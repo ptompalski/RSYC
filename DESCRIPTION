@@ -1,0 +1,23 @@
+Package: RSYC
+Title: Remote sensing-derived aboveground biomass yield curves for Canada
+Version: 0.0.0.9000
+Authors@R: 
+    c(
+    person(given = "Piotr", 
+           family = "Tompalski",
+           email = "piotr.tompalski@NRCan-RNCan.gc.ca",
+           role = c("aut", "cre", "cph")))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    dplyr,
+    glue,
+    magrittr,
+    tibble
