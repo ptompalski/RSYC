@@ -2,4 +2,7 @@
 
 export("%>%")
 export(predict_rsyc)
+export(species_codes)
+export(species_in_tile)
+export(tiles_for_species)
 importFrom(magrittr,"%>%")
