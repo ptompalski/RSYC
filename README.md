@@ -35,6 +35,17 @@ al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068)
 remotes::install_github("ptompalski/RSYC")
 ```
 
+## Model availability
+
+The RSYC models are both species-specific and tile-specific, meaning
+each combination of species and geographic tile may have its own yield
+curve. A full index of available species–tile combinations is included
+in the package and can be accessed programmatically. Additionally, the
+spatial distribution of tiles with available models is shown in the
+figure below.
+
+![](man/figures/TileIndex.png)
+
 ## Examples
 
 Predict AGB for black spruce at different ages in tile H14
@@ -71,10 +82,6 @@ ggplot(yc, aes(x = age, y = agb, color = tile)) +
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
-
-## Model availability
-
-![](../7_RS_AGB/graphics/studyAreaRSYC2_v7_noInset.png)
 
 ## References
 
