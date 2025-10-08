@@ -11,7 +11,7 @@ within a 150 × 150 km tile, capturing large-scale spatial variability in
 productivity and environmental conditions.
 
 [![Click to
-enlarge](man/figures/RSYC_curves_species.png)](man/figures/RSYC_curves_species.png)
+enlarge](man/figures/RSYC_curves_species_gh.png)](man/figures/RSYC_curves_species_gh.png)
 
 RSYC models were developed to support large-area assessments of forest
 growth and carbon dynamics using a consistent, nationally harmonized

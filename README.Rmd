@@ -9,7 +9,7 @@
 
 The RSYC models provide estimates of aboveground biomass (AGB) accumulation over stand age across all forested ecozones of Canada. Developed using Landsat time-series data for forest age, species composition, and AGB, the models include 27 species-specific yield curves as well as three multi-species models (coniferous, broadleaf, and generic). Each model represents the average AGB trajectory (in t/ha) within a 150 × 150 km tile, capturing large-scale spatial variability in productivity and environmental conditions.
 
-[![Click to enlarge](man/figures/RSYC_curves_species.png)](man/figures/RSYC_curves_species.png)
+[![Click to enlarge](man/figures/RSYC_curves_species_gh.png)](man/figures/RSYC_curves_species_gh.png)
 
 
 RSYC models were developed to support large-area assessments of forest growth and carbon dynamics using a consistent, nationally harmonized approach. Validation was conducted using an independent set of field plots, and model development emphasized both empirical accuracy and biological realism. Compared to traditional growth and yield models, RSYC provides improved spatial coverage, a consistent methodological framework across jurisdictions, and lower systematic bias, making them particularly suitable for applications such as national carbon accounting and forest resource planning.
