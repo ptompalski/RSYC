@@ -24,7 +24,7 @@ predict_rsyc <- function(tile_id, age, species) {
   assert_is_character(tile_id)
   assert_is_character(species)
   assert_is_numeric(age)
-  assert_all_are_positive(age)
+  assert_none_are_negative(age)
 
   
   #get params

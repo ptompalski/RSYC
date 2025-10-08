@@ -22,3 +22,9 @@ assert_all_are_positive = function(x)
   if (!all(x > 0))
     stop(glue::glue("All values of {x.} must be positive."), call. = FALSE)
 }
+assert_none_are_negative = function(x)
+{
+  x. <- lazyeval::expr_text(x)
+  if (!all(x >= 0))
+    stop(glue::glue("Values of {x.} cannot be negative."), call. = FALSE)
+}
