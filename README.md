@@ -10,6 +10,9 @@ generic). Each model represents the average AGB trajectory (in t/ha)
 within a 150 × 150 km tile, capturing large-scale spatial variability in
 productivity and environmental conditions.
 
+[![Click to
+enlarge](man/figures/RSYC_curves_species.png)](man/figures/RSYC_curves_species.png)
+
 RSYC models were developed to support large-area assessments of forest
 growth and carbon dynamics using a consistent, nationally harmonized
 approach. Validation was conducted using an independent set of field
