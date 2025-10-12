@@ -20,12 +20,11 @@ for which yield curves were developed. The layer can be used to identify the
 models to use in given location.
 }
 \examples{
-# Load the layer
-library(sf)
-data(RSYC_tiles)
-
-# Plot
-plot(st_geometry(RSYC_tiles))
+if (requireNamespace("sf", quietly = TRUE)) {
+  library(sf)
+  data(RSYC_tiles)
+  plot(st_geometry(RSYC_tiles))
+}
 
 }
 \keyword{datasets}
