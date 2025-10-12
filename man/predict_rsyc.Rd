@@ -11,7 +11,7 @@ predict_rsyc(tile_id, age, species)
 
 \item{age}{A numeric vector of stand ages (in years) at which to predict biomass. All values must be positive.}
 
-\item{species}{A character string specifying the species code (e.g., \code{"PICE.MAR"} for black spruce).}
+\item{species}{A character string specifying the species code (e.g., \code{"PICE.MAR"} for black spruce). Use \code{species_codes()} for a full list of species names and codes.}
 }
 \value{
 A numeric vector of predicted AGB values (e.g., in tonnes per hectare) corresponding to the input ages.
