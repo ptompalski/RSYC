@@ -1,8 +1,9 @@
 pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
-articles: {}
-last_built: 2025-10-08T22:24Z
+articles:
+  articles/test: test.html
+last_built: 2025-10-11T05:20Z
 urls:
   reference: https://ptompalski.github.io/RSYC/reference
   article: https://ptompalski.github.io/RSYC/articles

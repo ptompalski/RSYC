@@ -21,3 +21,4 @@ Imports:
     magrittr,
     tibble
 URL: https://ptompalski.github.io/RSYC/
+Config/Needs/website: rmarkdown

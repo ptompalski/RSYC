@@ -5,3 +5,12 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
+
+
+^_pkgdown\.yml$
+^pkgdown$
+^docs$
+^_quarto\.yml$
+^.*\.qmd$
+^site_libs$
+^vignettes/articles$

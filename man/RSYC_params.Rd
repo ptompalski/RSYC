@@ -5,17 +5,17 @@
 \alias{RSYC_params}
 \title{Parameters for the RSYC models}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1892 rows and 9 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1892 rows and 7 columns.
 }
 \usage{
 RSYC_params
 }
 \description{
-A data frame with 1892 rows and 9 columns:
+A data frame with 1892 rows and 97 columns:
 \describe{
 \item{TileID}{Tile identified}
 \item{SpeciesCode, SpeciesName}{Species}
-\item{b1_fixed, b1_random, b2, b3, b4}{model parameters}
+\item{b1, b2, b3, b4}{model parameters}
 ...
 }
 }
