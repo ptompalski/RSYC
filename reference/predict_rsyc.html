@@ -56,7 +56,7 @@ It retrieves the model parameters associated with the specified tile and species
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
-<dd><p>A character string specifying the species code (e.g., <code>"PICE.MAR"</code> for black spruce).</p></dd>
+<dd><p>A character string specifying the species code (e.g., <code>"PICE.MAR"</code> for black spruce). Use <code><a href="species_codes.html">species_codes()</a></code> for a full list of species names and codes.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -71,7 +71,23 @@ It retrieves the model parameters associated with the specified tile and species
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span>tile_id <span class="op">=</span> <span class="st">"J11"</span>, age <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘lazyeval’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]  0.2935077  0.7604127  1.3107991  1.9126710  2.5475918  3.2033215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7]  3.8711329  4.5445389  5.2185913  5.8894551  6.5541293  7.2102561</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13]  7.8559829  8.4898609  9.1107676  9.7178472 10.3104626 10.8881580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] 11.4506277 11.9976910 12.5292714 13.0453791 13.5460963 14.0315654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] 14.5019779 14.9575665 15.3985967 15.8253610 16.2381732 16.6373638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] 17.0232759 17.3962618 17.7566802 18.1048935 18.4412657 18.7661606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] 19.0799403 19.3829638 19.6755859 19.9581563 20.2310188 20.4945108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] 20.7489626 20.9946970 21.2320292 21.4612663 21.6827072 21.8966425</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] 22.1033547 22.3031174 22.4961965 22.6828490 22.8633239 23.0378622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55] 23.2066967 23.3700522 23.5281461 23.6811879 23.8293799 23.9729171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] 24.1119875 24.2467720 24.3774452 24.5041750 24.6271229 24.7464445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] 24.8622895 24.9748017 25.0841194 25.1903757 25.2936983 25.3942101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] 25.4920290 25.5872683 25.6800368 25.7704391 25.8585755 25.9445421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] 26.0284315 26.1103323 26.1903297 26.2685052 26.3449372 26.4197007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] 26.4928680 26.5645079 26.6346869 26.7034684 26.7709134 26.8370802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] 26.9020249 26.9658011 27.0284602 27.0900516 27.1506225 27.2102181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] 27.2688820 27.3266556 27.3835788 27.4396898</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
