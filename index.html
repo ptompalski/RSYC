@@ -53,30 +53,45 @@
 <p>For more details on model development, validation, and applications, please refer to Tompalski et al. 2025. For more details on data pre-processing, filtering approach, and initial model development see <a href="https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068" class="external-link">Tompalski et al. 2024</a> (open access).</p>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
-<span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="model-availability">Model availability<a class="anchor" aria-label="anchor" href="#model-availability"></a>
 </h2>
 <p>The RSYC models are both species-specific and tile-specific, meaning each combination of species and geographic tile may have its own yield curve. A full index of available species–tile combinations is included in the package and can be accessed programmatically. Additionally, the spatial distribution of tiles with available models is shown in the figure below.</p>
 <p><img src="reference/figures/TileIndex.png"></p>
 </div>
 <div class="section level2">
+<h2 id="model-parameters">Model parameters<a class="anchor" aria-label="anchor" href="#model-parameters"></a>
+</h2>
+<p>You don’t need to install the R package to use the model. All model parameters used in RSYC are available for direct download:</p>
+<ul>
+<li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_params.csv" class="external-link">RSYC_params.csv</a></p></li>
+<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_tiles.gpkg" class="external-link"><code>RSYC_tiles.gpkg</code></a></p></li>
+</ul>
+<p>The RSYC model predicts above-ground biomass (AGB) as a function of stand age:</p>
+<pre class="math"><code>
+AGB = b_1 \, e^{-b_4 \, \text{Age}} \, \left(1 - e^{-b_2 \, \text{Age}}\right)^{b_3}</code></pre>
+<p>where<br>
+- <span class="math inline">$`b_1, b_2, b_3, b_4`$</span> are species-specific model parameters, and<br>
+- <em>Age</em> is stand age in years.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
+<span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>Predict AGB for black spruce at different ages in tile H14</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC/">RSYC</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span>tile_id <span class="op">=</span> <span class="st">"H14"</span>, age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 33.00630 65.95080 78.23435</span></span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## [1] 33.00630 65.95080 78.23435</span></span></code></pre></div>
 <p>Predict AGB for coniferous species in tiles</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>tile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N3"</span>, <span class="st">"H17"</span>, <span class="st">"F31"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -94,10 +109,8 @@
 <span>    color <span class="op">=</span> <span class="st">"Tile"</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"RSYC Biomass Predictions by Tile"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/README-unnamed-chunk-3-1.svg" alt="plot of chunk unnamed-chunk-3"><div class="figcaption">plot of chunk unnamed-chunk-3</div>
-</div>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.svg"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
