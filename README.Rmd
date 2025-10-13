@@ -46,7 +46,7 @@ library(RSYC)
 predict_rsyc(tile_id = "H14", age = c(20, 60, 120), species = "PICE.MAR")
 ```
 Predict AGB for coniferous species in tiles 
-```{r, warning=F, message=F}
+```{r, warning=F, message=F, fig.width=7, fig.height=5, dev="svg"}
 library(tidyverse)
 
 yc <- tibble(tile = c("N3", "H17", "F31")) %>%
