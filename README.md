@@ -1,7 +1,4 @@
----
-  output: github_document
----
-  
+
 ## Remote Sensing-based Yield Curves (RSYC) for Canada's Forested Ecozones
 
 
@@ -68,7 +65,7 @@ ggplot(yc, aes(x = age, y = agb, color = tile)) +
   theme_minimal()
 ```
 
-![plot of chunk unnamed-chunk-3](man/figures/README-unnamed-chunk-3-1.png)
+![plot of chunk unnamed-chunk-3](man/figures/README-unnamed-chunk-3-1.svg)
 
 
 
