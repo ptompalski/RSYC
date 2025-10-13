@@ -22,6 +22,34 @@ RSYC models were developed to support large-area assessments of forest growth an
 For more details on model development, validation, and applications, please refer to Tompalski et al. 2025. For more details on data pre-processing, filtering approach, and initial model development see [Tompalski et al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068) (open access).
 
 
+## Model availability
+
+The RSYC models are both species-specific and tile-specific, meaning each combination of species and geographic tile may have its own yield curve. A full index of available species–tile combinations is included in the package and can be accessed programmatically. Additionally, the spatial distribution of tiles with available models is shown in the figure below.
+
+![](man/figures/TileIndex.png)
+
+## Model parameters
+
+You don't need to install the R package to use the model. All model parameters used in RSYC are available for direct download:
+
+- **Model parameters:** [RSYC_params.csv](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_params.csv) 
+
+- **Tile grid:** [`RSYC_tiles.gpkg`](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_tiles.gpkg)
+
+
+The RSYC model predicts above-ground biomass (AGB) as a function of stand age:
+
+$$
+AGB = b_1 \, e^{-b_4 \, \text{Age}} \, \left(1 - e^{-b_2 \, \text{Age}}\right)^{b_3}
+$$
+
+where  
+- \( b_1, b_2, b_3, b_4 \) are species-specific model parameters, and  
+- *Age* is stand age in years.
+
+
+
+
 ## Installation
 
 ```r
@@ -31,12 +59,6 @@ remotes::install_github("ptompalski/RSYC")
 ```
 
 
-## Model availability
-
-The RSYC models are both species-specific and tile-specific, meaning each combination of species and geographic tile may have its own yield curve. A full index of available species–tile combinations is included in the package and can be accessed programmatically. Additionally, the spatial distribution of tiles with available models is shown in the figure below.
-
-![](man/figures/TileIndex.png)
-
 ## Examples
 
 Predict AGB for black spruce at different ages in tile H14
@@ -45,8 +67,9 @@ library(RSYC)
 
 predict_rsyc(tile_id = "H14", age = c(20, 60, 120), species = "PICE.MAR")
 ```
+
 Predict AGB for coniferous species in tiles 
-```{r, warning=F, message=F, fig.width=7, fig.height=5, dev="svg"}
+```{r, warning=F, message=F, fig.width=9, fig.height=5, dev="svg", fig.cap=""}
 library(tidyverse)
 
 yc <- tibble(tile = c("N3", "H17", "F31")) %>%
@@ -64,12 +87,9 @@ ggplot(yc, aes(x = age, y = agb, color = tile)) +
     color = "Tile",
     title = "RSYC Biomass Predictions by Tile"
   ) +
-  theme_minimal()
+  theme_minimal(base_size = 12)
 
 ```
-
-
-
 
 
 
