@@ -57,12 +57,12 @@ stand age:
 
 ``` math
 
-AGB = b_1 \, e^{-b_4 \, \text{Age}} \, \left(1 - e^{-b_2 \, \text{Age}}\right)^{b_3}
+AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}
 ```
 
 where  
-- $`b_1, b_2, b_3, b_4`$ are species-specific model parameters, and  
-- *Age* is stand age in years.
+- $`b_1, b_2, b_3, b_4`$ are tile- and species-specific parameters  
+- *Age* is stand age (years).
 
 ## Installation
 

@@ -50,5 +50,6 @@ rsconnect/
 
 _packageSetup.R
 #docs
+readme.html
 
 /.quarto/
