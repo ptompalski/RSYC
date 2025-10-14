@@ -6,7 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Remote sensing-derived aboveground biomass yield curves for Canada • RSYC</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -67,16 +73,21 @@
 <li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_tiles.gpkg" class="external-link"><code>RSYC_tiles.gpkg</code></a></p></li>
 </ul>
 <p>The RSYC model predicts above-ground biomass (AGB) as a function of stand age:</p>
-<pre class="math"><code>
-AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}</code></pre>
-<p>where<br>
-- <span class="math inline">$`b_1, b_2, b_3, b_4`$</span> are tile- and species-specific parameters<br>
-- <em>Age</em> is stand age (years).</p>
+<p><span class="math display">\[
+AGB = b_1 e^{-b_4 \text{Age}} (1 - e^{-b_2 \text{Age}})^{b_3}
+\]</span></p>
+<p>where</p>
+<ul>
+<li>
+<span class="math inline">\(b_1, b_2, b_3, b_4\)</span> are tile- and species-specific parameters</li>
+<li>
+<em>Age</em> is stand age (years)</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
 <span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span><span class="op">)</span></span></code></pre></div>
@@ -85,13 +96,13 @@ AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}</code></pre>
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>Predict AGB for black spruce at different ages in tile H14</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC/">RSYC</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span>tile_id <span class="op">=</span> <span class="st">"H14"</span>, age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## [1] 33.00630 65.95080 78.23435</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## [1] 33.00630 65.95080 78.23435</span></span></code></pre></div>
 <p>Predict AGB for coniferous species in tiles</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>tile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N3"</span>, <span class="st">"H17"</span>, <span class="st">"F31"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -109,8 +120,8 @@ AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}</code></pre>
 <span>    color <span class="op">=</span> <span class="st">"Tile"</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"RSYC Biomass Predictions by Tile"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_minimal</span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.svg"><!-- --></p>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.svg"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
