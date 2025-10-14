@@ -1,5 +1,8 @@
 ---
-  output: github_document
+output:
+  github_document:
+    md_extensions: +tex_math_dollars+tex_math_single_backslash
+always_allow_html: true
 ---
   
 ## Remote Sensing-based Yield Curves (RSYC) for Canada's Forested Ecozones
@@ -9,6 +12,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   dev = "png"
 )
+knitr::opts_knit$set(escape = FALSE)
 ```
 
 
@@ -39,13 +43,17 @@ You don't need to install the R package to use the model. All model parameters u
 
 The RSYC model predicts above-ground biomass (AGB) as a function of stand age:
 
-$$
-AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}
-$$
+```{r, results='asis', echo=FALSE}
+cat("$$
+AGB = b_1 e^{-b_4 \\text{Age}} (1 - e^{-b_2 \\text{Age}})^{b_3}
+$$")
+```
 
-where  
-- \(b_1, b_2, b_3, b_4\) are tile- and species-specific parameters  
-- *Age* is stand age (years).
+
+where
+
+- $b_1, b_2, b_3, b_4$ are tile- and species-specific parameters
+- *Age* is stand age (years)
 
 
 ## Installation
@@ -67,7 +75,7 @@ predict_rsyc(tile_id = "H14", age = c(20, 60, 120), species = "PICE.MAR")
 ```
 
 Predict AGB for coniferous species in tiles 
-```{r, warning=F, message=F, fig.width=9, fig.height=5, dev="svg", fig.cap=""}
+```{r, warning=F, message=F, fig.width=10, fig.height=5, dev="svg", fig.cap=""}
 library(tidyverse)
 
 yc <- tibble(tile = c("N3", "H17", "F31")) %>%
@@ -85,7 +93,7 @@ ggplot(yc, aes(x = age, y = agb, color = tile)) +
     color = "Tile",
     title = "RSYC Biomass Predictions by Tile"
   ) +
-  theme_minimal(base_size = 12)
+  theme_minimal(base_size = 14)
 
 ```
 

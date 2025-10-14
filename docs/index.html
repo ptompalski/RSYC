@@ -6,10 +6,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Remote sensing-derived aboveground biomass yield curves for Canada • RSYC</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Remote sensing-derived aboveground biomass yield curves for Canada">
 <meta name="description" content="What the package does (one paragraph).">
 <meta property="og:description" content="What the package does (one paragraph).">
@@ -22,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,12 +38,6 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/test.html">test</a></li>
-  </ul>
-</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -59,6 +59,32 @@
 <p>For more details on model development, validation, and applications, please refer to Tompalski et al. 2025. For more details on data pre-processing, filtering approach, and initial model development see <a href="https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068" class="external-link">Tompalski et al. 2024</a> (open access).</p>
 </div>
 <div class="section level2">
+<h2 id="model-availability">Model availability<a class="anchor" aria-label="anchor" href="#model-availability"></a>
+</h2>
+<p>The RSYC models are both species-specific and tile-specific, meaning each combination of species and geographic tile may have its own yield curve. A full index of available species–tile combinations is included in the package and can be accessed programmatically. Additionally, the spatial distribution of tiles with available models is shown in the figure below.</p>
+<p><img src="reference/figures/TileIndex.png"></p>
+</div>
+<div class="section level2">
+<h2 id="model-parameters">Model parameters<a class="anchor" aria-label="anchor" href="#model-parameters"></a>
+</h2>
+<p>You don’t need to install the R package to use the model. All model parameters used in RSYC are available for direct download:</p>
+<ul>
+<li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_params.csv" class="external-link">RSYC_params.csv</a></p></li>
+<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_tiles.gpkg" class="external-link"><code>RSYC_tiles.gpkg</code></a></p></li>
+</ul>
+<p>The RSYC model predicts above-ground biomass (AGB) as a function of stand age:</p>
+<p><span class="math display">\[
+AGB = b_1 e^{-b_4 \text{Age}} (1 - e^{-b_2 \text{Age}})^{b_3}
+\]</span></p>
+<p>where</p>
+<ul>
+<li>
+<span class="math inline">\(b_1, b_2, b_3, b_4\)</span> are tile- and species-specific parameters</li>
+<li>
+<em>Age</em> is stand age (years)</li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -67,17 +93,11 @@
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="model-availability">Model availability<a class="anchor" aria-label="anchor" href="#model-availability"></a>
-</h2>
-<p>The RSYC models are both species-specific and tile-specific, meaning each combination of species and geographic tile may have its own yield curve. A full index of available species–tile combinations is included in the package and can be accessed programmatically. Additionally, the spatial distribution of tiles with available models is shown in the figure below.</p>
-<p><img src="reference/figures/TileIndex.png"></p>
-</div>
-<div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>Predict AGB for black spruce at different ages in tile H14</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RSYC</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC/">RSYC</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span>tile_id <span class="op">=</span> <span class="st">"H14"</span>, age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## [1] 33.00630 65.95080 78.23435</span></span></code></pre></div>
@@ -100,14 +120,14 @@
 <span>    color <span class="op">=</span> <span class="st">"Tile"</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"RSYC Biomass Predictions by Tile"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="README_files/figure-gfm/unnamed-chunk-2-1.png"><!-- --></p>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.svg"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>If you use this package in your work, please cite:</p>
-<p>Tompalski, P., Hermosilla, T., Baral, S., Wulder, M.A., White, J.C., (2025). National aboveground biomass yield curves for Canada . In prep.</p>
+<p>Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C. 2025. National remote sensing-derived aboveground biomass yield curves for Canada. Forestry: An International Journal Of Forest Research. <a href="https://doi.org/10.1093/forestry/cpaf067" class="external-link uri">https://doi.org/10.1093/forestry/cpaf067</a></p>
 <p>Tompalski, P., Wulder, M.A., White, J.C., Hermosilla, T., Riofrío, J., Kurz, W.A., 2024. Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data. Forest Ecology and Management 561, 121894. <a href="https://doi.org/10.1016/j.foreco.2024.121894" class="external-link uri">https://doi.org/10.1016/j.foreco.2024.121894</a></p>
 </div>
 
@@ -130,7 +150,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Piotr Tompalski <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<li>Piotr Tompalski <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
 </ul>
 </div>
 
@@ -145,7 +165,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

@@ -55,14 +55,14 @@ parameters used in RSYC are available for direct download:
 The RSYC model predicts above-ground biomass (AGB) as a function of
 stand age:
 
-``` math
+$$
+AGB = b_1 e^{-b_4 \text{Age}} (1 - e^{-b_2 \text{Age}})^{b_3}
+$$
 
-AGB = b_1 e^{-b_4 Age} (1 - e^{-b_2 Age})^{b_3}
-```
+where
 
-where  
-- $`b_1, b_2, b_3, b_4`$ are tile- and species-specific parameters  
-- *Age* is stand age (years).
+- $b_1, b_2, b_3, b_4$ are tile- and species-specific parameters
+- *Age* is stand age (years)
 
 ## Installation
 
@@ -104,10 +104,10 @@ ggplot(yc, aes(x = age, y = agb, color = tile)) +
     color = "Tile",
     title = "RSYC Biomass Predictions by Tile"
   ) +
-  theme_minimal(base_size = 12)
+  theme_minimal(base_size = 14)
 ```
 
-![](man/figures/README-unnamed-chunk-3-1.svg)<!-- -->
+![](man/figures/README-unnamed-chunk-4-1.svg)<!-- -->
 
 ## References
 
