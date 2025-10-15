@@ -49,6 +49,7 @@ po/*~
 rsconnect/
 
 _packageSetup.R
+app.R
 #docs
 readme.html
 
