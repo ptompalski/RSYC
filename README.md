@@ -50,7 +50,7 @@ parameters used in RSYC are available for direct download:
   [RSYC_params.csv](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_params.csv)
 
 - **Tile grid:**
-  [`RSYC_tiles.gpkg`](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_tiles.gpkg)
+  [`RSYC_tiles.gpkg`](https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg)
 
 The RSYC model predicts above-ground biomass (AGB) as a function of
 stand age:
