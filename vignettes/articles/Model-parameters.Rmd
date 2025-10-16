@@ -1,0 +1,28 @@
+---
+title: "Model parameters"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+```{r, echo=F, message=F}
+library(RSYC)
+
+RSYC::RSYC_params %>% 
+  dplyr::select(-SpeciesCode) %>%
+  DT::datatable(
+    filter='top', 
+      rownames = FALSE,
+      options = list(pageLength = 25)
+  ) %>%
+    DT::formatRound(columns = c("b1"), digits = 2) %>%
+    DT::formatRound(columns = c("b3"), digits = 4) %>%
+    DT::formatRound(columns = c("b2","b4"), digits = 5) 
+
+```

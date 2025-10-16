@@ -1,8 +1,9 @@
 pandoc: 3.6.3
 pkgdown: 2.1.3
 pkgdown_sha: ~
-articles: {}
-last_built: 2025-10-14T17:29Z
+articles:
+  articles/Model-parameters: Model-parameters.html
+last_built: 2025-10-16T20:47Z
 urls:
   reference: https://ptompalski.github.io/RSYC/reference
   article: https://ptompalski.github.io/RSYC/articles
