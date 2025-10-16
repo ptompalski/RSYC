@@ -21,5 +21,10 @@ Imports:
     lazyeval,
     magrittr,
     tibble
+Suggests:
+    knitr,
+    rmarkdown,
+    DT
+VignetteBuilder: knitr
 URL: https://ptompalski.github.io/RSYC/
 Config/Needs/website: rmarkdown
