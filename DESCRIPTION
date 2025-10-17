@@ -24,7 +24,9 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    DT
+    DT,
+    leaflet
 VignetteBuilder: knitr
-URL: https://ptompalski.github.io/RSYC/
+URL: https://github.com/ptompalski/RSYC
+BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown

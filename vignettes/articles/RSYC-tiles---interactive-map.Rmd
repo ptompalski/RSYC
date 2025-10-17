@@ -1,0 +1,36 @@
+---
+title: "RSYC tiles - interactive map"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r echo=F, message=F}
+library(RSYC)
+library(sf)
+library(dplyr)
+library(leaflet)
+
+RSYC_tiles <- read_sf(system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC"))
+
+tiles_ll <- RSYC_tiles %>%
+  st_make_valid() %>%
+  st_transform(4326) 
+
+# pal <- colorFactor("Set3", domain = tiles_ll$tile_id)
+
+leaflet(tiles_ll, options = leafletOptions(minZoom = 2)) |>
+addProviderTiles("CartoDB.Positron") |>
+addPolygons(
+# fillColor = ~pal(TileID),
+weight = 1, color = "#555", fillOpacity = 0.5,
+label = ~TileID,            # hover shows ID
+popup = ~paste0("<b>Tile ID: </b>", TileID),  # click shows ID
+highlightOptions = highlightOptions(weight = 2, color = "#000", bringToFront = TRUE)
+)
+
+```
