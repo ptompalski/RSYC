@@ -1,0 +1,66 @@
+meta <- packageDescription("RSYC")
+year <- format(Sys.Date(), "%Y")
+
+
+citHeader(
+  "To cite the RSYC package and related paper, please use both references below:"
+)
+
+## 1. Software citation (auto version)
+bibentry(
+  bibtype = "Manual",
+  title = "RSYC R package",
+  author = person(
+    given = "Piotr",
+    family = "Tompalski",
+    email = "piotr.tompalski@nrcan-rncan.gc.ca",
+    role = c("aut", "cre")
+  ),
+  year = year, #substr(meta$Packaged, 1, 4), # or manually specify "2025"
+  note = sprintf("Version %s", meta$Version),
+  url = meta$URL,
+  textVersion = sprintf(
+    "Tompalski, P. (%s). RSYC R package. R package version %s. Available at %s",
+    year,
+    # substr(meta$Packaged, 1, 4),
+    meta$Version,
+    meta$URL
+  )
+)
+
+## 2. Paper citation
+bibentry(
+  bibtype = "Article",
+  title = "National remote sensing-derived aboveground biomass yield curves for Canada",
+  author = c(
+    person("Piotr", "Tompalski"),
+    person("Txomin", "Hermosilla"),
+    person("Sharad K.", "Baral"),
+    person("Michael A.", "Wulder"),
+    person("Joanne C.", "White")
+  ),
+  journal = "Forestry: An International Journal Of Forest Research",
+  year = "2025",
+  doi = "10.1093/forestry/cpaf067",
+  textVersion = "Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C. 2025. National remote sensing-derived aboveground biomass yield curves for Canada. Forestry: An International Journal Of Forest Research. https://doi.org/10.1093/forestry/cpaf067"
+)
+
+## 2. Paper citation
+bibentry(
+  bibtype = "Article",
+  title = "Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data",
+  author = c(
+    person("Piotr", "Tompalski"),
+    person("Michael A.", "Wulder"),
+    person("Joanne C.", "White"),
+    person("Txomin", "Hermosilla"),
+    person("Jose", "Riofrío"),
+    person("Werner A.", "Kurz")
+  ),
+  journal = "Forest Ecology and Management",
+  number = "561",
+  pages = "121894",
+  year = "2024",
+  doi = "10.1016/j.foreco.2024.121894",
+  textVersion = "Tompalski, P., Wulder, M.A., White, J.C., Hermosilla, T., Riofrío, J., Kurz, W.A., 2024. Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data. Forest Ecology and Management 561, 121894. https://doi.org/10.1016/j.foreco.2024.121894"
+)
