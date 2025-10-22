@@ -3,4 +3,3 @@ destination: "docs"
 template:
   bootstrap: 5
   math-rendering: mathjax
-  

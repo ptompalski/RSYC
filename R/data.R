@@ -25,10 +25,15 @@
 #' }
 #'
 #' @examples
-#' if (requireNamespace("sf", quietly = TRUE)) {
+#' \dontrun{
+#'   # Path to the RSYC_tiles within the installed package
+#'   gpkg <- system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
+#'
+#'   # Read with sf
 #'   library(sf)
-#'   data(RSYC_tiles)
+#'   RSYC_tiles <- st_read(gpkg, quiet = TRUE)
 #'   plot(st_geometry(RSYC_tiles))
 #' }
 #'
-"RSYC_tiles"
+#' @name RSYC_tiles
+NULL
