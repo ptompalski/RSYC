@@ -23,7 +23,7 @@ The RSYC models provide estimates of aboveground biomass (AGB) accumulation over
 
 RSYC models were developed to support large-area assessments of forest growth and carbon dynamics using a consistent, nationally harmonized approach. Validation was conducted using an independent set of field plots, and model development emphasized both empirical accuracy and biological realism. Compared to traditional growth and yield models, RSYC provides improved spatial coverage, a consistent methodological framework across jurisdictions, and lower systematic bias, making them particularly suitable for applications such as national carbon accounting and forest resource planning.
 
-For more details on model development, validation, and applications, please refer to Tompalski et al. 2025. For more details on data pre-processing, filtering approach, and initial model development see [Tompalski et al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068) (open access).
+For more details on model development, validation, and applications, please refer to [Tompalski et al. 2025](https://doi.org/10.1093/forestry/cpaf067). For more details on data pre-processing, filtering approach, and initial model development see [Tompalski et al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068) (both papers are open access).
 
 
 ## Model availability
