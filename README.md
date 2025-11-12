@@ -24,11 +24,12 @@ particularly suitable for applications such as national carbon
 accounting and forest resource planning.
 
 For more details on model development, validation, and applications,
-please refer to Tompalski et al. 2025. For more details on data
-pre-processing, filtering approach, and initial model development see
-[Tompalski et
+please refer to [Tompalski et
+al. 2025](https://doi.org/10.1093/forestry/cpaf067). For more details on
+data pre-processing, filtering approach, and initial model development
+see [Tompalski et
 al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068)
-(open access).
+(both papers are open access).
 
 ## Model availability
 
