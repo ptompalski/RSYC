@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   articles/Model-parameters: Model-parameters.html
   articles/RSYC-tiles---interactive-map: RSYC-tiles---interactive-map.html
-last_built: 2025-12-04T18:21Z
+last_built: 2025-12-04T20:17Z
 urls:
   reference: https://ptompalski.github.io/RSYC/reference
   article: https://ptompalski.github.io/RSYC/articles
