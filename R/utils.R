@@ -1,30 +1,54 @@
-CRdeclining2 <- function(age, b1, b2, b3, b4) { #four-parameter declining CR 
+.rsyc_public_strata_levels <- c(
+  "tile", "ecozone", "ecoprovince", "ecoregion", "ecodistrict"
+)
+
+CRdeclining2 <- function(age, b1, b2, b3, b4) {
   b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3
-  
 }
 
+.rsyc_assert_scalar_character <- function(x, arg) {
+  if (!is.character(x) || length(x) != 1L || is.na(x) || !nzchar(x)) {
+    stop(glue::glue("`{arg}` must be one non-empty character value."), call. = FALSE)
+  }
+  invisible(x)
+}
 
+.rsyc_assert_age <- function(age) {
+  if (!is.numeric(age) || length(age) == 0L) {
+    stop("`age` must be a non-empty numeric vector.", call. = FALSE)
+  }
+  if (any(!is.finite(age))) {
+    stop("`age` must contain only finite values.", call. = FALSE)
+  }
+  if (any(age < 0)) {
+    stop("`age` cannot contain negative values.", call. = FALSE)
+  }
+  invisible(age)
+}
 
-assert_is_numeric = function(x)
-{
-  x. <- lazyeval::expr_text(x)
-  if (!is.numeric(x))
-    stop(glue::glue("{x.} must be numeric (not {class(x)})."), call. = FALSE)
+.rsyc_match_choice <- function(x, arg, choices) {
+  .rsyc_assert_scalar_character(x, arg)
+  value <- tolower(x)
+  if (!(value %in% choices)) {
+    stop(
+      glue::glue("`{arg}` must be one of: {paste(choices, collapse = ', ')}."),
+      call. = FALSE
+    )
+  }
+  value
 }
-assert_is_character <- function(x) {
-  x. <- lazyeval::expr_text(x)
-  if (!is.character(x))
-    stop(glue::glue("{x.} must be character (not a {class(x)})."), call. = FALSE)
+
+.rsyc_normalize_species <- function(species, scalar = TRUE) {
+  if (scalar) {
+    .rsyc_assert_scalar_character(species, "species")
+  } else if (!is.character(species)) {
+    stop("`species` must be character.", call. = FALSE)
+  }
+
+  lower <- tolower(species)
+  ifelse(lower %in% c("generic", "coniferous", "broadleaf"), lower, toupper(species))
 }
-assert_all_are_positive = function(x)
-{
-  x. <- lazyeval::expr_text(x)
-  if (!all(x > 0))
-    stop(glue::glue("All values of {x.} must be positive."), call. = FALSE)
-}
-assert_none_are_negative = function(x)
-{
-  x. <- lazyeval::expr_text(x)
-  if (!all(x >= 0))
-    stop(glue::glue("Values of {x.} cannot be negative."), call. = FALSE)
+
+.rsyc_strata_name <- function(strata_id) {
+  sub("^.*/", "", strata_id)
 }

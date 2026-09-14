@@ -2,20 +2,24 @@
 % Please edit documentation in R/tiles_for_species.R
 \name{tiles_for_species}
 \alias{tiles_for_species}
-\title{List Available Tiles for a Given Species}
+\title{List Tiles Available for a Species}
 \usage{
-tiles_for_species(species)
+tiles_for_species(species, response = "agb")
 }
 \arguments{
-\item{species}{A character string specifying the species code (e.g., "PICE.MAR" for black spruce).}
+\item{species}{A single species code or model group. Matching is
+case-insensitive.}
+
+\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
 }
 \value{
-A character vector of tile IDs where the specified species is available.
+A character vector of tile IDs.
 }
 \description{
-This function returns the tile IDs where RSYC models are available for a specified species.
+List Tiles Available for a Species
 }
 \examples{
 tiles_for_species("PINU.CON")
+tiles_for_species("Coniferous", response = "volume")
 
 }

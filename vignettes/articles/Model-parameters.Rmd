@@ -1,28 +1,56 @@
 ---
-title: "Model parameters"
+title: "Model parameters and identifiers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Model parameters and identifiers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+`RSYC_models` is the stable package-facing model table. Each row is one
+published curve identified by response, species, spatial stratum, and model
+source.
+
+```{r}
+library(RSYC)
+RSYC_models[c(
+  "model_id", "response", "response_units", "strata_level", "strata_id",
+  "scale", "species", "b1", "b2", "b3", "b4"
+)]
+```
+
+The supported responses are `agb` (Mg/ha) and `volume` (m3/ha). Spatial levels
+are `tile`, `ecozone`, `ecoprovince`, `ecoregion`, and `ecodistrict`. The model
+contract retains both national and regional rows, but the current prediction
+and discovery functions expose national models only.
+
+Canonical ecosystem `strata_id` values encode their hierarchy with `/`.
+`predict_rsyc()` also accepts the shorter `strata_name` when it is unique for
+the requested response, species, and level:
+
+```{r}
+rsyc_strata(
+  response = "agb",
+  species = "PICE.MAR",
+  strata_level = "ecoregion"
 )
 ```
 
+Use `available_rsyc_models()` to inspect model metadata without working with
+the full coefficient and diagnostic table:
 
-
-```{r, echo=F, message=F}
-library(RSYC)
-
-RSYC::RSYC_params %>% 
-  dplyr::select(-SpeciesCode) %>%
-  DT::datatable(
-    filter='top', 
-      rownames = FALSE,
-      options = list(pageLength = 25)
-  ) %>%
-    DT::formatRound(columns = c("b1"), digits = 2) %>%
-    DT::formatRound(columns = c("b3"), digits = 4) %>%
-    DT::formatRound(columns = c("b2","b4"), digits = 5) 
-
+```{r}
+available_rsyc_models(
+  response = "volume",
+  species = "PICE.MAR",
+  strata_level = "tile"
+)
 ```
+
+The uncertainty and variance fields in `RSYC_models` are retained for a future
+local-calibration interface. They are not currently applied by
+`predict_rsyc()`.

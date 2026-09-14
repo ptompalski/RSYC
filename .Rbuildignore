@@ -1,10 +1,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.quarto$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
+^LICENSE$
 
 
 ^_pkgdown\.yml$

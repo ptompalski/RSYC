@@ -2,20 +2,23 @@
 % Please edit documentation in R/species_in_tile.R
 \name{species_in_tile}
 \alias{species_in_tile}
-\title{List Available Species for a Given Tile}
+\title{List Species Available in a Tile}
 \usage{
-species_in_tile(tile_id)
+species_in_tile(tile_id, response = "agb")
 }
 \arguments{
-\item{tile_id}{A character string specifying the tile ID.}
+\item{tile_id}{A single tile ID.}
+
+\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
 }
 \value{
-A character vector of species codes available for the given tile.
+A character vector of canonical species codes and model groups.
 }
 \description{
-This function returns the species codes for which RSYC models are available within a specified tile.
+List Species Available in a Tile
 }
 \examples{
-species_in_tile("B22")
+species_in_tile("H14")
+species_in_tile("H14", response = "volume")
 
 }

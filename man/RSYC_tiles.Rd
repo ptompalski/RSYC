@@ -2,28 +2,8 @@
 % Please edit documentation in R/data.R
 \name{RSYC_tiles}
 \alias{RSYC_tiles}
-\title{RSYC Tile Grid (150 × 150 km)}
-\format{
-An \code{sf} object with one feature per tile and the following attribute:
-\describe{
-\item{TileID}{Unique identifier of the 150 × 150 km tile (character).}
-}
-}
+\title{RSYC Tile Grid (150 x 150 km)}
 \description{
-A spatial layer defining the 150 × 150 km tiles used in the development of
-the Remote Sensing Yield Curves (RSYC). Each polygon represents one tile
-for which yield curves were developed. The layer can be used to identify the
-models to use in given location.
-}
-\examples{
-\dontrun{
-  # Path to the RSYC_tiles within the installed package
-  gpkg <- system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
-
-  # Read with sf
-  library(sf)
-  RSYC_tiles <- st_read(gpkg, quiet = TRUE)
-  plot(st_geometry(RSYC_tiles))
-}
-
+A GeoPackage containing the tile polygons used by the RSYC models. The path
+can be obtained with \code{system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")} and read with \code{sf::st_read()}.
 }

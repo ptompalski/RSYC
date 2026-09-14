@@ -1,126 +1,198 @@
+# RSYC: Remote Sensing-Based Yield Curves for Canada
 
-## Remote Sensing-based Yield Curves (RSYC) for Canada’s Forested Ecozones
+RSYC provides published yield curves for aboveground biomass (AGB, Mg/ha) and
+total volume (m3/ha). Curves are available for individual species and the
+`generic`, `coniferous`, and `broadleaf` model groups.
 
-The RSYC models provide estimates of aboveground biomass (AGB)
-accumulation over stand age across all forested ecozones of Canada.
-Developed using Landsat time-series data for forest age, species
-composition, and AGB, the models include 27 species-specific yield
-curves as well as three multi-species models (coniferous, broadleaf, and
-generic). Each model represents the average AGB trajectory (in t/ha)
-within a 150 × 150 km tile, capturing large-scale spatial variability in
-productivity and environmental conditions.
-
-[![Click to
-enlarge](man/figures/RSYC_curves_species_gh.png)](man/figures/RSYC_curves_species_gh.png)
-
-RSYC models were developed to support large-area assessments of forest
-growth and carbon dynamics using a consistent, nationally harmonized
-approach. Validation was conducted using an independent set of field
-plots, and model development emphasized both empirical accuracy and
-biological realism. Compared to traditional growth and yield models,
-RSYC provides improved spatial coverage, a consistent methodological
-framework across jurisdictions, and lower systematic bias, making them
-particularly suitable for applications such as national carbon
-accounting and forest resource planning.
-
-For more details on model development, validation, and applications,
-please refer to [Tompalski et
-al. 2025](https://doi.org/10.1093/forestry/cpaf067). For more details on
-data pre-processing, filtering approach, and initial model development
-see [Tompalski et
-al. 2024](https://linkinghub.elsevier.com/retrieve/pii/S0378112724002068)
-(both papers are open access).
-
-## Model availability
-
-The RSYC models are both species-specific and tile-specific, meaning
-each combination of species and geographic tile may have its own yield
-curve. A full index of available species–tile combinations is included
-in the package and can be accessed programmatically. Additionally, the
-spatial distribution of tiles with available models is shown in the
-figure below.
-
-![](man/figures/TileIndex.png)
-
-## Model parameters
-
-You don’t need to install the R package to use the model. All model
-parameters used in RSYC are available for direct download:
-
-- **Model parameters:**
-  [RSYC_params.csv](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_params.csv)
-
-- **Tile grid:**
-  [`RSYC_tiles.gpkg`](https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg)
-
-The RSYC model predicts above-ground biomass (AGB) as a function of
-stand age:
-
-$$
-AGB = b_1 e^{-b_4 \text{Age}} (1 - e^{-b_2 \text{Age}})^{b_3}
-$$
-
-where
-
-- $b_1, b_2, b_3, b_4$ are tile- and species-specific parameters
-- *Age* is stand age (years)
+Version 0.1.0 contains 28,391 curves from model release `v20260709`. Models are
+available for 150 x 150 km tiles and four nested ecological levels: ecozone,
+ecoprovince, ecoregion, and ecodistrict. The public prediction and discovery
+interfaces currently use national models.
 
 ## Installation
 
 ``` r
-# Install from GitHub
 # install.packages("remotes")
 remotes::install_github("ptompalski/RSYC")
 ```
 
-## Examples
+## Prediction
 
-Predict AGB for black spruce at different ages in tile H14
+Predict national tile AGB with the required response-first signature:
 
 ``` r
 library(RSYC)
-
-predict_rsyc(tile_id = "H14", age = c(20, 60, 120), species = "PICE.MAR")
+predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 ```
 
-    ## [1] 33.00630 65.95080 78.23435
-
-Predict AGB for coniferous species in tiles
+Select total volume with `response = "volume"`:
 
 ``` r
-library(tidyverse)
-
-yc <- tibble(tile = c("N3", "H17", "F31")) %>%
-  mutate(
-    age = list(1:150),
-    agb = map2(tile, age, ~ predict_rsyc(tile_id = .x, age = .y, species = "Coniferous"))
-  ) %>%
-  unnest(c(age, agb))
-
-ggplot(yc, aes(x = age, y = agb, color = tile)) +
-  geom_line() +
-  labs(
-    x = "Stand Age (years)",
-    y = "Aboveground Biomass (t/ha)",
-    color = "Tile",
-    title = "RSYC Biomass Predictions by Tile"
-  ) +
-  theme_minimal(base_size = 14)
+predict_rsyc(
+  response = "volume",
+  species = "PICE.MAR",
+  age = c(20, 60, 120),
+  strata_level = "tile",
+  strata_id = "H14"
+)
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.svg)<!-- -->
+For ecosystem models, a short name is sufficient when it identifies one
+matching stratum:
+
+``` r
+predict_rsyc(
+  response = "agb",
+  species = "PICE.MAR",
+  age = c(20, 60, 120),
+  strata_level = "ecodistrict",
+  strata_id = "Windsor Lowlands"
+)
+```
+
+Some names occur under multiple parent strata. In those cases,
+`predict_rsyc()` reports every match and asks for one of the full hierarchical
+paths returned by `rsyc_strata()`.
+
+Scale is intentionally not exposed by these functions; all selections are
+restricted to national models.
+
+### Compare species and tiles
+
+Build a tibble containing one prediction request per row, then use
+`purrr::pmap_dbl()` to pass its columns to `predict_rsyc()`. The combinations
+below are all present in the published model catalog.
+
+``` r
+tile_inputs <- tidyr::crossing(
+  response = c("agb", "volume"),
+  species = c("PICE.MAR", "POPU.TRE", "coniferous"),
+  age = c(20, 60, 120),
+  strata_level = "tile",
+  strata_id = c("H14", "F31")
+) |>
+  dplyr::mutate(
+    prediction = purrr::pmap_dbl(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+tile_inputs
+```
+
+### Compare nested ecosystem levels
+
+Use the name at the requested ecosystem level when it is unambiguous.
+
+``` r
+eco_inputs <- tibble::tribble(
+  ~response, ~species,   ~age, ~strata_level, ~strata_id,
+  "agb",     "PICE.MAR", 80,  "ecozone",
+    "Atlantic Maritime",
+  "agb",     "PICE.MAR", 80,  "ecoprovince",
+    "Appalachian-Acadian Highlands",
+  "agb",     "PICE.MAR", 80,  "ecoregion",
+    "Appalachians",
+  "agb",     "PICE.MAR", 80,  "ecodistrict",
+    "Windsor Lowlands"
+)
+
+eco_inputs <- eco_inputs |>
+  dplyr::mutate(
+    prediction = purrr::pmap_dbl(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+eco_inputs
+```
+
+If a name is duplicated, inspect the alternatives and use the canonical path:
+
+``` r
+rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
+  dplyr::filter(strata_name == "Muskwa")
+
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecodistrict",
+  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+)
+```
+
+### Generate complete curves from a tibble
+
+Use list-columns when each row represents a model and should return predictions
+for several ages:
+
+``` r
+curve_inputs <- tibble::tribble(
+  ~response, ~species,    ~strata_level, ~strata_id,
+  "agb",     "PICE.MAR",  "tile",       "H14",
+  "agb",     "POPU.TRE",  "tile",       "F31",
+  "volume",  "coniferous", "tile",       "N3"
+)
+curve_inputs <- curve_inputs |>
+  dplyr::mutate(
+    age = list(1:200),
+    prediction = purrr::pmap(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+curve_inputs
+
+curve_predictions <- curve_inputs |>
+  tidyr::unnest(c(age, prediction))
+```
+
+See [Prediction examples](vignettes/articles/Prediction-examples.Rmd) for a
+longer walkthrough, including model-availability checks.
+
+## Finding available models
+
+``` r
+available_rsyc_models(
+  response = "volume",
+  species = "PICE.MAR",
+  strata_level = "ecozone"
+)
+
+rsyc_species(response = "agb", strata_level = "ecoregion")
+rsyc_strata(response = "volume", species = "PICE.MAR", strata_level = "ecozone")
+```
+
+The complete, cleaned package-facing contract is exported as `RSYC_models`.
+It retains regional rows for provenance and future development, although the
+current public functions operate only on national rows. The earlier
+`RSYC_params` tile-only dataset has been removed. The tile grid is still
+available at:
+
+``` r
+system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
+```
+
+## Model equation
+
+All predictions use the four-parameter declining Chapman-Richards equation:
+
+$$
+y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
+$$
+
+The published calibration range is 1-600 years. Predictions outside this range
+produce an extrapolation warning.
 
 ## References
 
-If you use this package in your work, please cite:
-
-Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C.
-2025. National remote sensing-derived aboveground biomass yield curves
-for Canada. Forestry: An International Journal Of Forest Research.
+Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C. 2025.
+National remote sensing-derived aboveground biomass yield curves for Canada.
+*Forestry: An International Journal of Forest Research*.
 <https://doi.org/10.1093/forestry/cpaf067>
 
-Tompalski, P., Wulder, M.A., White, J.C., Hermosilla, T., Riofrío, J.,
-Kurz, W.A., 2024. Developing aboveground biomass yield curves for
-dominant boreal tree species from time series remote sensing data.
-Forest Ecology and Management 561, 121894.
-<https://doi.org/10.1016/j.foreco.2024.121894>
+Tompalski, P., Wulder, M.A., White, J.C., Hermosilla, T., Riofrio, J., Kurz,
+W.A. 2024. Developing aboveground biomass yield curves for dominant boreal
+tree species from time series remote sensing data. *Forest Ecology and
+Management* 561, 121894. <https://doi.org/10.1016/j.foreco.2024.121894>

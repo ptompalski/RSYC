@@ -1,13 +1,16 @@
 Package: RSYC
-Title: Remote sensing-derived aboveground biomass yield curves for Canada
-Version: 0.0.1
+Title: Remote Sensing-Derived Yield Curves for Canada
+Version: 0.1.0
 Authors@R: 
     c(
     person(given = "Piotr", 
            family = "Tompalski",
            email = "piotr.tompalski@NRCan-RNCan.gc.ca",
            role = c("aut", "cre", "cph")))
-Description: What the package does (one paragraph).
+Description: Provides published remote sensing-based yield curves for
+    aboveground biomass and total volume across Canada. Models are available
+    for 150 km tiles and nested ecological strata at national and regional
+    scales, with tools for prediction and model discovery.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -16,17 +19,19 @@ Depends:
     R (>= 3.5)
 LazyData: true
 Imports: 
-    dplyr,
     glue,
-    lazyeval,
     magrittr,
     tibble
 Suggests:
+    dplyr,
     knitr,
+    purrr,
     rmarkdown,
     DT,
-    leaflet
-VignetteBuilder: knitr
+    leaflet,
+    tidyr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 URL: https://github.com/ptompalski/RSYC
 BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown

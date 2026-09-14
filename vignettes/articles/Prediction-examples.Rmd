@@ -1,0 +1,142 @@
+---
+title: "Prediction examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Prediction examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r}
+library(RSYC)
+```
+
+## Individual predictions
+
+The five arguments are response, species, age, spatial level, and spatial ID.
+They can be supplied positionally:
+
+```{r}
+predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+predict_rsyc("volume", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+```
+
+Species-specific curves and broad model groups use the same interface:
+
+```{r}
+species_predictions <- tibble::tibble(
+  species = c("PICE.MAR", "PINU.BAN", "POPU.TRE", "coniferous", "broadleaf")
+) |>
+  dplyr::mutate(
+    agb_80 = purrr::map_dbl(
+      species,
+      \(species) predict_rsyc("agb", species, 80, "tile", "H14")
+    )
+  )
+
+species_predictions
+```
+
+## Multiple tiles and species
+
+Create one row per request and apply the five tibble columns directly to the
+five prediction arguments:
+
+```{r}
+tile_inputs <- tidyr::crossing(
+  response = c("agb", "volume"),
+  species = c("PICE.MAR", "POPU.TRE", "coniferous"),
+  age = c(20, 60, 120),
+  strata_level = "tile",
+  strata_id = c("H14", "F31")
+) |>
+  dplyr::mutate(
+    prediction = purrr::pmap_dbl(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+tile_inputs
+```
+
+Before constructing a large request table, use `species_in_tile()` or
+`available_rsyc_models()` to verify that every requested combination exists.
+
+## Nested ecological strata
+
+Use the name at the requested ecological level when it identifies one matching
+stratum:
+
+```{r}
+eco_inputs <- tibble::tribble(
+  ~response, ~species,   ~age, ~strata_level, ~strata_id,
+  "agb",     "PICE.MAR", 80,  "ecozone",
+    "Atlantic Maritime",
+  "agb",     "PICE.MAR", 80,  "ecoprovince",
+    "Appalachian-Acadian Highlands",
+  "agb",     "PICE.MAR", 80,  "ecoregion",
+    "Appalachians",
+  "agb",     "PICE.MAR", 80,  "ecodistrict",
+    "Windsor Lowlands"
+)
+
+eco_inputs <- eco_inputs |>
+  dplyr::mutate(
+    prediction = purrr::pmap_dbl(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+eco_inputs[c("strata_level", "strata_id", "prediction")]
+```
+
+Use `rsyc_strata()` to inspect short names and their canonical paths. For
+example, `Muskwa` is ambiguous for this species and response:
+
+```{r}
+rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
+  dplyr::filter(strata_name == "Muskwa")
+
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecodistrict",
+  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+)
+```
+
+## One complete curve per row
+
+A list-column allows each input row to hold an age vector and its corresponding
+yield curve:
+
+```{r}
+curve_inputs <- tibble::tribble(
+  ~response, ~species,     ~strata_level, ~strata_id,
+  "agb",     "PICE.MAR",   "tile",       "H14",
+  "agb",     "POPU.TRE",   "tile",       "F31",
+  "volume",  "coniferous", "tile",       "N3"
+)
+curve_inputs <- curve_inputs |>
+  dplyr::mutate(
+    age = list(1:200),
+    prediction = purrr::pmap(
+      list(response, species, age, strata_level, strata_id),
+      predict_rsyc
+    )
+  )
+
+curve_inputs
+
+curve_predictions <- curve_inputs |>
+  tidyr::unnest(c(age, prediction))
+
+curve_predictions
+```
+
+The `age` and `prediction` list-columns can then be expanded or plotted using
+the user's preferred data-manipulation and graphics packages.

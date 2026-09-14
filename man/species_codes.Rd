@@ -4,17 +4,22 @@
 \alias{species_codes}
 \title{List Available Species Codes and Names}
 \usage{
-species_codes()
+species_codes(response = NULL, strata_level = NULL)
+}
+\arguments{
+\item{response}{Optional response filter: \code{"agb"} or \code{"volume"}.}
+
+\item{strata_level}{Optional public spatial-level filter.}
 }
 \value{
-A tibble with two columns: \code{SpeciesCode} and \code{SpeciesName}.
+A tibble with columns \code{SpeciesCode} and \code{SpeciesName}.
 }
 \description{
-This function returns a data frame of species codes and their corresponding species names
-used in the RSYC model set. It arranges species codes alphabetically, but promotes the
-meta-categories \code{"Generic"}, \code{"Broadleaf"}, and \code{"Coniferous"} to the top of the list.
+List species codes and common names represented in the published RSYC model
+set. Model groups are listed first, followed by species codes.
 }
 \examples{
 species_codes()
+species_codes(response = "volume", strata_level = "ecoregion")
 
 }

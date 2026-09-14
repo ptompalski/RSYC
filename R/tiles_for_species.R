@@ -1,30 +1,28 @@
-#' List Available Tiles for a Given Species
+#' List Tiles Available for a Species
 #'
-#' This function returns the tile IDs where RSYC models are available for a specified species.
+#' @param species A single species code or model group. Matching is
+#'   case-insensitive.
+#' @param response Response variable: `"agb"` or `"volume"`.
 #'
-#' @param species A character string specifying the species code (e.g., "PICE.MAR" for black spruce).
-#'
-#' @return A character vector of tile IDs where the specified species is available.
+#' @return A character vector of tile IDs.
 #'
 #' @examples
 #' tiles_for_species("PINU.CON")
+#' tiles_for_species("Coniferous", response = "volume")
 #'
 #' @export
-tiles_for_species <- function(species) {
-  
-  # Check input
-  assert_is_character(species)
-  
-  # Filter RSYC parameters
-  D <- RSYC::RSYC_params %>%
-    dplyr::filter(SpeciesCode == species) %>%
-    dplyr::distinct(TileID) %>%
-    dplyr::pull(TileID)
-  
-  # If no tiles found, give informative warning
-  if (length(D) == 0) {
-    warning(glue::glue("No tiles found for species code '{species}'."), call. = FALSE)
+tiles_for_species <- function(species, response = "agb") {
+  species <- .rsyc_normalize_species(species)
+  models <- .rsyc_filter_models(response, species, "tile", NULL)
+  tiles <- unique(models$strata_id)
+
+  if (!length(tiles)) {
+    warning(
+      glue::glue(
+        "No tiles found for species '{species}', response='{tolower(response)}'."
+      ),
+      call. = FALSE
+    )
   }
-  
-  return(D)
+  tiles
 }

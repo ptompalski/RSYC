@@ -2,28 +2,45 @@
 % Please edit documentation in R/predict_rsyc.R
 \name{predict_rsyc}
 \alias{predict_rsyc}
-\title{Predict Aboveground Biomass Using RSYC models}
+\title{Predict a Remote Sensing-Based Yield Curve}
 \usage{
-predict_rsyc(tile_id, age, species)
+predict_rsyc(response, species, age, strata_level, strata_id)
 }
 \arguments{
-\item{tile_id}{A character string specifying the tile ID. Must match a tile for which RSYC models are available.}
+\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
 
-\item{age}{A numeric vector of stand ages (in years) at which to predict biomass. All values must be positive.}
+\item{species}{A species code or model group. Matching is case-insensitive.}
 
-\item{species}{A character string specifying the species code (e.g., \code{"PICE.MAR"} for black spruce). Use \code{species_codes()} for a full list of species names and codes.}
+\item{age}{Numeric vector of stand ages in years.}
+
+\item{strata_level}{Spatial level: \code{"tile"}, \code{"ecozone"},
+\code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
+
+\item{strata_id}{Published stratum name or full hierarchical path. A short
+ecosystem name is accepted when it identifies one matching model. If it is
+ambiguous, supply the full path shown by \code{rsyc_strata()}.}
 }
 \value{
-A numeric vector of predicted AGB values (e.g., in tonnes per hectare) corresponding to the input ages.
+A numeric vector. AGB is expressed in Mg/ha and volume in m3/ha.
 }
 \description{
-This function generates aboveground biomass (AGB) predictions using remote sensing-based yield curves (RSYC) for a given species, stand age, and tile.
-It retrieves the model parameters associated with the specified tile and species and applies a four-parameter Chapman-Richards growth function.
+Predict aboveground biomass or total volume from a published national RSYC
+model selected by species and spatial stratum.
 }
 \details{
-The RSYC models were developed using data from 0 to 150 years. If any ages provided exceed 150, a warning is issued because predictions represent extrapolations beyond the model's calibration range and may be unreliable.
+The public prediction interface currently uses national models only.
+Published models cover stand ages from 1 through 600 years. Values outside
+this interval generate an extrapolation warning. Full ecosystem paths use
+\code{/} to separate the hierarchy from ecozone down to the requested level.
 }
 \examples{
-predict_rsyc(tile_id = "J11", age = 1:100, species = "PICE.MAR")
+predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+predict_rsyc(
+  response = "volume",
+  species = "PICE.MAR",
+  age = c(20, 60, 120),
+  strata_level = "ecozone",
+  strata_id = "Boreal Shield East"
+)
 
 }
