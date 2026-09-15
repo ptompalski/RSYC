@@ -6,14 +6,17 @@ Authors@R:
     person(given = "Piotr", 
            family = "Tompalski",
            email = "piotr.tompalski@NRCan-RNCan.gc.ca",
-           role = c("aut", "cre", "cph")))
+           role = c("aut", "cre", "cph")),
+    person(paste("His Majesty the King in Right of Canada,",
+                 "as represented by the Minister of Natural Resources Canada"),
+           role = "cph")
+    )
 Description: Provides published remote sensing-based yield curves for
     aboveground biomass and total volume across Canada. Models are available
     for 150 km tiles and four levels of Canada's ecological land
     classification. Functions help users estimate yield at a given stand age
     and find curves by species and area.
 License: GPL (>= 3)
-Copyright: See inst/ECOSTRATIFICATION.md for optional third-party spatial data.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
