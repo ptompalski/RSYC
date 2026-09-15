@@ -115,7 +115,7 @@ predict_rsyc(
 
 ## Several complete curves
 
-This example estimates yield at ages 1 to 200 for each species and area listed
+This example estimates yield at ages 1 to 150 for each species and area listed
 in `curve_inputs`:
 
 ```{r}
@@ -127,7 +127,7 @@ curve_inputs <- tibble::tribble(
 )
 curve_inputs <- curve_inputs |>
   dplyr::mutate(
-    age = list(1:200),
+    age = list(1:150),
     prediction = purrr::pmap(
       list(response, species, age, strata_level, strata_id),
       predict_rsyc
@@ -143,4 +143,27 @@ curve_predictions
 ```
 
 The final table, `curve_predictions`, can then be plotted or used in further
-analysis.
+analysis. AGB and volume are shown in separate panels because they use
+different units:
+
+```{r curve-plot, fig.width=8, fig.height=5, fig.alt="RSYC yield curves by stand age for three species and tile combinations."}
+curve_predictions |>
+  dplyr::mutate(
+    response = factor(
+      response,
+      levels = c("agb", "volume"),
+      labels = c("AGB (Mg/ha)", "Volume (m3/ha)")
+    ),
+    curve = paste(species, strata_id, sep = " - ")
+  ) |>
+  ggplot2::ggplot(ggplot2::aes(age, prediction, colour = curve)) +
+  ggplot2::geom_line(linewidth = 0.9) +
+  ggplot2::facet_wrap(ggplot2::vars(response), scales = "free_y") +
+  ggplot2::labs(
+    x = "Stand age (years)",
+    y = "Predicted yield",
+    colour = "Species and tile"
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+```

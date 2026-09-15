@@ -5,11 +5,49 @@ RSYC provides published yield curves for aboveground biomass (AGB,
 Mg/ha) and total volume (m3/ha). Curves are available for individual
 species and the `generic`, `coniferous`, and `broadleaf` model groups.
 
-Version 0.1.0 contains 28,391 curves from model release `v20260709`.
 Models are available for 150 x 150 km tiles and four nested ecological
-levels: ecozone, ecoprovince, ecoregion, and ecodistrict. The package
-functions currently use curves fitted across Canada rather than curves
-fitted for individual regions.
+levels: ecozone, ecoprovince, ecoregion, and ecodistrict.
+
+<figure>
+<img src="man/figures/RSYC_curves_species_gh.png"
+alt="Species-specific RSYC curves across Canada’s 150 km tile grid." />
+<figcaption aria-hidden="true">Species-specific RSYC curves across
+Canada’s 150 km tile grid.</figcaption>
+</figure>
+
+## Model parameters
+
+You don’t need to install the R package to use the models. All model
+parameters used in RSYC are available for direct download. The ZIP
+archive contains the updated `RSYC_models.csv` table, including AGB and
+volume models for tiles and ecological strata.
+
+- **Model parameters:**
+  [RSYC_models.zip](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_models.zip)
+
+- **Tile grid:**
+  [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg)
+
+- **Ecological strata:**
+  [RSYC_ecostrat.gpkg](https://github.com/ptompalski/RSYC/releases/download/boundaries-v1/RSYC_ecostrat.gpkg)
+
+The RSYC models predict aboveground biomass (AGB) or total volume as a
+function of stand age:
+
+$$
+y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
+$$
+
+where
+
+- $y$ is AGB (Mg/ha) or total volume (m3/ha)
+- $b_1, b_2, b_3, b_4$ are response-, stratum-, and species-specific
+  parameters
+- *Age* is stand age (years)
+
+The curves were fitted for stand ages 1 to 150 years. RSYC warns when
+asked to estimate outside this age range. Age 0 is also allowed as the
+starting point of a curve.
 
 ## Installation
 
@@ -18,7 +56,9 @@ fitted for individual regions.
 remotes::install_github("ptompalski/RSYC")
 ```
 
-## Estimate biomass or volume
+## Examples
+
+### Estimate biomass or volume
 
 Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20,
 60, and 120 years:
@@ -26,6 +66,7 @@ Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20,
 ``` r
 library(RSYC)
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+#> [1] 27.49419 60.21335 74.19827
 ```
 
 To estimate total volume instead, set `response = "volume"`:
@@ -57,7 +98,7 @@ Some area names occur in more than one part of Canada. In those cases,
 `predict_rsyc()` lists every match. Choose the intended area using the
 full sequence of ecological areas shown by `rsyc_strata()`.
 
-### Compare species and tiles
+#### Compare species and tiles
 
 The following example estimates AGB and volume for several species,
 stand ages, and tiles. Each row of `tile_inputs` describes one estimate.
@@ -81,7 +122,7 @@ tile_inputs <- tidyr::crossing(
 tile_inputs
 ```
 
-### Compare ecological levels
+#### Compare ecological levels
 
 Use the area name at the chosen ecological level when that name occurs
 only once.
@@ -110,6 +151,18 @@ eco_inputs <- eco_inputs |>
 eco_inputs
 ```
 
+The same species can have different curves at each nested ecological
+level. The example below shows black spruce volume curves together with
+the areas they represent:
+
+<figure>
+<img
+src="man/figures/PICE_MAR_nested_ecosystem_maps_and_volume_curves.png"
+alt="Black spruce volume curves and maps at four nested ecological levels." />
+<figcaption aria-hidden="true">Black spruce volume curves and maps at
+four nested ecological levels.</figcaption>
+</figure>
+
 If a name occurs in several places, list the alternatives and use the
 full sequence from ecozone to the selected level:
 
@@ -123,7 +176,7 @@ predict_rsyc(
 )
 ```
 
-### Generate several complete curves
+#### Generate several complete curves
 
 The following example produces a complete set of estimates for ages 1 to
 150 for each species and area listed in `curve_inputs`:
@@ -145,21 +198,54 @@ curve_inputs <- curve_inputs |>
   )
 
 curve_inputs
+#> # A tibble: 3 × 6
+#>   response species    strata_level strata_id age         prediction 
+#>   <chr>    <chr>      <chr>        <chr>     <list>      <list>     
+#> 1 agb      PICE.MAR   tile         H14       <int [150]> <dbl [150]>
+#> 2 agb      POPU.TRE   tile         F31       <int [150]> <dbl [150]>
+#> 3 volume   coniferous tile         N3        <int [150]> <dbl [150]>
 
 curve_predictions <- curve_inputs |>
   tidyr::unnest(c(age, prediction))
 ```
 
+Plot the curves to compare how predicted yield changes with stand age.
+AGB and volume are shown separately because they use different units:
+
+``` r
+curve_predictions |>
+  dplyr::mutate(
+    response = factor(
+      response,
+      levels = c("agb", "volume"),
+      labels = c("AGB (Mg/ha)", "Volume (m3/ha)")
+    ),
+    curve = paste(species, strata_id, sep = " - ")
+  ) |>
+  ggplot2::ggplot(ggplot2::aes(age, prediction, colour = curve)) +
+  ggplot2::geom_line(linewidth = 0.9) +
+  ggplot2::facet_wrap(ggplot2::vars(response), scales = "free_y") +
+  ggplot2::labs(
+    x = "Stand age (years)",
+    y = "Predicted yield",
+    colour = "Species and tile"
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+<img src="man/figures/README-curve-plot-1.png" alt="RSYC yield curves by stand age for three species and tile combinations."  />
+
 See [Prediction examples](vignettes/articles/Prediction-examples.Rmd)
 for a longer walkthrough, including model-availability checks.
 
-## Find available curves
+### Find available curves
 
 Three functions are provided to help identify which model to use:
 
-- `available_rsyc_models()` lists individual published curves that match a
-  response, species, type of area, or area name. For example, list the volume
-  curves for black spruce at the ecozone level:
+- `available_rsyc_models()` lists individual published curves that match
+  a response, species, type of area, or area name. For example, list the
+  volume curves for black spruce at the ecozone level:
 
 ``` r
 available_rsyc_models(
@@ -169,18 +255,19 @@ available_rsyc_models(
 )
 ```
 
-- `rsyc_species()` lists the species available for a selected response and
-  area. It also gives each species' common name and model group. For example,
-  list the AGB species available in tile H14:
+- `rsyc_species()` lists the species available for a selected response
+  and area. It also gives each species’ common name and model group. For
+  example, list the AGB species available in tile H14:
 
 ``` r
 rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
 ```
 
 - `rsyc_strata()` lists the areas for which models are available for a
-  selected response and species. It gives both the short area name and the
-  full hierarchical area identifier, which can distinguish repeated area
-  names. For example, list the ecozones with volume models for black spruce:
+  selected response and species. It gives both the short area name and
+  the full hierarchical area identifier, which can distinguish repeated
+  area names. For example, list the ecozones with volume models for
+  black spruce:
 
 ``` r
 rsyc_strata(
@@ -190,41 +277,7 @@ rsyc_strata(
 )
 ```
 
-`RSYC_models` contains all 28,391 published curves and their supporting
-model details. It includes curves fitted across Canada and curves fitted
-for individual regions. The package functions currently use only the
-Canada-wide curves. The earlier tile-only data set, `RSYC_params`, has
-been removed. The tile map is still available at:
-
-``` r
-system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
-```
-
-## Optional ecological boundary maps
-
-The National Ecological Framework boundary maps come from a separate
-source and are not included in the main package. Download them once,
-then read the ecological level you need:
-
-``` r
-download_rsyc_boundaries()
-
-tiles <- rsyc_boundaries("tile")
-ecodistricts <- rsyc_boundaries("ecodistrict")
-```
-
-RSYC saves the downloaded file in its user data folder and checks that
-the file is complete and unchanged. The file contains boundary maps
-only, not yield curves. It is never downloaded when RSYC is installed or
-loaded. Organizations that keep an approved copy elsewhere can provide
-its address through the `RSYC.ecostrat_url` option.
-
-The ecological framework was developed independently of RSYC and is
-published by Agriculture and Agri-Food Canada. Contains information
-licensed under the [Open Government Licence –
-Canada](https://open.canada.ca/en/open-government-licence-canada).
-
-## Combine yield curves with a map
+### Create spatial yield-curve datasets
 
 `rsyc_product()` prepares yield estimates and the matching area
 boundaries. The boundaries are stored separately so the same map shape
@@ -253,19 +306,13 @@ version, equation, and choices used to create the results.
 Use `output = "rsyc_volume.gpkg"` to save the map, yield curves, and
 summary information together in one GeoPackage file.
 
-## Model equation
+## Presentations and papers
 
-All yield estimates use this form of the Chapman-Richards equation:
-
-$$
-y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
-$$
-
-The curves were fitted for stand ages 1 to 150 years. RSYC warns when
-asked to estimate outside this age range. Age 0 is also allowed as the
-starting point of a curve.
-
-## References
+For a visual introduction to the models, start with the **[RSYC
+overview](https://ptompalski.github.io/RSYC_overview/)**. A second
+presentation, [RSYC at IBFRA
+2026](https://ptompalski.github.io/RSYC-IBFRA2026/), focuses on their
+use in national forest growth and carbon assessment.
 
 Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C.
 2025. National remote sensing-derived aboveground biomass yield curves

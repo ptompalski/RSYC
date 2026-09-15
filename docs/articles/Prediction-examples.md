@@ -153,7 +153,7 @@ predict_rsyc(
 
 ## Several complete curves
 
-This example estimates yield at ages 1 to 200 for each species and area
+This example estimates yield at ages 1 to 150 for each species and area
 listed in `curve_inputs`:
 
 ``` r
@@ -166,32 +166,26 @@ curve_inputs <- tibble::tribble(
 )
 curve_inputs <- curve_inputs |>
   dplyr::mutate(
-    age = list(1:200),
+    age = list(1:150),
     prediction = purrr::pmap(
       list(response, species, age, strata_level, strata_id),
       predict_rsyc
     )
   )
-#> Warning: There were 3 warnings in `dplyr::mutate()`.
-#> The first warning was:
-#> ℹ In argument: `prediction = purrr::pmap(...)`.
-#> Caused by warning:
-#> ! Stand age is outside the published calibration range (1-150 years); predictions are extrapolations.
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 2 remaining warnings.
 
 curve_inputs
 #> # A tibble: 3 × 6
 #>   response species    strata_level strata_id age         prediction 
 #>   <chr>    <chr>      <chr>        <chr>     <list>      <list>     
-#> 1 agb      PICE.MAR   tile         H14       <int [200]> <dbl [200]>
-#> 2 agb      POPU.TRE   tile         F31       <int [200]> <dbl [200]>
-#> 3 volume   coniferous tile         N3        <int [200]> <dbl [200]>
+#> 1 agb      PICE.MAR   tile         H14       <int [150]> <dbl [150]>
+#> 2 agb      POPU.TRE   tile         F31       <int [150]> <dbl [150]>
+#> 3 volume   coniferous tile         N3        <int [150]> <dbl [150]>
 
 curve_predictions <- curve_inputs |>
   tidyr::unnest(c(age, prediction))
 
 curve_predictions
-#> # A tibble: 600 × 6
+#> # A tibble: 450 × 6
 #>    response species  strata_level strata_id   age prediction
 #>    <chr>    <chr>    <chr>        <chr>     <int>      <dbl>
 #>  1 agb      PICE.MAR tile         H14           1      0.812
@@ -204,8 +198,35 @@ curve_predictions
 #>  8 agb      PICE.MAR tile         H14           8     10.5  
 #>  9 agb      PICE.MAR tile         H14           9     12.0  
 #> 10 agb      PICE.MAR tile         H14          10     13.5  
-#> # ℹ 590 more rows
+#> # ℹ 440 more rows
 ```
 
 The final table, `curve_predictions`, can then be plotted or used in
-further analysis.
+further analysis. AGB and volume are shown in separate panels because
+they use different units:
+
+``` r
+
+curve_predictions |>
+  dplyr::mutate(
+    response = factor(
+      response,
+      levels = c("agb", "volume"),
+      labels = c("AGB (Mg/ha)", "Volume (m3/ha)")
+    ),
+    curve = paste(species, strata_id, sep = " - ")
+  ) |>
+  ggplot2::ggplot(ggplot2::aes(age, prediction, colour = curve)) +
+  ggplot2::geom_line(linewidth = 0.9) +
+  ggplot2::facet_wrap(ggplot2::vars(response), scales = "free_y") +
+  ggplot2::labs(
+    x = "Stand age (years)",
+    y = "Predicted yield",
+    colour = "Species and tile"
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+![RSYC yield curves by stand age for three species and tile
+combinations.](Prediction-examples_files/figure-html/curve-plot-1.png)

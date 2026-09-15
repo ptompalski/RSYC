@@ -27,12 +27,12 @@ Imports:
     tibble
 Suggests:
     dplyr,
+    ggplot2,
     knitr,
     purrr,
     rmarkdown,
     sf,
     DT,
-    leaflet,
     tidyr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

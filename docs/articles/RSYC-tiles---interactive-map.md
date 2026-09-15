@@ -1,1 +1,0 @@
-# RSYC tiles - interactive map
