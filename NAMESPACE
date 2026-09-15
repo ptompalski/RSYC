@@ -2,7 +2,10 @@
 
 export("%>%")
 export(available_rsyc_models)
+export(download_rsyc_boundaries)
 export(predict_rsyc)
+export(rsyc_boundaries)
+export(rsyc_product)
 export(rsyc_species)
 export(rsyc_strata)
 export(species_codes)

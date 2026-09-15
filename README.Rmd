@@ -15,10 +15,8 @@ RSYC provides published yield curves for aboveground biomass (AGB, Mg/ha) and
 total volume (m3/ha). Curves are available for individual species and the
 `generic`, `coniferous`, and `broadleaf` model groups.
 
-Version 0.1.0 contains 28,391 curves from model release `v20260709`. Models are
-available for 150 x 150 km tiles and four nested ecological levels: ecozone,
-ecoprovince, ecoregion, and ecodistrict. The public prediction and discovery
-interfaces currently use national models.
+Models are available for 150 x 150 km tiles and four nested ecological levels: ecozone,
+ecoprovince, ecoregion, and ecodistrict.
 
 ## Installation
 
@@ -27,16 +25,17 @@ interfaces currently use national models.
 remotes::install_github("ptompalski/RSYC")
 ```
 
-## Prediction
+## Estimate biomass or volume
 
-Predict national tile AGB with the required response-first signature:
+Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20, 60,
+and 120 years:
 
 ```{r}
 library(RSYC)
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 ```
 
-Select total volume with `response = "volume"`:
+To estimate total volume instead, set `response = "volume"`:
 
 ```{r}
 predict_rsyc(
@@ -48,8 +47,8 @@ predict_rsyc(
 )
 ```
 
-For ecosystem models, a short name is sufficient when it identifies one
-matching stratum:
+For ecological areas, the area name is enough when it occurs only once at the
+chosen level:
 
 ```{r}
 predict_rsyc(
@@ -61,18 +60,16 @@ predict_rsyc(
 )
 ```
 
-Some names occur under multiple parent strata. In those cases,
-`predict_rsyc()` reports every match and asks for one of the full hierarchical
-paths returned by `rsyc_strata()`.
+Some area names occur in more than one part of Canada. In those cases,
+`predict_rsyc()` lists every match. Choose the intended area using the full
+sequence of ecological areas shown by `rsyc_strata()`.
 
-Scale is intentionally not exposed by these functions; all selections are
-restricted to national models.
 
 ### Compare species and tiles
 
-Build a tibble containing one prediction request per row, then use
-`purrr::pmap_dbl()` to pass its columns to `predict_rsyc()`. The combinations
-below are all present in the published model catalog.
+The following example estimates AGB and volume for several species, stand ages,
+and tiles. Each row of `tile_inputs` describes one estimate. All combinations
+shown below have a published RSYC curve.
 
 ```{r}
 tile_inputs <- tidyr::crossing(
@@ -92,9 +89,10 @@ tile_inputs <- tidyr::crossing(
 tile_inputs
 ```
 
-### Compare nested ecosystem levels
+### Compare ecological levels
 
-Use the name at the requested ecosystem level when it is unambiguous.
+Use the area name at the chosen ecological level when that name occurs only
+once.
 
 ```{r}
 eco_inputs <- tibble::tribble(
@@ -120,7 +118,8 @@ eco_inputs <- eco_inputs |>
 eco_inputs
 ```
 
-If a name is duplicated, inspect the alternatives and use the canonical path:
+If a name occurs in several places, list the alternatives and use the full
+sequence from ecozone to the selected level:
 
 ```{r}
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
@@ -132,10 +131,10 @@ predict_rsyc(
 )
 ```
 
-### Generate complete curves from a tibble
+### Generate several complete curves
 
-Use list-columns when each row represents a model and should return predictions
-for several ages:
+The following example produces a complete set of estimates for ages 1 to 150
+for each species and area listed in `curve_inputs`:
 
 ```{r}
 curve_inputs <- tibble::tribble(
@@ -146,7 +145,7 @@ curve_inputs <- tibble::tribble(
 )
 curve_inputs <- curve_inputs |>
   dplyr::mutate(
-    age = list(1:200),
+    age = list(1:150),
     prediction = purrr::pmap(
       list(response, species, age, strata_level, strata_id),
       predict_rsyc
@@ -162,7 +161,13 @@ curve_predictions <- curve_inputs |>
 See [Prediction examples](vignettes/articles/Prediction-examples.Rmd) for a
 longer walkthrough, including model-availability checks.
 
-## Finding available models
+## Find available curves
+
+Three functions are provided to help identify which model to use:
+
+- `available_rsyc_models()` lists individual published curves that match a
+  response, species, type of area, or area name. For example, list the volume
+  curves for black spruce at the ecozone level:
 
 ```{r}
 available_rsyc_models(
@@ -170,31 +175,93 @@ available_rsyc_models(
   species = "PICE.MAR",
   strata_level = "ecozone"
 )
-
-rsyc_species(response = "agb", strata_level = "ecoregion")
-rsyc_strata(response = "volume", species = "PICE.MAR", strata_level = "ecozone")
 ```
 
-The complete, cleaned package-facing contract is exported as `RSYC_models`.
-It retains regional rows for provenance and future development, although the
-current public functions operate only on national rows. The earlier
-`RSYC_params` tile-only dataset has been removed. The tile grid is still
-available at:
+- `rsyc_species()` lists the species available for a selected response and
+  area. It also gives each species' common name and model group. For example,
+  list the AGB species available in tile H14:
 
-```r
-system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
+```{r}
+rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
 ```
+
+- `rsyc_strata()` lists the areas for which models are available for a
+  selected response and species. It gives both the short area name and the
+  full hierarchical area identifier, which can distinguish repeated area
+  names. For example, list the ecozones with volume models for black spruce:
+
+```{r}
+rsyc_strata(
+  response = "volume",
+  species = "PICE.MAR",
+  strata_level = "ecozone"
+)
+```
+
+
+## Optional ecological boundary maps
+
+The National Ecological Framework boundary maps come from a separate source
+and are not included in the main package. Download them once, then read the
+ecological level you need:
+
+```{r eval=FALSE}
+download_rsyc_boundaries()
+
+tiles <- rsyc_boundaries("tile")
+ecodistricts <- rsyc_boundaries("ecodistrict")
+```
+
+RSYC saves the downloaded file in its user data folder and checks that the file
+is complete and unchanged. The file contains boundary maps only, not yield
+curves. It is never downloaded when RSYC is installed or loaded. Organizations
+that keep an approved copy elsewhere can provide its address through the
+`RSYC.ecostrat_url` option.
+
+The ecological framework was developed independently of RSYC and is published
+by Agriculture and Agri-Food Canada. Contains information licensed under the
+[Open Government Licence – Canada](https://open.canada.ca/en/open-government-licence-canada).
+
+## Combine yield curves with a map
+
+`rsyc_product()` prepares yield estimates and the matching area boundaries.
+The boundaries are stored separately so the same map shape is not repeated for
+every species and stand age. By default, the function estimates ages 1 through
+150:
+
+```{r eval=FALSE}
+product <- rsyc_product(
+  response = "volume",
+  species = c("PICE.MAR", "POPU.TRE"),
+  age = 1:200,
+  strata_level = "ecodistrict"
+)
+
+product$spatial
+product$curves
+product$metadata
+```
+
+The `spatial` map contains `strata_id`, the ecological area names, and the area
+shapes. For tiles, it contains only `strata_id` and the tile shapes. The
+`curves` table records the model, area, species, stand age, and estimated yield.
+The `metadata` table summarizes the units, model version, equation, and choices
+used to create the results.
+
+Use `output = "rsyc_volume.gpkg"` to save the map, yield curves, and summary
+information together in one GeoPackage file.
 
 ## Model equation
 
-All predictions use the four-parameter declining Chapman-Richards equation:
+All yield estimates use this form of the Chapman-Richards equation:
 
 $$
 y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 $$
 
-The published calibration range is 1-600 years. Predictions outside this range
-produce an extrapolation warning.
+The curves were fitted for stand ages 1 to 150 years. RSYC warns when asked to
+estimate outside this age range. Age 0 is also allowed as the starting point of
+a curve.
 
 ## References
 

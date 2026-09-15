@@ -2,27 +2,27 @@
 % Please edit documentation in R/model-catalog.R
 \name{rsyc_strata}
 \alias{rsyc_strata}
-\title{List Spatial Strata Available in RSYC Models}
+\title{List Areas Available in RSYC Models}
 \usage{
 rsyc_strata(response = NULL, species = NULL, strata_level = NULL)
 }
 \arguments{
-\item{response}{Optional character vector containing \code{"agb"} and/or
-\code{"volume"}.}
+\item{response}{One or both forest measures: \code{"agb"} for aboveground biomass
+and \code{"volume"} for total volume. The default includes both.}
 
-\item{species}{Optional character vector of species codes or model groups.
-Matching is case-insensitive.}
+\item{species}{One or more species codes or broad groups. Uppercase and
+lowercase letters are treated the same. The default includes all species.}
 
-\item{strata_level}{Optional character vector containing public spatial
-levels: \code{"tile"}, \code{"ecozone"}, \code{"ecoprovince"}, \code{"ecoregion"}, or
-\code{"ecodistrict"}.}
+\item{strata_level}{One or more types of area: \code{"tile"}, \code{"ecozone"},
+\code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
+all types.}
 }
 \value{
-A tibble with the short \code{strata_name} and canonical hierarchical
-\code{strata_id} for each matching national-model stratum.
+A table with the short area name (\code{strata_name}) and its full
+location within Canada's ecological classification (\code{strata_id}).
 }
 \description{
-List Spatial Strata Available in RSYC Models
+List Areas Available in RSYC Models
 }
 \examples{
 rsyc_strata(

@@ -64,3 +64,19 @@ test_that("unavailable discovery combinations are empty or warn", {
   expect_warning(species_in_tile("NOT_A_TILE"), "No species")
   expect_warning(tiles_for_species("NOT.A.SPECIES"), "No tiles")
 })
+
+test_that("catalog filters validate vector inputs", {
+  expect_error(available_rsyc_models(strata_id = NA_character_), "non-empty")
+  expect_error(available_rsyc_models(response = character()), "non-empty")
+  expect_error(available_rsyc_models(response = "height"), "contain only")
+  expect_error(available_rsyc_models(species = 1), "non-empty")
+
+  models <- available_rsyc_models(response = c("AGB", "agb"))
+  expect_true(nrow(models) > 0L)
+  expect_true(all(models$response == "agb"))
+})
+
+test_that("internal species normalization rejects non-character vectors", {
+  normalize <- getFromNamespace(".rsyc_normalize_species", "RSYC")
+  expect_error(normalize(1, scalar = FALSE), "must be character")
+})

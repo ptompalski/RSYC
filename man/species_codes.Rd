@@ -7,16 +7,18 @@
 species_codes(response = NULL, strata_level = NULL)
 }
 \arguments{
-\item{response}{Optional response filter: \code{"agb"} or \code{"volume"}.}
+\item{response}{Forest measure to include: \code{"agb"} for aboveground biomass
+or \code{"volume"} for total volume. By default, both are included.}
 
-\item{strata_level}{Optional public spatial-level filter.}
+\item{strata_level}{Type of area to include. By default, all types are
+included.}
 }
 \value{
-A tibble with columns \code{SpeciesCode} and \code{SpeciesName}.
+A table with the species code and common name.
 }
 \description{
-List species codes and common names represented in the published RSYC model
-set. Model groups are listed first, followed by species codes.
+List the species codes and common names represented in the published RSYC
+curves. Broad groups are listed first, followed by individual species.
 }
 \examples{
 species_codes()

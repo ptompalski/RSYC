@@ -1,8 +1,8 @@
 ---
-title: "Model parameters and identifiers"
+title: "Understanding the yield-curve data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Model parameters and identifiers}
+  %\VignetteIndexEntry{Understanding the yield-curve data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,26 +11,27 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-`RSYC_models` is the stable package-facing model table. Each row is one
-published curve identified by response, species, spatial stratum, and model
-source.
+`RSYC_models` contains all published RSYC yield curves. Each row describes one
+curve for a forest measure, species, area, and source.
 
 ```{r}
 library(RSYC)
-RSYC_models[c(
+head(RSYC_models[c(
   "model_id", "response", "response_units", "strata_level", "strata_id",
   "scale", "species", "b1", "b2", "b3", "b4"
-)]
+)])
 ```
 
-The supported responses are `agb` (Mg/ha) and `volume` (m3/ha). Spatial levels
-are `tile`, `ecozone`, `ecoprovince`, `ecoregion`, and `ecodistrict`. The model
-contract retains both national and regional rows, but the current prediction
-and discovery functions expose national models only.
+The `response` column describes the forest measure: `agb` is aboveground
+biomass in Mg/ha, and `volume` is total volume in m3/ha. Areas can be tiles,
+ecozones, ecoprovinces, ecoregions, or ecodistricts. The table includes curves
+fitted across Canada and curves fitted within individual regions. The package
+functions currently use only the Canada-wide curves.
 
-Canonical ecosystem `strata_id` values encode their hierarchy with `/`.
-`predict_rsyc()` also accepts the shorter `strata_name` when it is unique for
-the requested response, species, and level:
+For ecological areas, `strata_id` gives the full sequence of names from the
+ecozone down to the selected level, separated by `/`. `predict_rsyc()` also
+accepts the shorter `strata_name` when that name occurs only once for the
+chosen forest measure, species, and ecological level:
 
 ```{r}
 rsyc_strata(
@@ -40,8 +41,8 @@ rsyc_strata(
 )
 ```
 
-Use `available_rsyc_models()` to inspect model metadata without working with
-the full coefficient and diagnostic table:
+Use `available_rsyc_models()` to see which curves are available without viewing
+all of the fields used to fit and check the curves:
 
 ```{r}
 available_rsyc_models(
@@ -51,6 +52,6 @@ available_rsyc_models(
 )
 ```
 
-The uncertainty and variance fields in `RSYC_models` are retained for a future
-local-calibration interface. They are not currently applied by
-`predict_rsyc()`.
+`RSYC_models` also contains measures of uncertainty and variation. These values
+may support adjustment with local observations in a future version, but
+`predict_rsyc()` does not currently use them.

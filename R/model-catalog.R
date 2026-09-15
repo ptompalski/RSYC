@@ -1,19 +1,20 @@
 #' List Published RSYC Models
 #'
-#' Return model metadata filtered by response, species, spatial level, stratum,
-#' using the currently supported national models. `NULL` means that a field is
-#' not filtered.
+#' List the published Canada-wide curves that match a forest measure, species,
+#' type of area, or area name. Leave a choice as `NULL` to include all of its
+#' available values.
 #'
-#' @param response Optional character vector containing `"agb"` and/or
-#'   `"volume"`.
-#' @param species Optional character vector of species codes or model groups.
-#'   Matching is case-insensitive.
-#' @param strata_level Optional character vector containing public spatial
-#'   levels: `"tile"`, `"ecozone"`, `"ecoprovince"`, `"ecoregion"`, or
-#'   `"ecodistrict"`.
-#' @param strata_id Optional character vector of short stratum names or full
-#'   published hierarchical paths.
-#' @return A tibble with one row per matching published curve.
+#' @param response One or both forest measures: `"agb"` for aboveground biomass
+#'   and `"volume"` for total volume. The default includes both.
+#' @param species One or more species codes or broad groups. Uppercase and
+#'   lowercase letters are treated the same. The default includes all species.
+#' @param strata_level One or more types of area: `"tile"`, `"ecozone"`,
+#'   `"ecoprovince"`, `"ecoregion"`, or `"ecodistrict"`. The default includes
+#'   all types.
+#' @param strata_id One or more tile IDs, ecological area names, or full
+#'   sequences of ecological area names. The default includes all areas.
+#' @return A table with one row for each published curve that matches the
+#'   choices.
 #'
 #' @examples
 #' available_rsyc_models(
@@ -45,7 +46,7 @@ available_rsyc_models <- function(
 #' List Species Available in RSYC Models
 #'
 #' @inheritParams available_rsyc_models
-#' @return A tibble with columns `species`, `species_name`, and `model_group`.
+#' @return A table giving each species code, common name, and broad model group.
 #'
 #' @examples
 #' rsyc_species(response = "agb", strata_level = "ecoregion")
@@ -68,11 +69,11 @@ rsyc_species <- function(
   tibble::as_tibble(species)
 }
 
-#' List Spatial Strata Available in RSYC Models
+#' List Areas Available in RSYC Models
 #'
 #' @inheritParams available_rsyc_models
-#' @return A tibble with the short `strata_name` and canonical hierarchical
-#'   `strata_id` for each matching national-model stratum.
+#' @return A table with the short area name (`strata_name`) and its full
+#'   location within Canada's ecological classification (`strata_id`).
 #'
 #' @examples
 #' rsyc_strata(
@@ -100,7 +101,7 @@ rsyc_strata <- function(
   strata_level = NULL,
   strata_id = NULL
 ) {
-  models <- RSYC::RSYC_models
+  models <- .rsyc_model_catalog()
   keep <- models$scale == "national"
 
   if (!is.null(response)) {

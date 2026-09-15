@@ -9,9 +9,11 @@ Authors@R:
            role = c("aut", "cre", "cph")))
 Description: Provides published remote sensing-based yield curves for
     aboveground biomass and total volume across Canada. Models are available
-    for 150 km tiles and nested ecological strata at national and regional
-    scales, with tools for prediction and model discovery.
+    for 150 km tiles and four levels of Canada's ecological land
+    classification. Functions help users estimate yield at a given stand age
+    and find curves by species and area.
 License: GPL (>= 3)
+Copyright: See inst/ECOSTRATIFICATION.md for optional third-party spatial data.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
@@ -19,6 +21,7 @@ Depends:
     R (>= 3.5)
 LazyData: true
 Imports: 
+    digest,
     glue,
     magrittr,
     tibble
@@ -27,11 +30,13 @@ Suggests:
     knitr,
     purrr,
     rmarkdown,
+    sf,
     DT,
     leaflet,
     tidyr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/ptompalski/RSYC
+URL: https://ptompalski.github.io/RSYC,
+    https://github.com/ptompalski/RSYC
 BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown

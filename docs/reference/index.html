@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Model parameters</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+    <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
     <li><a class="dropdown-item" href="../articles/RSYC-tiles---interactive-map.html">RSYC tiles - interactive map</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -46,48 +47,94 @@
 
 
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
 
       <dl><dt>
 
+          <code><a href="available_rsyc_models.html">available_rsyc_models()</a></code>
+
+        </dt>
+        <dd>List Published RSYC Models</dd>
+
+        <dt>
+
+          <code><a href="download_rsyc_boundaries.html">download_rsyc_boundaries()</a></code>
+
+        </dt>
+        <dd>Download RSYC Ecological Boundaries</dd>
+
+        <dt>
+
           <code><a href="predict_rsyc.html">predict_rsyc()</a></code>
 
         </dt>
-        <dd>Predict Aboveground Biomass Using RSYC models</dd>
-      </dl><dl><dt>
+        <dd>Estimate Biomass or Volume from an RSYC Yield Curve</dd>
 
-          <code><a href="RSYC_params.html">RSYC_params</a></code>
+        <dt>
+
+          <code><a href="rsyc_boundaries.html">rsyc_boundaries()</a></code>
 
         </dt>
-        <dd>Parameters for the RSYC models</dd>
-      </dl><dl><dt>
+        <dd>Read RSYC Boundary Maps</dd>
+
+        <dt>
+
+          <code><a href="RSYC_models.html">RSYC_models</a></code>
+
+        </dt>
+        <dd>Published RSYC Yield-Curve Data</dd>
+
+        <dt>
+
+          <code><a href="rsyc_product.html">rsyc_product()</a></code>
+
+        </dt>
+        <dd>Combine RSYC Yield Curves with a Boundary Map</dd>
+
+        <dt>
+
+          <code><a href="rsyc_species.html">rsyc_species()</a></code>
+
+        </dt>
+        <dd>List Species Available in RSYC Models</dd>
+
+        <dt>
+
+          <code><a href="rsyc_strata.html">rsyc_strata()</a></code>
+
+        </dt>
+        <dd>List Areas Available in RSYC Models</dd>
+
+        <dt>
 
           <code><a href="RSYC_tiles.html">RSYC_tiles</a></code>
 
         </dt>
-        <dd>RSYC Tile Grid (150 × 150 km)</dd>
-      </dl><dl><dt>
+        <dd>RSYC Tile Grid (150 x 150 km)</dd>
+
+        <dt>
 
           <code><a href="species_codes.html">species_codes()</a></code>
 
         </dt>
         <dd>List Available Species Codes and Names</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="species_in_tile.html">species_in_tile()</a></code>
 
         </dt>
-        <dd>List Available Species for a Given Tile</dd>
-      </dl><dl><dt>
+        <dd>List Species Available in a Tile</dd>
+
+        <dt>
 
           <code><a href="tiles_for_species.html">tiles_for_species()</a></code>
 
         </dt>
-        <dd>List Available Tiles for a Given Species</dd>
+        <dd>List Tiles Available for a Species</dd>
       </dl></div>
   </main></div>
 
@@ -97,7 +144,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

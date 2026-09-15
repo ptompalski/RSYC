@@ -36,13 +36,15 @@
 
 #' List Available Species Codes and Names
 #'
-#' List species codes and common names represented in the published RSYC model
-#' set. Model groups are listed first, followed by species codes.
+#' List the species codes and common names represented in the published RSYC
+#' curves. Broad groups are listed first, followed by individual species.
 #'
-#' @param response Optional response filter: `"agb"` or `"volume"`.
-#' @param strata_level Optional public spatial-level filter.
+#' @param response Forest measure to include: `"agb"` for aboveground biomass
+#'   or `"volume"` for total volume. By default, both are included.
+#' @param strata_level Type of area to include. By default, all types are
+#'   included.
 #'
-#' @return A tibble with columns `SpeciesCode` and `SpeciesName`.
+#' @return A table with the species code and common name.
 #'
 #' @examples
 #' species_codes()

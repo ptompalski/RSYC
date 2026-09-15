@@ -15,17 +15,19 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library(RSYC)
 ```
 
-## Individual predictions
+## Estimate yield for one species and area
 
-The five arguments are response, species, age, spatial level, and spatial ID.
-They can be supplied positionally:
+Choose the forest measure, species, stand age, type of area, and area name or
+tile ID. The following examples estimate AGB and volume for black spruce in
+tile H14 at three stand ages:
 
 ```{r}
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 predict_rsyc("volume", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 ```
 
-Species-specific curves and broad model groups use the same interface:
+The same function works for individual species and broad groups such as
+`coniferous` and `broadleaf`:
 
 ```{r}
 species_predictions <- tibble::tibble(
@@ -43,8 +45,9 @@ species_predictions
 
 ## Multiple tiles and species
 
-Create one row per request and apply the five tibble columns directly to the
-five prediction arguments:
+The following example estimates yield for several combinations of forest
+measure, species, stand age, and tile. Each row of `tile_inputs` describes one
+combination:
 
 ```{r}
 tile_inputs <- tidyr::crossing(
@@ -64,13 +67,13 @@ tile_inputs <- tidyr::crossing(
 tile_inputs
 ```
 
-Before constructing a large request table, use `species_in_tile()` or
-`available_rsyc_models()` to verify that every requested combination exists.
+Before estimating many combinations, use `species_in_tile()` or
+`available_rsyc_models()` to confirm that a published curve is available for
+each species and tile.
 
-## Nested ecological strata
+## Ecological areas
 
-Use the name at the requested ecological level when it identifies one matching
-stratum:
+Use the area name when it occurs only once at the selected ecological level:
 
 ```{r}
 eco_inputs <- tibble::tribble(
@@ -96,8 +99,9 @@ eco_inputs <- eco_inputs |>
 eco_inputs[c("strata_level", "strata_id", "prediction")]
 ```
 
-Use `rsyc_strata()` to inspect short names and their canonical paths. For
-example, `Muskwa` is ambiguous for this species and response:
+Use `rsyc_strata()` to list area names and see where they lie within Canada's
+ecological classification. For example, more than one ecodistrict named
+`Muskwa` has a curve for this species and forest measure:
 
 ```{r}
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
@@ -109,10 +113,10 @@ predict_rsyc(
 )
 ```
 
-## One complete curve per row
+## Several complete curves
 
-A list-column allows each input row to hold an age vector and its corresponding
-yield curve:
+This example estimates yield at ages 1 to 200 for each species and area listed
+in `curve_inputs`:
 
 ```{r}
 curve_inputs <- tibble::tribble(
@@ -138,5 +142,5 @@ curve_predictions <- curve_inputs |>
 curve_predictions
 ```
 
-The `age` and `prediction` list-columns can then be expanded or plotted using
-the user's preferred data-manipulation and graphics packages.
+The final table, `curve_predictions`, can then be plotted or used in further
+analysis.

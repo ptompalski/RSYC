@@ -1,9 +1,11 @@
 #' List Species Available in a Tile
 #'
-#' @param tile_id A single tile ID.
-#' @param response Response variable: `"agb"` or `"volume"`.
+#' @param tile_id One tile ID.
+#' @param response Forest measure: `"agb"` for aboveground biomass or
+#'   `"volume"` for total volume.
 #'
-#' @return A character vector of canonical species codes and model groups.
+#' @return The species codes and broad groups that have a published curve in
+#'   the chosen tile.
 #'
 #' @examples
 #' species_in_tile("H14")

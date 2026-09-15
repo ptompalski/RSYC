@@ -13,7 +13,7 @@ test_that("AGB and volume predictions exactly apply national coefficients", {
         RSYC_models$species == "PICE.MAR",
       , drop = FALSE
     ]
-    age <- c(10, 100, 300)
+    age <- c(10, 100, 150)
     expected <- with(model, b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3)
     actual <- predict_rsyc(response, "PICE.MAR", age, "tile", "H14")
     expect_equal(actual, expected)
@@ -64,14 +64,47 @@ test_that("species matching is case-insensitive", {
 })
 
 test_that("invalid inputs and extrapolation are reported", {
-  expect_warning(predict_rsyc("agb", "PICE.MAR", 0, "tile", "H14"), "published range")
-  expect_warning(predict_rsyc("agb", "PICE.MAR", 601, "tile", "H14"), "published range")
+  expect_no_warning(
+    predict_rsyc("agb", "PICE.MAR", c(0, 1, 150), "tile", "H14")
+  )
+  expect_warning(
+    predict_rsyc("agb", "PICE.MAR", 151, "tile", "H14"),
+    "published calibration range \\(1-150 years\\)"
+  )
   expect_error(predict_rsyc("agb", "PICE.MAR", -1, "tile", "H14"), "negative")
+  expect_error(predict_rsyc("agb", "PICE.MAR", character(), "tile", "H14"), "non-empty numeric")
   expect_error(predict_rsyc("agb", "PICE.MAR", Inf, "tile", "H14"), "finite")
   expect_error(predict_rsyc("agb", "PICE.MAR", NA_real_, "tile", "H14"), "finite")
   expect_error(
     predict_rsyc("agb", "PICE.MAR", 20, "tile", "NOT_A_TILE"),
     "No national RSYC model"
+  )
+})
+
+test_that("scalar prediction arguments are validated", {
+  expect_error(predict_rsyc(character(), "PICE.MAR", 20, "tile", "H14"), "one non-empty")
+  expect_error(predict_rsyc("height", "PICE.MAR", 20, "tile", "H14"), "must be one of")
+  expect_error(predict_rsyc("agb", c("PICE.MAR", "POPU.TRE"), 20, "tile", "H14"), "one non-empty")
+  expect_error(predict_rsyc("agb", "PICE.MAR", 20, "tile", NA_character_), "one non-empty")
+})
+
+test_that("duplicate model rows are rejected", {
+  original <- RSYC_models
+  models <- rbind(original, original[1L, , drop = FALSE])
+  models[nrow(models), ] <- original[
+    original$response == "agb" & original$species == "PICE.MAR" &
+      original$strata_level == "tile" & original$strata_id == "H14" &
+      original$scale == "national",
+    , drop = FALSE
+  ][1L, ]
+  testthat::local_mocked_bindings(
+    .rsyc_model_catalog = function() models,
+    .package = "RSYC"
+  )
+
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 20, "tile", "H14"),
+    "Multiple national RSYC models"
   )
 })
 

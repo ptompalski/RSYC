@@ -2,36 +2,40 @@
 % Please edit documentation in R/predict_rsyc.R
 \name{predict_rsyc}
 \alias{predict_rsyc}
-\title{Predict a Remote Sensing-Based Yield Curve}
+\title{Estimate Biomass or Volume from an RSYC Yield Curve}
 \usage{
 predict_rsyc(response, species, age, strata_level, strata_id)
 }
 \arguments{
-\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
+\item{response}{Forest measure to estimate: \code{"agb"} for aboveground biomass
+or \code{"volume"} for total volume.}
 
-\item{species}{A species code or model group. Matching is case-insensitive.}
+\item{species}{A species code or broad group such as \code{"coniferous"}.
+Uppercase and lowercase letters are treated the same.}
 
-\item{age}{Numeric vector of stand ages in years.}
+\item{age}{One or more stand ages in years.}
 
-\item{strata_level}{Spatial level: \code{"tile"}, \code{"ecozone"},
+\item{strata_level}{Type of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
-\item{strata_id}{Published stratum name or full hierarchical path. A short
-ecosystem name is accepted when it identifies one matching model. If it is
-ambiguous, supply the full path shown by \code{rsyc_strata()}.}
+\item{strata_id}{Tile ID or ecological area name. A single area name can be
+used when it occurs only once. If the name occurs in several places, use
+the full sequence of area names shown by \code{rsyc_strata()}.}
 }
 \value{
-A numeric vector. AGB is expressed in Mg/ha and volume in m3/ha.
+One estimated value for each stand age. AGB is in Mg/ha and volume
+is in m3/ha.
 }
 \description{
-Predict aboveground biomass or total volume from a published national RSYC
-model selected by species and spatial stratum.
+Estimate aboveground biomass or total volume at one or more stand ages. The
+curve is selected by species and area.
 }
 \details{
-The public prediction interface currently uses national models only.
-Published models cover stand ages from 1 through 600 years. Values outside
-this interval generate an extrapolation warning. Full ecosystem paths use
-\code{/} to separate the hierarchy from ecozone down to the requested level.
+This function currently uses curves fitted across Canada. The curves were
+fitted for stand ages 1 through 150 years. The function warns when asked to
+estimate outside this age range; age 0 is also allowed as the start of a
+curve. When a full ecological area sequence is needed, use \code{/} between the
+ecozone, ecoprovince, ecoregion, and ecodistrict names.
 }
 \examples{
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")

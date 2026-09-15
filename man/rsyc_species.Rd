@@ -7,18 +7,18 @@
 rsyc_species(response = NULL, strata_level = NULL, strata_id = NULL)
 }
 \arguments{
-\item{response}{Optional character vector containing \code{"agb"} and/or
-\code{"volume"}.}
+\item{response}{One or both forest measures: \code{"agb"} for aboveground biomass
+and \code{"volume"} for total volume. The default includes both.}
 
-\item{strata_level}{Optional character vector containing public spatial
-levels: \code{"tile"}, \code{"ecozone"}, \code{"ecoprovince"}, \code{"ecoregion"}, or
-\code{"ecodistrict"}.}
+\item{strata_level}{One or more types of area: \code{"tile"}, \code{"ecozone"},
+\code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
+all types.}
 
-\item{strata_id}{Optional character vector of short stratum names or full
-published hierarchical paths.}
+\item{strata_id}{One or more tile IDs, ecological area names, or full
+sequences of ecological area names. The default includes all areas.}
 }
 \value{
-A tibble with columns \code{species}, \code{species_name}, and \code{model_group}.
+A table giving each species code, common name, and broad model group.
 }
 \description{
 List Species Available in RSYC Models

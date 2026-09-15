@@ -7,13 +7,15 @@
 tiles_for_species(species, response = "agb")
 }
 \arguments{
-\item{species}{A single species code or model group. Matching is
-case-insensitive.}
+\item{species}{One species code or broad group. Uppercase and lowercase
+letters are treated the same.}
 
-\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
+\item{response}{Forest measure: \code{"agb"} for aboveground biomass or
+\code{"volume"} for total volume.}
 }
 \value{
-A character vector of tile IDs.
+The IDs of tiles with a published curve for the chosen species and
+forest measure.
 }
 \description{
 List Tiles Available for a Species

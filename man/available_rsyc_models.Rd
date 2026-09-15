@@ -12,26 +12,27 @@ available_rsyc_models(
 )
 }
 \arguments{
-\item{response}{Optional character vector containing \code{"agb"} and/or
-\code{"volume"}.}
+\item{response}{One or both forest measures: \code{"agb"} for aboveground biomass
+and \code{"volume"} for total volume. The default includes both.}
 
-\item{species}{Optional character vector of species codes or model groups.
-Matching is case-insensitive.}
+\item{species}{One or more species codes or broad groups. Uppercase and
+lowercase letters are treated the same. The default includes all species.}
 
-\item{strata_level}{Optional character vector containing public spatial
-levels: \code{"tile"}, \code{"ecozone"}, \code{"ecoprovince"}, \code{"ecoregion"}, or
-\code{"ecodistrict"}.}
+\item{strata_level}{One or more types of area: \code{"tile"}, \code{"ecozone"},
+\code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
+all types.}
 
-\item{strata_id}{Optional character vector of short stratum names or full
-published hierarchical paths.}
+\item{strata_id}{One or more tile IDs, ecological area names, or full
+sequences of ecological area names. The default includes all areas.}
 }
 \value{
-A tibble with one row per matching published curve.
+A table with one row for each published curve that matches the
+choices.
 }
 \description{
-Return model metadata filtered by response, species, spatial level, stratum,
-using the currently supported national models. \code{NULL} means that a field is
-not filtered.
+List the published Canada-wide curves that match a forest measure, species,
+type of area, or area name. Leave a choice as \code{NULL} to include all of its
+available values.
 }
 \examples{
 available_rsyc_models(

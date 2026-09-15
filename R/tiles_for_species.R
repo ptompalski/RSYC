@@ -1,10 +1,12 @@
 #' List Tiles Available for a Species
 #'
-#' @param species A single species code or model group. Matching is
-#'   case-insensitive.
-#' @param response Response variable: `"agb"` or `"volume"`.
+#' @param species One species code or broad group. Uppercase and lowercase
+#'   letters are treated the same.
+#' @param response Forest measure: `"agb"` for aboveground biomass or
+#'   `"volume"` for total volume.
 #'
-#' @return A character vector of tile IDs.
+#' @return The IDs of tiles with a published curve for the chosen species and
+#'   forest measure.
 #'
 #' @examples
 #' tiles_for_species("PINU.CON")

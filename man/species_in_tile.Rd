@@ -7,12 +7,14 @@
 species_in_tile(tile_id, response = "agb")
 }
 \arguments{
-\item{tile_id}{A single tile ID.}
+\item{tile_id}{One tile ID.}
 
-\item{response}{Response variable: \code{"agb"} or \code{"volume"}.}
+\item{response}{Forest measure: \code{"agb"} for aboveground biomass or
+\code{"volume"} for total volume.}
 }
 \value{
-A character vector of canonical species codes and model groups.
+The species codes and broad groups that have a published curve in
+the chosen tile.
 }
 \description{
 List Species Available in a Tile
