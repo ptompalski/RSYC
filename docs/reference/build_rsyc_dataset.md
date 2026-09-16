@@ -1,4 +1,4 @@
-# Combine RSYC Yield Curves with a Boundary Map
+# Build an RSYC Spatial Yield-Curve Dataset
 
 Estimate yield for one or more species across a set of tiles or
 ecological areas. The boundary map is kept separate from the curve table
@@ -7,7 +7,7 @@ so that each area shape is stored only once.
 ## Usage
 
 ``` r
-rsyc_product(
+build_rsyc_dataset(
   response,
   species,
   age = 1:150,
@@ -85,14 +85,14 @@ tile boundaries are included with RSYC.
 ## Examples
 
 ``` r
-tile_product <- rsyc_product(
+tile_dataset <- build_rsyc_dataset(
   response = "agb",
   species = c("PICE.MAR", "POPU.TRE"),
   age = c(50, 100, 150),
   strata_level = "tile",
   strata_id = c("H14", "F31")
 )
-tile_product$spatial
+tile_dataset$spatial
 #> Simple feature collection with 2 features and 1 field
 #> Geometry type: POLYGON
 #> Dimension:     XY
@@ -101,7 +101,7 @@ tile_product$spatial
 #>     strata_id                       geometry
 #> 106       F31 POLYGON ((2169089 348648.1,...
 #> 156       H14 POLYGON ((-380910.5 648648....
-tile_product$curves
+tile_dataset$curves
 #> # A tibble: 12 × 5
 #>    model_id                            strata_id species    age prediction
 #>    <chr>                               <chr>     <chr>    <dbl>      <dbl>

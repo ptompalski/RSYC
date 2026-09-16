@@ -67,7 +67,7 @@ tile_inputs <- tidyr::crossing(
 tile_inputs
 ```
 
-Before estimating many combinations, use `species_in_tile()` or
+Before estimating many combinations, use `rsyc_species()` or
 `available_rsyc_models()` to confirm that a published curve is available for
 each species and tile.
 

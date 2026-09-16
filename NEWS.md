@@ -8,7 +8,7 @@ the expanded, versioned model catalogue.
 
 * RSYC model releases are now versioned. This package version includes model
   release `v20260709`; the release is recorded in the `model_version` field of
-  the model catalogue and in generated product metadata.
+  the model catalogue and in generated dataset metadata.
 * Replaced the former parameter data with `RSYC_models`, a unified catalogue of
   published aboveground biomass (`agb`) and total-volume (`volume`) curves.
 * Models can now be selected for either 150 km tiles or polygons from four
@@ -28,10 +28,10 @@ the expanded, versioned model catalogue.
 * Redesigned the model-discovery workflow. `available_rsyc_models()`,
   `rsyc_species()`, and `rsyc_strata()` now query the versioned catalogue by
   response and geographic level.
-* Updated `species_codes()`, `species_in_tile()`, and `tiles_for_species()` for
-  the expanded response and model metadata; the tile-specific helpers remain
-  available as convenient shortcuts.
-* Added `rsyc_product()` to return predictions together with the model
+* Updated `species_codes()` for the expanded model metadata. Removed the legacy
+  tile-only `species_in_tile()` and `tiles_for_species()` helpers; use
+  `rsyc_species()` and `rsyc_strata()` for both tiles and ecological strata.
+* Added `build_rsyc_dataset()` to return predictions together with the model
   parameters and provenance metadata needed to reproduce them.
 
 ## Spatial data and documentation

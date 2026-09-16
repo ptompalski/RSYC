@@ -45,6 +45,7 @@
     <li><a class="dropdown-item" href="articles/Prediction-examples.html">Prediction examples</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -275,18 +276,18 @@ Black spruce volume curves and maps at four nested ecological levels.
 <div class="section level3">
 <h3 id="create-spatial-yield-curve-datasets">Create spatial yield-curve datasets<a class="anchor" aria-label="anchor" href="#create-spatial-yield-curve-datasets"></a>
 </h3>
-<p><code><a href="reference/rsyc_product.html">rsyc_product()</a></code> prepares yield estimates and the matching area boundaries. The boundaries are stored separately so the same map shape is not repeated for every species and stand age. By default, the function estimates ages 1 through 150:</p>
+<p><code><a href="reference/build_rsyc_dataset.html">build_rsyc_dataset()</a></code> prepares yield estimates and the matching area boundaries. The boundaries are stored separately so the same map shape is not repeated for every species and stand age. By default, the function estimates ages 1 through 150:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">product</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rsyc_product.html">rsyc_product</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_rsyc_dataset.html">build_rsyc_dataset</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PICE.MAR"</span>, <span class="st">"POPU.TRE"</span><span class="op">)</span>,</span>
 <span>  age <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,</span>
 <span>  strata_level <span class="op">=</span> <span class="st">"ecodistrict"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">product</span><span class="op">$</span><span class="va">spatial</span></span>
-<span><span class="va">product</span><span class="op">$</span><span class="va">curves</span></span>
-<span><span class="va">product</span><span class="op">$</span><span class="va">metadata</span></span></code></pre></div>
+<span><span class="va">dataset</span><span class="op">$</span><span class="va">spatial</span></span>
+<span><span class="va">dataset</span><span class="op">$</span><span class="va">curves</span></span>
+<span><span class="va">dataset</span><span class="op">$</span><span class="va">metadata</span></span></code></pre></div>
 <p>The <code>spatial</code> map contains <code>strata_id</code>, the ecological area names, and the area shapes. For tiles, it contains only <code>strata_id</code> and the tile shapes. The <code>curves</code> table records the model, area, species, stand age, and estimated yield. The <code>metadata</code> table summarizes the units, model version, equation, and choices used to create the results.</p>
 <p>Use <code>output = "rsyc_volume.gpkg"</code> to save the map, yield curves, and summary information together in one GeoPackage file.</p>
 </div>
@@ -295,6 +296,7 @@ Black spruce volume curves and maps at four nested ecological levels.
 <h2 id="presentations-and-papers">Presentations and papers<a class="anchor" aria-label="anchor" href="#presentations-and-papers"></a>
 </h2>
 <p>For a visual introduction to the models, start with the <strong><a href="https://ptompalski.github.io/RSYC_overview/">RSYC overview</a></strong>. A second presentation, <a href="https://ptompalski.github.io/RSYC-IBFRA2026/">RSYC at IBFRA 2026</a>, focuses on their use in national forest growth and carbon assessment.</p>
+<p>If you use the RSYC package in your work, please cite the following two references:</p>
 <p>Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C. 2025. National remote sensing-derived aboveground biomass yield curves for Canada. <em>Forestry: An International Journal of Forest Research</em>. <a href="https://doi.org/10.1093/forestry/cpaf067" class="external-link uri">https://doi.org/10.1093/forestry/cpaf067</a></p>
 <p>Tompalski, P., Wulder, M.A., White, J.C., Hermosilla, T., Riofrio, J., Kurz, W.A. 2024. Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data. <em>Forest Ecology and Management</em> 561, 121894. <a href="https://doi.org/10.1016/j.foreco.2024.121894" class="external-link uri">https://doi.org/10.1016/j.foreco.2024.121894</a></p>
 </div>
@@ -327,6 +329,7 @@ Black spruce volume curves and maps at four nested ecological levels.
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Piotr Tompalski <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 

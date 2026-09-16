@@ -3,3 +3,30 @@ destination: "docs"
 template:
   bootstrap: 5
   math-rendering: mathjax
+
+reference:
+- title: Predict yield and build datasets
+  desc: Estimate yield curves and combine predictions with spatial data.
+  contents:
+  - predict_rsyc
+  - build_rsyc_dataset
+
+- title: Discover available models
+  desc: Find published curves, species, and geographic strata.
+  contents:
+  - available_rsyc_models
+  - rsyc_species
+  - rsyc_strata
+  - species_codes
+
+- title: Access spatial boundaries
+  desc: Download and read the polygons associated with RSYC models.
+  contents:
+  - rsyc_boundaries
+  - download_rsyc_boundaries
+
+- title: Package datasets
+  desc: Model metadata and the bundled tile grid.
+  contents:
+  - RSYC_models
+  - RSYC_tiles

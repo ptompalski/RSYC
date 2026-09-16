@@ -279,22 +279,22 @@ rsyc_strata(
 
 ### Create spatial yield-curve datasets
 
-`rsyc_product()` prepares yield estimates and the matching area
+`build_rsyc_dataset()` prepares yield estimates and the matching area
 boundaries. The boundaries are stored separately so the same map shape
 is not repeated for every species and stand age. By default, the
 function estimates ages 1 through 150:
 
 ``` r
-product <- rsyc_product(
+dataset <- build_rsyc_dataset(
   response = "volume",
   species = c("PICE.MAR", "POPU.TRE"),
   age = 1:200,
   strata_level = "ecodistrict"
 )
 
-product$spatial
-product$curves
-product$metadata
+dataset$spatial
+dataset$curves
+dataset$metadata
 ```
 
 The `spatial` map contains `strata_id`, the ecological area names, and
@@ -313,6 +313,9 @@ overview](https://ptompalski.github.io/RSYC_overview/)**. A second
 presentation, [RSYC at IBFRA
 2026](https://ptompalski.github.io/RSYC-IBFRA2026/), focuses on their
 use in national forest growth and carbon assessment.
+
+If you use the RSYC package in your work, please cite the following two
+references:
 
 Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C.
 2025. National remote sensing-derived aboveground biomass yield curves

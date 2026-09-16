@@ -1,4 +1,4 @@
-#' Combine RSYC Yield Curves with a Boundary Map
+#' Build an RSYC Spatial Yield-Curve Dataset
 #'
 #' Estimate yield for one or more species across a set of tiles or ecological
 #' areas. The boundary map is kept separate from the curve table so that each
@@ -32,18 +32,18 @@
 #' [download_rsyc_boundaries()]; tile boundaries are included with RSYC.
 #'
 #' @examples
-#' tile_product <- rsyc_product(
+#' tile_dataset <- build_rsyc_dataset(
 #'   response = "agb",
 #'   species = c("PICE.MAR", "POPU.TRE"),
 #'   age = c(50, 100, 150),
 #'   strata_level = "tile",
 #'   strata_id = c("H14", "F31")
 #' )
-#' tile_product$spatial
-#' tile_product$curves
+#' tile_dataset$spatial
+#' tile_dataset$curves
 #'
 #' @export
-rsyc_product <- function(
+build_rsyc_dataset <- function(
   response,
   species,
   age = 1:150,
@@ -74,12 +74,12 @@ rsyc_product <- function(
   models <- models[keep, , drop = FALSE]
 
   if (!is.null(strata_id)) {
-    resolved <- .rsyc_resolve_product_strata(models, strata_id, strata_level)
+    resolved <- .rsyc_resolve_dataset_strata(models, strata_id, strata_level)
     models <- models[models$strata_id %in% resolved, , drop = FALSE]
   }
   if (!nrow(models)) {
     stop(
-      "No national RSYC models match the requested product. Use ",
+      "No national RSYC models match the requested dataset. Use ",
       "`available_rsyc_models()` to inspect model availability.",
       call. = FALSE
     )
@@ -136,15 +136,15 @@ rsyc_product <- function(
     created_at_utc = format(Sys.time(), tz = "UTC", usetz = TRUE)
   )
 
-  product <- list(spatial = spatial, curves = curves, metadata = metadata)
+  dataset <- list(spatial = spatial, curves = curves, metadata = metadata)
 
   if (!is.null(output)) {
-    .rsyc_write_product(product, output, overwrite = overwrite, quiet = quiet)
+    .rsyc_write_dataset(dataset, output, overwrite = overwrite, quiet = quiet)
   }
-  product
+  dataset
 }
 
-.rsyc_resolve_product_strata <- function(models, strata_id, strata_level) {
+.rsyc_resolve_dataset_strata <- function(models, strata_id, strata_level) {
   if (!is.character(strata_id) || !length(strata_id) ||
       anyNA(strata_id) || any(!nzchar(strata_id))) {
     stop("`strata_id` must contain non-empty character values.", call. = FALSE)
@@ -179,7 +179,7 @@ rsyc_product <- function(
   unique(resolved)
 }
 
-.rsyc_write_product <- function(product, output, overwrite, quiet) {
+.rsyc_write_dataset <- function(dataset, output, overwrite, quiet) {
   .rsyc_assert_scalar_character(output, "output")
   if (tolower(tools::file_ext(output)) != "gpkg") {
     stop("`output` must have a `.gpkg` extension.", call. = FALSE)
@@ -193,13 +193,13 @@ rsyc_product <- function(
   }
 
   sf::st_write(
-    product$spatial,
+    dataset$spatial,
     output,
     layer = "spatial",
     delete_dsn = file.exists(output),
     quiet = quiet
   )
-  sf::st_write(product$curves, output, layer = "curves", append = TRUE, quiet = quiet)
-  sf::st_write(product$metadata, output, layer = "metadata", append = TRUE, quiet = quiet)
+  sf::st_write(dataset$curves, output, layer = "curves", append = TRUE, quiet = quiet)
+  sf::st_write(dataset$metadata, output, layer = "metadata", append = TRUE, quiet = quiet)
   invisible(output)
 }

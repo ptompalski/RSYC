@@ -44,9 +44,7 @@ test_that("catalog filters accept short or hierarchical stratum IDs", {
   expect_identical(short$strata_name, "Windsor Lowlands")
 })
 
-test_that("tile discovery helpers retain national AGB defaults", {
-  expect_true("PICE.MAR" %in% species_in_tile("H14"))
-  expect_true("H14" %in% tiles_for_species("PICE.MAR"))
+test_that("species codes include broad model groups", {
   expect_true(all(c("SpeciesCode", "SpeciesName") %in% names(species_codes())))
   expect_identical(species_codes()$SpeciesCode[1:3], c("generic", "coniferous", "broadleaf"))
 })
@@ -55,14 +53,18 @@ test_that("scale is not exposed by discovery helpers", {
   expect_error(available_rsyc_models(scale = "regional"), "unused argument")
   expect_error(rsyc_species(scale = "regional"), "unused argument")
   expect_error(rsyc_strata(scale = "regional"), "unused argument")
-  expect_error(species_in_tile("H14", scale = "regional"), "unused argument")
-  expect_error(tiles_for_species("PICE.MAR", scale = "regional"), "unused argument")
 })
 
-test_that("unavailable discovery combinations are empty or warn", {
+test_that("unavailable discovery combinations are empty", {
   expect_equal(nrow(available_rsyc_models(strata_id = "NOT_A_STRATUM")), 0L)
-  expect_warning(species_in_tile("NOT_A_TILE"), "No species")
-  expect_warning(tiles_for_species("NOT.A.SPECIES"), "No tiles")
+  expect_equal(
+    nrow(rsyc_species(strata_level = "tile", strata_id = "NOT_A_TILE")),
+    0L
+  )
+  expect_equal(
+    nrow(rsyc_strata(species = "NOT.A.SPECIES", strata_level = "tile")),
+    0L
+  )
 })
 
 test_that("catalog filters validate vector inputs", {

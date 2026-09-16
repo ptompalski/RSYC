@@ -85,7 +85,7 @@ tile_inputs
 ```
 
 Before estimating many combinations, use
-[`species_in_tile()`](https://ptompalski.github.io/RSYC/reference/species_in_tile.md)
+[`rsyc_species()`](https://ptompalski.github.io/RSYC/reference/rsyc_species.md)
 or
 [`available_rsyc_models()`](https://ptompalski.github.io/RSYC/reference/available_rsyc_models.md)
 to confirm that a published curve is available for each species and

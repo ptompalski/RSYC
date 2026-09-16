@@ -27,6 +27,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
     <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ptompalski/RSYC/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -42,9 +43,32 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="predict-yield-and-build-datasets">Predict yield and build datasets<a class="anchor" aria-label="anchor" href="#predict-yield-and-build-datasets"></a></h2>
+
+      <div class="section-desc"><p>Estimate yield curves and combine predictions with spatial data.</p></div>
+
+      <dl></dl></div><div class="section level2">
 
 
+
+
+      <dl><dt>
+
+          <code><a href="predict_rsyc.html">predict_rsyc()</a></code>
+
+        </dt>
+        <dd>Estimate Biomass or Volume from an RSYC Yield Curve</dd>
+
+        <dt>
+
+          <code><a href="build_rsyc_dataset.html">build_rsyc_dataset()</a></code>
+
+        </dt>
+        <dd>Build an RSYC Spatial Yield-Curve Dataset</dd>
+      </dl></div><div class="section level2">
+      <h2 id="discover-available-models">Discover available models<a class="anchor" aria-label="anchor" href="#discover-available-models"></a></h2>
+
+      <div class="section-desc"><p>Find published curves, species, and geographic strata.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -57,41 +81,6 @@
 
         </dt>
         <dd>List Published RSYC Models</dd>
-
-        <dt>
-
-          <code><a href="download_rsyc_boundaries.html">download_rsyc_boundaries()</a></code>
-
-        </dt>
-        <dd>Download RSYC Ecological Boundaries</dd>
-
-        <dt>
-
-          <code><a href="predict_rsyc.html">predict_rsyc()</a></code>
-
-        </dt>
-        <dd>Estimate Biomass or Volume from an RSYC Yield Curve</dd>
-
-        <dt>
-
-          <code><a href="rsyc_boundaries.html">rsyc_boundaries()</a></code>
-
-        </dt>
-        <dd>Read RSYC Boundary Maps</dd>
-
-        <dt>
-
-          <code><a href="RSYC_models.html">RSYC_models</a></code>
-
-        </dt>
-        <dd>Published RSYC Yield-Curve Data</dd>
-
-        <dt>
-
-          <code><a href="rsyc_product.html">rsyc_product()</a></code>
-
-        </dt>
-        <dd>Combine RSYC Yield Curves with a Boundary Map</dd>
 
         <dt>
 
@@ -109,33 +98,59 @@
 
         <dt>
 
-          <code><a href="RSYC_tiles.html">RSYC_tiles</a></code>
-
-        </dt>
-        <dd>RSYC Tile Grid (150 x 150 km)</dd>
-
-        <dt>
-
           <code><a href="species_codes.html">species_codes()</a></code>
 
         </dt>
         <dd>List Available Species Codes and Names</dd>
+      </dl></div><div class="section level2">
+      <h2 id="access-spatial-boundaries">Access spatial boundaries<a class="anchor" aria-label="anchor" href="#access-spatial-boundaries"></a></h2>
+
+      <div class="section-desc"><p>Download and read the polygons associated with RSYC models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="rsyc_boundaries.html">rsyc_boundaries()</a></code>
+
+        </dt>
+        <dd>Read RSYC Boundary Maps</dd>
 
         <dt>
 
-          <code><a href="species_in_tile.html">species_in_tile()</a></code>
+          <code><a href="download_rsyc_boundaries.html">download_rsyc_boundaries()</a></code>
 
         </dt>
-        <dd>List Species Available in a Tile</dd>
+        <dd>Download RSYC Ecological Boundaries</dd>
+      </dl></div><div class="section level2">
+      <h2 id="package-datasets">Package datasets<a class="anchor" aria-label="anchor" href="#package-datasets"></a></h2>
+
+      <div class="section-desc"><p>Model metadata and the bundled tile grid.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="RSYC_models.html">RSYC_models</a></code>
+
+        </dt>
+        <dd>Published RSYC Yield-Curve Data</dd>
 
         <dt>
 
-          <code><a href="tiles_for_species.html">tiles_for_species()</a></code>
+          <code><a href="RSYC_tiles.html">RSYC_tiles</a></code>
 
         </dt>
-        <dd>List Tiles Available for a Species</dd>
+        <dd>RSYC Tile Grid (150 x 150 km)</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
