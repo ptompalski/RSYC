@@ -29,7 +29,7 @@ volume models for tiles and ecological strata.
   [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
 
 - **Ecological strata:**
-  [RSYC_ecostrat.gpkg](https://github.com/ptompalski/RSYC/releases/download/boundaries-v1/RSYC_ecostrat.gpkg)
+  [RSYC_ecostrat.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg)
 
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:

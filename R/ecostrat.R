@@ -1,9 +1,6 @@
-.rsyc_boundaries_release <- "boundaries-v1"
 .rsyc_ecostrat_filename <- "RSYC_ecostrat.gpkg"
 .rsyc_ecostrat_url <- paste0(
-  "https://github.com/ptompalski/RSYC/releases/download/",
-  .rsyc_boundaries_release,
-  "/",
+  "https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/",
   .rsyc_ecostrat_filename
 )
 
