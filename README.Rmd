@@ -32,9 +32,9 @@ used in RSYC are available for direct download. The ZIP archive contains the
 updated `RSYC_models.csv` table, including AGB and volume models for tiles and
 ecological strata.
 
-- **Model parameters:** [RSYC_models.zip](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_models.zip)
+- **Model parameters:** [RSYC_models.zip](https://raw.githubusercontent.com/ptompalski/RSYC/dev/data-raw/RSYC_models.zip)
 
-- **Tile grid:** [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg)
+- **Tile grid:** [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
 
 - **Ecological strata:** [RSYC_ecostrat.gpkg](https://github.com/ptompalski/RSYC/releases/download/boundaries-v1/RSYC_ecostrat.gpkg)
 

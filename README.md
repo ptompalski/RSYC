@@ -23,10 +23,10 @@ archive contains the updated `RSYC_models.csv` table, including AGB and
 volume models for tiles and ecological strata.
 
 - **Model parameters:**
-  [RSYC_models.zip](https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_models.zip)
+  [RSYC_models.zip](https://raw.githubusercontent.com/ptompalski/RSYC/dev/data-raw/RSYC_models.zip)
 
 - **Tile grid:**
-  [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg)
+  [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
 
 - **Ecological strata:**
   [RSYC_ecostrat.gpkg](https://github.com/ptompalski/RSYC/releases/download/boundaries-v1/RSYC_ecostrat.gpkg)
@@ -34,9 +34,7 @@ volume models for tiles and ecological strata.
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:
 
-$$
-y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
-$$
+$$y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.$$
 
 where
 
@@ -199,11 +197,12 @@ curve_inputs <- curve_inputs |>
 
 curve_inputs
 #> # A tibble: 3 × 6
-#>   response species    strata_level strata_id age         prediction 
-#>   <chr>    <chr>      <chr>        <chr>     <list>      <list>     
-#> 1 agb      PICE.MAR   tile         H14       <int [150]> <dbl [150]>
-#> 2 agb      POPU.TRE   tile         F31       <int [150]> <dbl [150]>
-#> 3 volume   coniferous tile         N3        <int [150]> <dbl [150]>
+#>   response species    strata_level strata_id age   
+#>   <chr>    <chr>      <chr>        <chr>     <list>
+#> 1 agb      PICE.MAR   tile         H14       <int> 
+#> 2 agb      POPU.TRE   tile         F31       <int> 
+#> 3 volume   coniferous tile         N3        <int> 
+#> # ℹ 1 more variable: prediction <list>
 
 curve_predictions <- curve_inputs |>
   tidyr::unnest(c(age, prediction))
