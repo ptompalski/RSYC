@@ -30,6 +30,19 @@ test_that("species and strata discovery helpers reflect model availability", {
   expect_true(all(c("strata_level", "strata_name", "strata_id") %in% names(strata)))
 })
 
+test_that("known ecodistrict model rows without boundary geometry are hidden", {
+  invalid <- "Taiga Shield West/Keewatin Lowlands/Dubawnt Lake Plain/Upland"
+
+  strata <- rsyc_strata(
+    response = "volume", species = "PICE.MAR", strata_level = "ecodistrict"
+  )
+  expect_false(invalid %in% strata$strata_id)
+  expect_error(
+    predict_rsyc("volume", "PICE.MAR", 50, "ecodistrict", invalid),
+    "No national RSYC model"
+  )
+})
+
 test_that("catalog filters accept short or hierarchical stratum IDs", {
   path <- "Atlantic Maritime/Fundy Uplands/Annapolis-Minas Lowlands/Windsor Lowlands"
   short <- available_rsyc_models(
