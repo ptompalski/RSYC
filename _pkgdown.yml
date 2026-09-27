@@ -9,6 +9,7 @@ reference:
   desc: Estimate yield curves and combine predictions with spatial data.
   contents:
   - predict_rsyc
+  - calibrate_rsyc
   - build_rsyc_dataset
 
 - title: Discover available models

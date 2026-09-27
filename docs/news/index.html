@@ -24,7 +24,8 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+    <li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
     <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -60,6 +61,7 @@
 <li>Redesigned the model-discovery workflow. <code><a href="../reference/available_rsyc_models.html">available_rsyc_models()</a></code>, <code><a href="../reference/rsyc_species.html">rsyc_species()</a></code>, and <code><a href="../reference/rsyc_strata.html">rsyc_strata()</a></code> now query the versioned catalogue by response and geographic level.</li>
 <li>Updated <code><a href="../reference/species_codes.html">species_codes()</a></code> for the expanded model metadata. Removed the legacy tile-only <code>species_in_tile()</code> and <code>tiles_for_species()</code> helpers; use <code><a href="../reference/rsyc_species.html">rsyc_species()</a></code> and <code><a href="../reference/rsyc_strata.html">rsyc_strata()</a></code> for both tiles and ecological strata.</li>
 <li>Added <code><a href="../reference/build_rsyc_dataset.html">build_rsyc_dataset()</a></code> to return predictions together with the model parameters and provenance metadata needed to reproduce them.</li>
+<li>Added <code><a href="../reference/calibrate_rsyc.html">calibrate_rsyc()</a></code> for local BLUP-based calibration of a published curve to field observations of AGB or volume at known stand ages. The local random effect is estimated conditional on the fitted model and substituted into the curve’s asymptote, following Tompalski et al. The adjustment is a shrinkage-based local level anchor, with optional safeguards (<code>apply_limits</code>) against implausible ratios and values.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="spatial-data-and-documentation-0-1-0">Spatial data and documentation<a class="anchor" aria-label="anchor" href="#spatial-data-and-documentation-0-1-0"></a></h3>
@@ -87,3 +89,4 @@
 
 
   </body></html>
+

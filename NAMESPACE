@@ -3,6 +3,7 @@
 export("%>%")
 export(available_rsyc_models)
 export(build_rsyc_dataset)
+export(calibrate_rsyc)
 export(download_rsyc_boundaries)
 export(predict_rsyc)
 export(rsyc_boundaries)

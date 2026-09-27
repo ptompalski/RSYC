@@ -41,7 +41,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+<li><a class="dropdown-item" href="articles/Local-calibration.html">Local calibration</a></li>
+    <li><a class="dropdown-item" href="articles/Model-parameters.html">Understanding the yield-curve data</a></li>
     <li><a class="dropdown-item" href="articles/Prediction-examples.html">Prediction examples</a></li>
   </ul>
 </li>
@@ -71,14 +72,12 @@ Species-specific RSYC curves across Canada’s 150 km tile grid.
 </h2>
 <p>You don’t need to install the R package to use the models. All model parameters used in RSYC are available for direct download. The ZIP archive contains the updated <code>RSYC_models.csv</code> table, including AGB and volume models for tiles and ecological strata.</p>
 <ul>
-<li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/data-raw/RSYC_models.zip" class="external-link">RSYC_models.zip</a></p></li>
-<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/main/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a></p></li>
-<li><p><strong>Ecological strata:</strong> <a href="https://github.com/ptompalski/RSYC/releases/download/boundaries-v1/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a></p></li>
+<li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/data-raw/RSYC_models.zip" class="external-link">RSYC_models.zip</a></p></li>
+<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a></p></li>
+<li><p><strong>Ecological strata:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a></p></li>
 </ul>
 <p>The RSYC models predict aboveground biomass (AGB) or total volume as a function of stand age:</p>
-<p><span class="math display">\[
-y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
-\]</span></p>
+<p><span class="math display">\[y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.\]</span></p>
 <p>where</p>
 <ul>
 <li>
@@ -209,11 +208,12 @@ Black spruce volume curves and maps at four nested ecological levels.
 <span></span>
 <span><span class="va">curve_inputs</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
-<span><span class="co">#&gt;   response species    strata_level strata_id age         prediction </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;      &lt;list&gt;     </span></span>
-<span><span class="co">#&gt; 1 agb      PICE.MAR   tile         H14       &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
-<span><span class="co">#&gt; 2 agb      POPU.TRE   tile         F31       &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
-<span><span class="co">#&gt; 3 volume   coniferous tile         N3        &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
+<span><span class="co">#&gt;   response species    strata_level strata_id age   </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;</span></span>
+<span><span class="co">#&gt; 1 agb      PICE.MAR   tile         H14       &lt;int&gt; </span></span>
+<span><span class="co">#&gt; 2 agb      POPU.TRE   tile         F31       &lt;int&gt; </span></span>
+<span><span class="co">#&gt; 3 volume   coniferous tile         N3        &lt;int&gt; </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: prediction &lt;list&gt;</span></span>
 <span></span>
 <span><span class="va">curve_predictions</span> <span class="op">&lt;-</span> <span class="va">curve_inputs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">prediction</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

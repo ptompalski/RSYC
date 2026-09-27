@@ -6,6 +6,8 @@ Estimate yield curves and combine predictions with spatial data.
 
 - [`predict_rsyc()`](https://ptompalski.github.io/RSYC/reference/predict_rsyc.md)
   : Estimate Biomass or Volume from an RSYC Yield Curve
+- [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
+  : Calibrate an RSYC Yield Curve with Local Observations
 - [`build_rsyc_dataset()`](https://ptompalski.github.io/RSYC/reference/build_rsyc_dataset.md)
   : Build an RSYC Spatial Yield-Curve Dataset
 

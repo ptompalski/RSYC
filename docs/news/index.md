@@ -49,6 +49,14 @@ to work with the expanded, versioned model catalogue.
   [`build_rsyc_dataset()`](https://ptompalski.github.io/RSYC/reference/build_rsyc_dataset.md)
   to return predictions together with the model parameters and
   provenance metadata needed to reproduce them.
+- Added
+  [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
+  for local BLUP-based calibration of a published curve to field
+  observations of AGB or volume at known stand ages. The local random
+  effect is estimated conditional on the fitted model and substituted
+  into the curve’s asymptote, following Tompalski et al. The adjustment
+  is a shrinkage-based local level anchor, with optional safeguards
+  (`apply_limits`) against implausible ratios and values.
 
 ### Spatial data and documentation
 
