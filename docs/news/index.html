@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,21 @@
       <small>Source: <a href="https://github.com/ptompalski/RSYC/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0.9000" id="rsyc-0209000">RSYC 0.2.0.9000<a class="anchor" aria-label="anchor" href="#rsyc-0209000"></a></h2>
+<div class="section level3">
+<h3 id="model-release-v20260923-0-2-0-9000">Model release v20260923<a class="anchor" aria-label="anchor" href="#model-release-v20260923-0-2-0-9000"></a></h3>
+<ul><li>Updated the packaged catalogue from model release <code>v20260709</code> to <code>v20260923</code>. After limiting ecological models to the 12 forested ecozones, the catalogue contains 27,208 rows and 42 columns. Curve coefficients and model availability changed, so predictions and local calibration results can differ from the previous package release.</li>
+<li>Added the raw ecological hierarchy fields <code>ecozone_id</code>, <code>ecoprovince_id</code>, <code>ecoregion_id</code>, and <code>ecodistrict_id</code>. They preserve upstream identifiers and provenance; geographic selection continues to use <code>strata_id</code> names and hierarchical paths in this development version.</li>
+<li>Relative to <code>v20260709</code>, national coverage was lost for 10 combinations: ecological AGB for <code>ALNU.INC</code>, <code>LARI.LAR</code>, and <code>QUER.RUB</code>; ecological volume for <code>ALNU.INC</code>, <code>FRAX.NIG</code>, <code>LARI.LAR</code>, and <code>QUER.RUB</code>; tile AGB for <code>LARI.LAR</code>; and tile volume for <code>FRAX.NIG</code> and <code>LARI.LAR</code>. These species had relatively limited spatial coverage and their models had frequently caused fitting problems in earlier model-development runs.</li>
+<li>Fixed an upstream sampling bug in which a small number of samples were drawn from the wrong ecodistricts. This issue affected ecological-strata models only; tile models were unaffected.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="spatial-products-0-2-0-9000">Spatial products<a class="anchor" aria-label="anchor" href="#spatial-products-0-2-0-9000"></a></h3>
+<ul><li>Added ecological boundary release v2, aligned exactly to the <code>v20260923</code> national model catalogue. It contains 12 forested ecozones, 36 ecoprovinces, 138 ecoregions, and 672 ecodistricts in EPSG:3978, with hierarchy names and raw hierarchy identifiers preserved.</li>
+<li>Boundary builds now record source and output checksums and validate complete, one-to-one coverage of published national model strata.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="rsyc-010">RSYC 0.1.0<a class="anchor" aria-label="anchor" href="#rsyc-010"></a></h2>
 <p>This is a significant update to both the published RSYC models and the package interface. Almost all user-facing functions have been redesigned to work with the expanded, versioned model catalogue.</p>

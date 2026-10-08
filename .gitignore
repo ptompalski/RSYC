@@ -56,3 +56,7 @@ readme.html
 /.quarto/
 
 papers
+
+AGENTS.md
+AI_logs
+data-raw/forested_ecozones.gpkg

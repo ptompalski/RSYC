@@ -33,18 +33,18 @@ A table giving each species code, common name, and broad model group.
 
 ``` r
 rsyc_species(response = "agb", strata_level = "ecoregion")
-#> # A tibble: 29 × 3
+#> # A tibble: 31 × 3
 #>    species    species_name  model_group
 #>    <chr>      <chr>         <chr>      
 #>  1 generic    Generic       generic    
 #>  2 coniferous Coniferous    coniferous 
-#>  3 ABIE.AMA   Amabilis fir  species    
-#>  4 ABIE.BAL   Balsam fir    species    
-#>  5 ABIE.LAS   Subalpine fir species    
-#>  6 ACER.RUB   Red maple     species    
-#>  7 ACER.SAH   Sugar maple   species    
-#>  8 ALNU.RUB   Red alder     species    
-#>  9 BETU.ALL   Yellow birch  species    
-#> 10 BETU.PAP   White birch   species    
-#> # ℹ 19 more rows
+#>  3 broadleaf  Broadleaf     broadleaf  
+#>  4 ABIE.AMA   Amabilis fir  species    
+#>  5 ABIE.BAL   Balsam fir    species    
+#>  6 ABIE.LAS   Subalpine fir species    
+#>  7 ACER.RUB   Red maple     species    
+#>  8 ACER.SAH   Sugar maple   species    
+#>  9 ALNU.RUB   Red alder     species    
+#> 10 BETU.ALL   Yellow birch  species    
+#> # ℹ 21 more rows
 ```

@@ -42,11 +42,11 @@ test_that("unique short ecosystem names resolve to hierarchical paths", {
 
 test_that("ambiguous short ecosystem names list hierarchical solutions", {
   expect_error(
-    predict_rsyc("agb", "PICE.MAR", 80, "ecodistrict", "Muskwa"),
+    predict_rsyc("agb", "PICE.MAR", 80, "ecodistrict", "Salmon River"),
     paste0(
       "ambiguous.*",
-      "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa.*",
-      "Taiga Plains/Hay-Slave Lowlands/Muskwa Plateau/Muskwa.*",
+      "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River.*",
+      "Boreal Shield East/Newfoundland/Northern Penninsula/Salmon River.*",
       "full hierarchical paths"
     )
   )

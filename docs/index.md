@@ -7,6 +7,12 @@ species and the `generic`, `coniferous`, and `broadleaf` model groups.
 Models are available for 150 x 150 km tiles and four nested ecological
 levels: ecozone, ecoprovince, ecoregion, and ecodistrict.
 
+This development version contains model release `v20260923`: 27,208
+published curve rows in a 42-column catalogue. The four raw hierarchy
+identifier fields (`ecozone_id`, `ecoprovince_id`, `ecoregion_id`, and
+`ecodistrict_id`) are included for provenance. Select ecological models
+by `strata_id` name or full hierarchical path.
+
 ![Species-specific RSYC curves across Canada’s 150 km tile
 grid.](reference/figures/RSYC_curves_species_gh.png)
 
@@ -24,14 +30,17 @@ volume models for tiles and ecological strata.
 
 - **Tile grid:**
   [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
+  (385 model-aligned v20260923 tiles)
 
 - **Ecological strata:**
   [RSYC_ecostrat.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg)
+  (temporary `dev` URL until the file is published as an immutable
+  release asset)
 
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:
 
-\\y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.\\
+\\ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}. \\
 
 where
 
@@ -47,7 +56,6 @@ starting point of a curve.
 ## Installation
 
 ``` r
-
 # install.packages("remotes")
 remotes::install_github("ptompalski/RSYC")
 ```
@@ -60,7 +68,6 @@ Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20,
 60, and 120 years:
 
 ``` r
-
 library(RSYC)
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 #> [1] 27.49419 60.21335 74.19827
@@ -69,7 +76,6 @@ predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 To estimate total volume instead, set `response = "volume"`:
 
 ``` r
-
 predict_rsyc(
   response = "volume",
   species = "PICE.MAR",
@@ -83,7 +89,6 @@ For ecological areas, the area name is enough when it occurs only once
 at the chosen level:
 
 ``` r
-
 predict_rsyc(
   response = "agb",
   species = "PICE.MAR",
@@ -106,7 +111,6 @@ stand ages, and tiles. Each row of `tile_inputs` describes one estimate.
 All combinations shown below have a published RSYC curve.
 
 ``` r
-
 tile_inputs <- tidyr::crossing(
   response = c("agb", "volume"),
   species = c("PICE.MAR", "POPU.TRE", "coniferous"),
@@ -130,7 +134,6 @@ Use the area name at the chosen ecological level when that name occurs
 only once.
 
 ``` r
-
 eco_inputs <- tibble::tribble(
   ~response, ~species,   ~age, ~strata_level, ~strata_id,
   "agb",     "PICE.MAR", 80,  "ecozone",
@@ -167,13 +170,12 @@ If a name occurs in several places, list the alternatives and use the
 full sequence from ecozone to the selected level:
 
 ``` r
-
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
-  dplyr::filter(strata_name == "Muskwa")
+  dplyr::filter(strata_name == "Salmon River")
 
 predict_rsyc(
   "agb", "PICE.MAR", 80, "ecodistrict",
-  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+  "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"
 )
 ```
 
@@ -183,7 +185,6 @@ The following example produces a complete set of estimates for ages 1 to
 150 for each species and area listed in `curve_inputs`:
 
 ``` r
-
 curve_inputs <- tibble::tribble(
   ~response, ~species,    ~strata_level, ~strata_id,
   "agb",     "PICE.MAR",  "tile",       "H14",
@@ -201,12 +202,11 @@ curve_inputs <- curve_inputs |>
 
 curve_inputs
 #> # A tibble: 3 × 6
-#>   response species    strata_level strata_id age   
-#>   <chr>    <chr>      <chr>        <chr>     <list>
-#> 1 agb      PICE.MAR   tile         H14       <int> 
-#> 2 agb      POPU.TRE   tile         F31       <int> 
-#> 3 volume   coniferous tile         N3        <int> 
-#> # ℹ 1 more variable: prediction <list>
+#>   response species    strata_level strata_id age         prediction 
+#>   <chr>    <chr>      <chr>        <chr>     <list>      <list>     
+#> 1 agb      PICE.MAR   tile         H14       <int [150]> <dbl [150]>
+#> 2 agb      POPU.TRE   tile         F31       <int [150]> <dbl [150]>
+#> 3 volume   coniferous tile         N3        <int [150]> <dbl [150]>
 
 curve_predictions <- curve_inputs |>
   tidyr::unnest(c(age, prediction))
@@ -216,7 +216,6 @@ Plot the curves to compare how predicted yield changes with stand age.
 AGB and volume are shown separately because they use different units:
 
 ``` r
-
 curve_predictions |>
   dplyr::mutate(
     response = factor(
@@ -255,7 +254,6 @@ Three functions are provided to help identify which model to use:
   spruce at the ecozone level:
 
 ``` r
-
 available_rsyc_models(
   response = "volume",
   species = "PICE.MAR",
@@ -269,7 +267,6 @@ available_rsyc_models(
   AGB species available in tile H14:
 
 ``` r
-
 rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
 ```
 
@@ -281,7 +278,6 @@ rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
   spruce:
 
 ``` r
-
 rsyc_strata(
   response = "volume",
   species = "PICE.MAR",
@@ -298,7 +294,6 @@ for every species and stand age. By default, the function estimates ages
 1 through 150:
 
 ``` r
-
 dataset <- build_rsyc_dataset(
   response = "volume",
   species = c("PICE.MAR", "POPU.TRE"),

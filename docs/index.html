@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,6 +65,7 @@
 </h1></div>
 <p>RSYC provides published yield curves for aboveground biomass (AGB, Mg/ha) and total volume (m3/ha). Curves are available for individual species and the <code>generic</code>, <code>coniferous</code>, and <code>broadleaf</code> model groups.</p>
 <p>Models are available for 150 x 150 km tiles and four nested ecological levels: ecozone, ecoprovince, ecoregion, and ecodistrict.</p>
+<p>This development version contains model release <code>v20260923</code>: 27,208 published curve rows in a 42-column catalogue. The four raw hierarchy identifier fields (<code>ecozone_id</code>, <code>ecoprovince_id</code>, <code>ecoregion_id</code>, and <code>ecodistrict_id</code>) are included for provenance. Select ecological models by <code>strata_id</code> name or full hierarchical path.</p>
 <figure><img src="reference/figures/RSYC_curves_species_gh.png" alt="Species-specific RSYC curves across Canada’s 150 km tile grid."><figcaption aria-hidden="true">
 Species-specific RSYC curves across Canada’s 150 km tile grid.
 </figcaption></figure><div class="section level2">
@@ -73,11 +74,13 @@ Species-specific RSYC curves across Canada’s 150 km tile grid.
 <p>You don’t need to install the R package to use the models. All model parameters used in RSYC are available for direct download. The ZIP archive contains the updated <code>RSYC_models.csv</code> table, including AGB and volume models for tiles and ecological strata.</p>
 <ul>
 <li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/data-raw/RSYC_models.zip" class="external-link">RSYC_models.zip</a></p></li>
-<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a></p></li>
-<li><p><strong>Ecological strata:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a></p></li>
+<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a> (385 model-aligned v20260923 tiles)</p></li>
+<li><p><strong>Ecological strata:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a> (temporary <code>dev</code> URL until the file is published as an immutable release asset)</p></li>
 </ul>
 <p>The RSYC models predict aboveground biomass (AGB) or total volume as a function of stand age:</p>
-<p><span class="math display">\[y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.\]</span></p>
+<p><span class="math display">\[
+y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
+\]</span></p>
 <p>where</p>
 <ul>
 <li>
@@ -179,11 +182,11 @@ Black spruce volume curves and maps at four nested ecological levels.
 </figcaption></figure><p>If a name occurs in several places, list the alternatives and use the full sequence from ecozone to the selected level:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/rsyc_strata.html">rsyc_strata</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="st">"ecodistrict"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">strata_name</span> <span class="op">==</span> <span class="st">"Muskwa"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">strata_name</span> <span class="op">==</span> <span class="st">"Salmon River"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span></span>
 <span>  <span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fl">80</span>, <span class="st">"ecodistrict"</span>,</span>
-<span>  <span class="st">"Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"</span></span>
+<span>  <span class="st">"Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -208,12 +211,11 @@ Black spruce volume curves and maps at four nested ecological levels.
 <span></span>
 <span><span class="va">curve_inputs</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
-<span><span class="co">#&gt;   response species    strata_level strata_id age   </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;</span></span>
-<span><span class="co">#&gt; 1 agb      PICE.MAR   tile         H14       &lt;int&gt; </span></span>
-<span><span class="co">#&gt; 2 agb      POPU.TRE   tile         F31       &lt;int&gt; </span></span>
-<span><span class="co">#&gt; 3 volume   coniferous tile         N3        &lt;int&gt; </span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: prediction &lt;list&gt;</span></span>
+<span><span class="co">#&gt;   response species    strata_level strata_id age         prediction </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;      &lt;list&gt;     </span></span>
+<span><span class="co">#&gt; 1 agb      PICE.MAR   tile         H14       &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
+<span><span class="co">#&gt; 2 agb      POPU.TRE   tile         F31       &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
+<span><span class="co">#&gt; 3 volume   coniferous tile         N3        &lt;int [150]&gt; &lt;dbl [150]&gt;</span></span>
 <span></span>
 <span><span class="va">curve_predictions</span> <span class="op">&lt;-</span> <span class="va">curve_inputs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">prediction</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

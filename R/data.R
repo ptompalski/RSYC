@@ -5,7 +5,7 @@
 #' Canada and within individual regions. Curves are available for tiles and
 #' four levels of Canada's ecological land classification.
 #'
-#' @format A table with 28,391 rows and 38 columns:
+#' @format A table with 27,208 rows and 42 columns:
 #' \describe{
 #'   \item{model_id, model_version}{Unique name for the curve and the RSYC
 #'   release in which it was published.}
@@ -13,6 +13,11 @@
 #'   units.}
 #'   \item{strata_type, strata_level, strata_id}{Type and name of the area
 #'   represented by the curve.}
+#'   \item{ecozone_id, ecoprovince_id, ecoregion_id, ecodistrict_id}{Raw
+#'   identifiers for the four levels of the ecological hierarchy.
+#'   `ecoprovince_id` is stored as character; the other three are integers.
+#'   Fields above the row's ecological level, and all four fields for tile
+#'   rows, may be missing.}
 #'   \item{scale, region_id}{Whether the curve was fitted across Canada or
 #'   within a region, and the region name where applicable.}
 #'   \item{species, model_group}{Species code or broad species group.}
@@ -22,7 +27,8 @@
 #'   \item{b1_se, b2_se, b3_se, b4_se, sigma}{Measures of uncertainty around
 #'   the fitted curve.}
 #'   \item{parent_b1_random_effect, parent_b1_var, local_b1_var, residual_var}{
-#'   Values retained for possible future adjustment of curves with local data.}
+#'   Variance components and parent effects used by local calibration and
+#'   retained for model provenance.}
 #'   \item{has_cor_struct, has_var_struct, component_ok, component_message}{
 #'   Checks recorded while each curve was fitted.}
 #'   \item{n_obs, n_units, converged, singular_or_boundary, fit_ok, publish_ok,
@@ -30,7 +36,9 @@
 #'   checks used to decide whether the curve was suitable for publication.}
 #' }
 #'
-#' @source RSYC-Canada model products, version `v20260709`.
+#' @source RSYC-Canada model products, version `v20260923`, upstream Git commit
+#'   `c799aba24b5d99a6a7953a4dcab1dd73b0925c2c`; source RDS SHA-256
+#'   `193ebfc1f3279ffc278d84c917d206b4b4bcaeae95f38acf25d9c84a040bd1d5`.
 #'
 #' @examples
 #' subset(
@@ -41,8 +49,9 @@
 
 #' RSYC Tile Grid (150 x 150 km)
 #'
-#' A GeoPackage containing the tile polygons used by the RSYC models. The path
-#' can be obtained with `system.file("extdata", "RSYC_tiles.gpkg", package =
+#' A model-aligned GeoPackage containing one polygon or multipolygon for each
+#' of the 385 tile IDs used by the v20260923 national RSYC models. The path can
+#' be obtained with `system.file("extdata", "RSYC_tiles.gpkg", package =
 #' "RSYC")` and read with `sf::st_read()`.
 #'
 #' @name RSYC_tiles

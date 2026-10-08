@@ -4,6 +4,7 @@
 \alias{RSYC_tiles}
 \title{RSYC Tile Grid (150 x 150 km)}
 \description{
-A GeoPackage containing the tile polygons used by the RSYC models. The path
-can be obtained with \code{system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")} and read with \code{sf::st_read()}.
+A model-aligned GeoPackage containing one polygon or multipolygon for each
+of the 385 tile IDs used by the v20260923 national RSYC models. The path can
+be obtained with \code{system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")} and read with \code{sf::st_read()}.
 }

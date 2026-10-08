@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,9 +83,9 @@ name or tile ID. The following examples estimate AGB and volume for
 black spruce in tile H14 at three stand ages:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 27.49419 60.21335 74.19827</span></span>
+<span><span class="co">#&gt; [1] 26.85001 58.32616 71.92139</span></span>
 <span><span class="fu"><a href="../reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span><span class="st">"volume"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1]  40.10655 100.42185 127.42231</span></span></code></pre></div>
+<span><span class="co">#&gt; [1]  39.04578  96.87074 123.04264</span></span></code></pre></div>
 <p>The same function works for individual species and broad groups such
 as <code>coniferous</code> and <code>broadleaf</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -103,11 +103,11 @@ as <code>coniferous</code> and <code>broadleaf</code>:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
 <span><span class="co">#&gt;   species    agb_80</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> PICE.MAR     67.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> PINU.BAN     40.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> POPU.TRE     80.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> coniferous   54.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> broadleaf    79.6</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> PICE.MAR     65.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> PINU.BAN     38.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> POPU.TRE     80.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> coniferous   52.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> broadleaf    80.3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="multiple-tiles-and-species">Multiple tiles and species<a class="anchor" aria-label="anchor" href="#multiple-tiles-and-species"></a>
@@ -134,16 +134,16 @@ forest measure, species, stand age, and tile. Each row of
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 6</span></span></span>
 <span><span class="co">#&gt;    response species      age strata_level strata_id prediction</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> agb      coniferous    20 tile         F31             41.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> agb      coniferous    20 tile         H14             27.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> agb      coniferous    60 tile         F31             76.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> agb      coniferous    60 tile         H14             50.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> agb      coniferous   120 tile         F31             87.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> agb      coniferous   120 tile         H14             57.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> agb      PICE.MAR      20 tile         F31             34.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> agb      PICE.MAR      20 tile         H14             27.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> agb      PICE.MAR      60 tile         F31             75.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> agb      PICE.MAR      60 tile         H14             60.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> agb      coniferous    20 tile         F31             41.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> agb      coniferous    20 tile         H14             26.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> agb      coniferous    60 tile         F31             76.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> agb      coniferous    60 tile         H14             48.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> agb      coniferous   120 tile         F31             87.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> agb      coniferous   120 tile         H14             55.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> agb      PICE.MAR      20 tile         F31             35.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> agb      PICE.MAR      20 tile         H14             26.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> agb      PICE.MAR      60 tile         F31             77.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> agb      PICE.MAR      60 tile         H14             58.3</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 26 more rows</span></span></span></code></pre></div>
 <p>Before estimating many combinations, use <code><a href="../reference/rsyc_species.html">rsyc_species()</a></code>
 or <code><a href="../reference/available_rsyc_models.html">available_rsyc_models()</a></code> to confirm that a published
@@ -179,28 +179,28 @@ level:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">#&gt;   strata_level strata_id                     prediction</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ecozone      Atlantic Maritime                   71.7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ecoprovince  Appalachian-Acadian Highlands       86.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ecoregion    Appalachians                        85.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ecodistrict  Windsor Lowlands                    50.2</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ecozone      Atlantic Maritime                   71.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ecoprovince  Appalachian-Acadian Highlands       87.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ecoregion    Appalachians                        85.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ecodistrict  Windsor Lowlands                    50.1</span></span></code></pre></div>
 <p>Use <code><a href="../reference/rsyc_strata.html">rsyc_strata()</a></code> to list area names and see where they
 lie within Canada’s ecological classification. For example, more than
-one ecodistrict named <code>Muskwa</code> has a curve for this species
-and forest measure:</p>
+one ecodistrict named <code>Salmon River</code> has a curve for this
+species and forest measure:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rsyc_strata.html">rsyc_strata</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="st">"ecodistrict"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">strata_name</span> <span class="op">==</span> <span class="st">"Muskwa"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">strata_name</span> <span class="op">==</span> <span class="st">"Salmon River"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
-<span><span class="co">#&gt;   strata_level strata_name strata_id                                            </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ecodistrict  Muskwa      Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ecodistrict  Muskwa      Taiga Plains/Hay-Slave Lowlands/Muskwa Plateau/Muskwa</span></span>
+<span><span class="co">#&gt;   strata_level strata_name  strata_id                                           </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ecodistrict  Salmon River Boreal Cordillera/Northern Boreal Cordillera/Pelly …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ecodistrict  Salmon River Boreal Shield East/Newfoundland/Northern Penninsula…</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span></span>
 <span>  <span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fl">80</span>, <span class="st">"ecodistrict"</span>,</span>
-<span>  <span class="st">"Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"</span></span>
+<span>  <span class="st">"Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 75.99985</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 39.17884</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="several-complete-curves">Several complete curves<a class="anchor" aria-label="anchor" href="#several-complete-curves"></a>
@@ -238,16 +238,16 @@ area listed in <code>curve_inputs</code>:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 450 × 6</span></span></span>
 <span><span class="co">#&gt;    response species  strata_level strata_id   age prediction</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> agb      PICE.MAR tile         H14           1      0.812</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> agb      PICE.MAR tile         H14           2      1.96 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> agb      PICE.MAR tile         H14           3      3.24 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> agb      PICE.MAR tile         H14           4      4.62 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> agb      PICE.MAR tile         H14           5      6.05 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> agb      PICE.MAR tile         H14           6      7.51 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> agb      PICE.MAR tile         H14           7      9.00 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> agb      PICE.MAR tile         H14           8     10.5  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> agb      PICE.MAR tile         H14           9     12.0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> agb      PICE.MAR tile         H14          10     13.5  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> agb      PICE.MAR tile         H14           1      0.825</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> agb      PICE.MAR tile         H14           2      1.97 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> agb      PICE.MAR tile         H14           3      3.25 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> agb      PICE.MAR tile         H14           4      4.60 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> agb      PICE.MAR tile         H14           5      6.01 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> agb      PICE.MAR tile         H14           6      7.45 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> agb      PICE.MAR tile         H14           7      8.90 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> agb      PICE.MAR tile         H14           8     10.4  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> agb      PICE.MAR tile         H14           9     11.8  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> agb      PICE.MAR tile         H14          10     13.3  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 440 more rows</span></span></span></code></pre></div>
 <p>The final table, <code>curve_predictions</code>, can then be plotted
 or used in further analysis. AGB and volume are shown in separate panels

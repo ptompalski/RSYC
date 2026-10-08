@@ -1,4 +1,6 @@
 .rsyc_ecostrat_filename <- "RSYC_ecostrat.gpkg"
+# Temporary development URL. Replace with an immutable release/tag asset when
+# boundary v2 is published.
 .rsyc_ecostrat_url <- paste0(
   "https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/",
   .rsyc_ecostrat_filename
@@ -14,8 +16,8 @@
 
 # Updated by data-raw/build_ecostrat.R when the downloadable boundary file is rebuilt.
 .rsyc_ecostrat_sha256 <- paste0(
-  "1f998c9ef4baa5565ac553505d78215c",
-  "a90d3939e1444efa4f38200f293d0d2d"
+  "e425818f3c1db682f21a6eec6bebf439",
+  "7761db46b08b13b8c4d3c780dc0d87a4"
 )
 
 #' Download RSYC Ecological Boundaries

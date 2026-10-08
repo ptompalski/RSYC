@@ -101,15 +101,15 @@ eco_inputs[c("strata_level", "strata_id", "prediction")]
 
 Use `rsyc_strata()` to list area names and see where they lie within Canada's
 ecological classification. For example, more than one ecodistrict named
-`Muskwa` has a curve for this species and forest measure:
+`Salmon River` has a curve for this species and forest measure:
 
 ```{r}
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
-  dplyr::filter(strata_name == "Muskwa")
+  dplyr::filter(strata_name == "Salmon River")
 
 predict_rsyc(
   "agb", "PICE.MAR", 80, "ecodistrict",
-  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+  "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"
 )
 ```
 

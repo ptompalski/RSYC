@@ -3,12 +3,19 @@ test_that("tile boundaries contain only the common join key and geometry", {
   tiles <- rsyc_boundaries("tile")
 
   expect_s3_class(tiles, "sf")
-  expect_equal(nrow(tiles), 389L)
+  expect_equal(nrow(tiles), 385L)
   expect_identical(
     names(tiles),
     c("strata_id", "geometry")
   )
   expect_true("H14" %in% tiles$strata_id)
+  expect_false(any(c("D34", "E35", "P1", "R1") %in% tiles$strata_id))
+  expect_false(anyDuplicated(tiles$strata_id) > 0L)
+  model_tile_ids <- unique(RSYC_models$strata_id[
+    RSYC_models$scale == "national" & RSYC_models$strata_level == "tile"
+  ])
+  expect_setequal(tiles$strata_id, model_tile_ids)
+  expect_true(all(sf::st_is_valid(tiles)))
   expect_equal(sf::st_crs(tiles)$epsg, 3978L)
 })
 
@@ -158,4 +165,97 @@ test_that("ecological levels retain only their relevant hierarchy", {
   expect_s3_class(result, "sf")
   expect_identical(result$strata_id, "Boreal Shield")
   expect_named(result, c("strata_id", "ecozone", "geometry"))
+})
+
+test_that("boundary v2 layers satisfy their release and model-join contract", {
+  skip_if_not_installed("sf")
+  path <- system.file("extdata", "RSYC_ecostrat.gpkg", package = "RSYC")
+  expect_true(nzchar(path))
+  verify <- getFromNamespace(".rsyc_verify_ecostrat", "RSYC")
+  expect_invisible(verify(path))
+
+  layers <- c("ecozones", "ecoprovinces", "ecoregions", "ecodistricts")
+  counts <- c(12L, 36L, 138L, 672L)
+  fields <- c(
+    "parameter_level", "ecozone", "ecoprovince", "ecoregion",
+    "ecodistrict", "ecozone_id", "ecoprovince_id", "ecoregion_id",
+    "ecodistrict_id", "join_key", "geometry"
+  )
+  field_types <- c(
+    parameter_level = "character", ecozone = "character",
+    ecoprovince = "character", ecoregion = "character",
+    ecodistrict = "character", ecozone_id = "integer",
+    ecoprovince_id = "character", ecoregion_id = "integer",
+    ecodistrict_id = "integer", join_key = "character"
+  )
+  info <- sf::st_layers(path)
+  expect_identical(info$name, layers)
+  expect_identical(as.integer(info$features), counts)
+
+  for (i in seq_along(layers)) {
+    layer <- layers[[i]]
+    level <- sub("s$", "", layer)
+    x <- sf::st_read(path, layer = layer, quiet = TRUE)
+    geometry <- attr(x, "sf_column")
+    names(x)[names(x) == geometry] <- "geometry"
+    sf::st_geometry(x) <- "geometry"
+    model_keys <- unique(RSYC_models$strata_id[
+      RSYC_models$scale == "national" & RSYC_models$strata_level == level
+    ])
+
+    expect_identical(names(x), fields)
+    expect_identical(
+      vapply(sf::st_drop_geometry(x), typeof, character(1)),
+      field_types
+    )
+    expect_equal(nrow(x), counts[[i]])
+    expect_equal(sf::st_crs(x)$epsg, 3978L)
+    expect_true(all(sf::st_is_valid(x)))
+    character_fields <- vapply(sf::st_drop_geometry(x), is.character, logical(1))
+    expect_true(all(vapply(
+      sf::st_drop_geometry(x)[character_fields],
+      function(value) all(validUTF8(value)),
+      logical(1)
+    )))
+    expect_false(anyNA(x$join_key))
+    expect_true(all(nzchar(x$join_key)))
+    expect_false(anyDuplicated(x$join_key) > 0L)
+    expect_setequal(x$join_key, model_keys)
+  }
+})
+
+test_that("every national model stratum joins to exactly one boundary", {
+  skip_if_not_installed("sf")
+  tile_path <- system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
+  ecological_path <- system.file(
+    "extdata", "RSYC_ecostrat.gpkg", package = "RSYC"
+  )
+  expect_true(nzchar(tile_path))
+  expect_true(nzchar(ecological_path))
+
+  levels <- c("tile", "ecozone", "ecoprovince", "ecoregion", "ecodistrict")
+  for (level in levels) {
+    if (identical(level, "tile")) {
+      boundaries <- sf::st_read(tile_path, layer = "RSYC_tiles", quiet = TRUE)
+      boundary_keys <- as.character(boundaries$TileID)
+    } else {
+      boundaries <- sf::st_read(
+        ecological_path,
+        layer = paste0(level, "s"),
+        quiet = TRUE
+      )
+      boundary_keys <- as.character(boundaries$join_key)
+    }
+    model_keys <- unique(RSYC_models$strata_id[
+      RSYC_models$scale == "national" & RSYC_models$strata_level == level
+    ])
+    match_counts <- vapply(
+      model_keys,
+      function(key) sum(boundary_keys == key),
+      integer(1)
+    )
+
+    expect_true(all(match_counts == 1L), info = level)
+    expect_setequal(boundary_keys, model_keys)
+  }
 })

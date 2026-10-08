@@ -99,22 +99,22 @@ tile_dataset$spatial
 #> Bounding box:  xmin: -410910.5 ymin: 348648.1 xmax: 2289089 ymax: 798648.1
 #> Projected CRS: NAD83 / Canada Atlas Lambert
 #>     strata_id                       geometry
-#> 106       F31 POLYGON ((2169089 348648.1,...
-#> 156       H14 POLYGON ((-380910.5 648648....
+#> 100       F31 POLYGON ((2139089 438648.1,...
+#> 146       H14 POLYGON ((-410910.5 738648....
 tile_dataset$curves
 #> # A tibble: 12 × 5
 #>    model_id                            strata_id species    age prediction
 #>    <chr>                               <chr>     <chr>    <dbl>      <dbl>
-#>  1 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR    50       68.6
-#>  2 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   100       89.3
-#>  3 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   150       95.9
-#>  4 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE    50       87.9
-#>  5 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   100      106. 
-#>  6 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   150      105. 
-#>  7 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR    50       54.9
-#>  8 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   100       71.5
-#>  9 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   150       76.8
-#> 10 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE    50       68.7
-#> 11 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   100       82.6
-#> 12 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   150       82.5
+#>  1 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR    50       70.4
+#>  2 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   100       91.6
+#>  3 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   150       98.6
+#>  4 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE    50       91.6
+#>  5 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   100      110. 
+#>  6 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   150      110. 
+#>  7 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR    50       53.3
+#>  8 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   100       69.3
+#>  9 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   150       74.6
+#> 10 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE    50       69.2
+#> 11 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   100       83.2
+#> 12 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   150       83.1
 ```

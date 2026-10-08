@@ -1,2 +1,2 @@
-boundary_version,source_model_version,filename,bytes,sha256,source
-v1,v20260709,RSYC_ecostrat.gpkg,28561408,1f998c9ef4baa5565ac553505d78215ca90d3939e1444efa4f38200f293d0d2d,National Ecological Framework snapshot used by RSYC-Canada
+"boundary_version","source_model_version","upstream_git_commit","filename","bytes","sha256","source_filename","source_sha256","forest_filter_filename","forest_filter_sha256","built_at_utc"
+"v2","v20260923","c799aba24b5d99a6a7953a4dcab1dd73b0925c2c","RSYC_ecostrat.gpkg",15421440,"e425818f3c1db682f21a6eec6bebf4397761db46b08b13b8c4d3c780dc0d87a4","RSYC_ecosystem_model_package.gpkg","739a3c3c0aeb8ef235a567bc01220ce94ebea7b9c3c92b70c822e9f08ef4c858","forested_ecozones.gpkg","f8b51550f6a741878ae55c9aac1fda5c62a452d47b0c594055792e80c2697b60","2026-10-08 18:19:43 UTC"

@@ -8,6 +8,12 @@ species and the `generic`, `coniferous`, and `broadleaf` model groups.
 Models are available for 150 x 150 km tiles and four nested ecological
 levels: ecozone, ecoprovince, ecoregion, and ecodistrict.
 
+This development version contains model release `v20260923`: 27,208
+published curve rows in a 42-column catalogue. The four raw hierarchy
+identifier fields (`ecozone_id`, `ecoprovince_id`, `ecoregion_id`, and
+`ecodistrict_id`) are included for provenance. Select ecological models
+by `strata_id` name or full hierarchical path.
+
 <figure>
 <img src="man/figures/RSYC_curves_species_gh.png"
 alt="Species-specific RSYC curves across Canada’s 150 km tile grid." />
@@ -27,14 +33,19 @@ volume models for tiles and ecological strata.
 
 - **Tile grid:**
   [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
+  (385 model-aligned v20260923 tiles)
 
 - **Ecological strata:**
   [RSYC_ecostrat.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg)
+  (temporary `dev` URL until the file is published as an immutable
+  release asset)
 
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:
 
-$$y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.$$
+$$
+y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
+$$
 
 where
 
@@ -166,11 +177,11 @@ full sequence from ecozone to the selected level:
 
 ``` r
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
-  dplyr::filter(strata_name == "Muskwa")
+  dplyr::filter(strata_name == "Salmon River")
 
 predict_rsyc(
   "agb", "PICE.MAR", 80, "ecodistrict",
-  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+  "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"
 )
 ```
 
@@ -197,12 +208,11 @@ curve_inputs <- curve_inputs |>
 
 curve_inputs
 #> # A tibble: 3 × 6
-#>   response species    strata_level strata_id age   
-#>   <chr>    <chr>      <chr>        <chr>     <list>
-#> 1 agb      PICE.MAR   tile         H14       <int> 
-#> 2 agb      POPU.TRE   tile         F31       <int> 
-#> 3 volume   coniferous tile         N3        <int> 
-#> # ℹ 1 more variable: prediction <list>
+#>   response species    strata_level strata_id age         prediction 
+#>   <chr>    <chr>      <chr>        <chr>     <list>      <list>     
+#> 1 agb      PICE.MAR   tile         H14       <int [150]> <dbl [150]>
+#> 2 agb      POPU.TRE   tile         F31       <int [150]> <dbl [150]>
+#> 3 volume   coniferous tile         N3        <int [150]> <dbl [150]>
 
 curve_predictions <- curve_inputs |>
   tidyr::unnest(c(age, prediction))

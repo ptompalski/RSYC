@@ -47,20 +47,20 @@ A table with one row for each published curve that matches the choices.
 available_rsyc_models(
   response = "volume", species = "PICE.MAR", strata_level = "tile"
 )
-#> # A tibble: 324 × 10
+#> # A tibble: 344 × 10
 #>    model_id         response response_units strata_type strata_level strata_name
 #>    <chr>            <chr>    <chr>          <chr>       <chr>        <chr>      
 #>  1 rsyc_volume_nat… volume   m3/ha          tile        tile         A24        
 #>  2 rsyc_volume_nat… volume   m3/ha          tile        tile         A25        
-#>  3 rsyc_volume_nat… volume   m3/ha          tile        tile         B21        
-#>  4 rsyc_volume_nat… volume   m3/ha          tile        tile         B22        
-#>  5 rsyc_volume_nat… volume   m3/ha          tile        tile         B23        
-#>  6 rsyc_volume_nat… volume   m3/ha          tile        tile         B24        
-#>  7 rsyc_volume_nat… volume   m3/ha          tile        tile         B25        
-#>  8 rsyc_volume_nat… volume   m3/ha          tile        tile         B26        
-#>  9 rsyc_volume_nat… volume   m3/ha          tile        tile         C15        
-#> 10 rsyc_volume_nat… volume   m3/ha          tile        tile         C16        
-#> # ℹ 314 more rows
+#>  3 rsyc_volume_nat… volume   m3/ha          tile        tile         A26        
+#>  4 rsyc_volume_nat… volume   m3/ha          tile        tile         B21        
+#>  5 rsyc_volume_nat… volume   m3/ha          tile        tile         B22        
+#>  6 rsyc_volume_nat… volume   m3/ha          tile        tile         B23        
+#>  7 rsyc_volume_nat… volume   m3/ha          tile        tile         B24        
+#>  8 rsyc_volume_nat… volume   m3/ha          tile        tile         B25        
+#>  9 rsyc_volume_nat… volume   m3/ha          tile        tile         B26        
+#> 10 rsyc_volume_nat… volume   m3/ha          tile        tile         B27        
+#> # ℹ 334 more rows
 #> # ℹ 4 more variables: strata_id <chr>, species <chr>, model_group <chr>,
 #> #   model_version <chr>
 ```

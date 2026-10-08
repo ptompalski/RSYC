@@ -9,21 +9,8 @@
 .rsyc_published_age_range <- c(1, 150)
 
 .rsyc_model_catalog <- function() {
-  .rsyc_drop_known_invalid_models(RSYC::RSYC_models)
+  RSYC::RSYC_models
 }
-
-.rsyc_drop_known_invalid_models <- function(models) {
-  invalid <- (
-    models$scale == "national" &
-      models$strata_level == "ecodistrict" &
-      models$strata_id %in% .rsyc_known_invalid_ecodistrict_strata
-  )
-  models[!invalid, , drop = FALSE]
-}
-
-.rsyc_known_invalid_ecodistrict_strata <- c(
-  "Taiga Shield West/Keewatin Lowlands/Dubawnt Lake Plain/Upland"
-)
 
 CRdeclining2 <- function(age, b1, b2, b3, b4) {
   b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3

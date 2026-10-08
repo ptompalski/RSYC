@@ -11,13 +11,16 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-`RSYC_models` contains all published RSYC yield curves. Each row describes one
-curve for a forest measure, species, area, and source.
+`RSYC_models` contains all published RSYC yield curves from model release
+`v20260923`. It has 27,208 rows and 42 columns; each row describes one curve
+for a forest measure, species, area, and source. The release was built from
+upstream Git commit `c799aba24b5d99a6a7953a4dcab1dd73b0925c2c`.
 
 ```{r}
 library(RSYC)
 head(RSYC_models[c(
   "model_id", "response", "response_units", "strata_level", "strata_id",
+  "ecozone_id", "ecoprovince_id", "ecoregion_id", "ecodistrict_id",
   "scale", "species", "b1", "b2", "b3", "b4"
 )])
 ```
@@ -27,6 +30,13 @@ biomass in Mg/ha, and `volume` is total volume in m3/ha. Areas can be tiles,
 ecozones, ecoprovinces, ecoregions, or ecodistricts. The table includes curves
 fitted across Canada and curves fitted within individual regions. The package
 functions currently use only the Canada-wide curves.
+
+The four raw hierarchy identifier fields retain upstream codes for ecological
+areas. `ecozone_id`, `ecoregion_id`, and `ecodistrict_id` are integers;
+`ecoprovince_id` is character so codes such as `"10.1"` retain their source
+representation. These fields provide data provenance in this release.
+Ecological model selection continues to use `strata_id`, either as an
+unambiguous short name or a full hierarchical path.
 
 For ecological areas, `strata_id` gives the full sequence of names from the
 ecozone down to the selected level, separated by `/`. `predict_rsyc()` also
@@ -52,6 +62,9 @@ available_rsyc_models(
 )
 ```
 
-`RSYC_models` also contains measures of uncertainty and variation. These values
-may support adjustment with local observations in a future version, but
-`predict_rsyc()` does not currently use them.
+`RSYC_models` also contains measures of uncertainty and variation.
+`local_b1_var` and `residual_var` support local calibration with
+`calibrate_rsyc()`; `predict_rsyc()` itself applies the published coefficients
+without local adjustment. Because the `v20260923` coefficients differ from the
+previous model release, rendered predictions and calibration examples have
+been regenerated for this catalogue.

@@ -6,6 +6,9 @@ if (!requireNamespace("digest", quietly = TRUE)) {
   stop("Package `digest` is required.")
 }
 
+source(file.path("data-raw", "release_contract.R"), local = TRUE)
+contract <- .rsyc_release_contract
+
 data_path <- file.path("data", "RSYC_models.rda")
 if (!file.exists(data_path)) {
   stop("Packaged model data does not exist: ", data_path)
@@ -16,21 +19,22 @@ loaded <- load(data_path, envir = environment)
 stopifnot(identical(loaded, "RSYC_models"))
 RSYC_models <- environment$RSYC_models
 
-expected_names <- c(
-  "model_id", "model_version", "response", "response_units", "strata_type",
-  "strata_level", "strata_id", "scale", "region_id", "species",
-  "model_group", "equation", "age_min", "age_max", "b1", "b2", "b3",
-  "b4", "b1_se", "b2_se", "b3_se", "b4_se", "sigma",
-  "parent_b1_random_effect", "parent_b1_var", "local_b1_var", "residual_var",
-  "has_cor_struct", "has_var_struct", "component_ok", "component_message",
-  "n_obs", "n_units", "converged", "singular_or_boundary", "fit_ok",
-  "publish_ok", "model_message"
+expected_names <- names(contract$model$column_types)
+character_fields <- names(
+  contract$model$column_types[contract$model$column_types == "character"]
 )
 stopifnot(
-  nrow(RSYC_models) == 28391L,
+  nrow(RSYC_models) == contract$model$rows,
+  ncol(RSYC_models) == contract$model$columns,
   identical(names(RSYC_models), expected_names),
-  identical(unique(RSYC_models$model_version), "v20260709"),
+  identical(vapply(RSYC_models, typeof, character(1)), contract$model$column_types),
+  identical(unique(RSYC_models$model_version), contract$model_version),
   !anyDuplicated(RSYC_models$model_id),
+  all(vapply(
+    RSYC_models[character_fields],
+    function(x) all(validUTF8(x)),
+    logical(1)
+  )),
   all(vapply(RSYC_models[c("b1", "b2", "b3", "b4")],
     function(x) all(is.finite(x)), logical(1)))
 )
@@ -50,18 +54,46 @@ utils::write.csv(
   na = "",
   fileEncoding = "UTF-8"
 )
+# ZIP archives otherwise embed the staging file's current modification time.
+# Pin it so an unchanged filtered catalogue produces the same release checksum.
+Sys.setFileTime(
+  csv_path,
+  as.POSIXct("2026-09-23 00:00:00", tz = "UTC")
+)
 
 round_trip <- utils::read.csv(
   csv_path,
   stringsAsFactors = FALSE,
   check.names = FALSE,
-  na.strings = ""
+  na.strings = "",
+  fileEncoding = "UTF-8",
+  colClasses = unname(c(
+    character = "character",
+    integer = "integer",
+    double = "numeric",
+    logical = "logical"
+  )[contract$model$column_types])
 )
 stopifnot(
   nrow(round_trip) == nrow(RSYC_models),
   identical(names(round_trip), names(RSYC_models)),
+  identical(vapply(round_trip, typeof, character(1)), contract$model$column_types),
+  all(vapply(
+    round_trip[character_fields],
+    function(x) all(validUTF8(x)),
+    logical(1)
+  )),
+  all(vapply(
+    character_fields,
+    function(field) identical(round_trip[[field]], RSYC_models[[field]]),
+    logical(1)
+  )),
   identical(round_trip$model_id, RSYC_models$model_id),
   identical(round_trip$model_version, RSYC_models$model_version),
+  identical(round_trip$ecozone_id, RSYC_models$ecozone_id),
+  identical(round_trip$ecoprovince_id, RSYC_models$ecoprovince_id),
+  identical(round_trip$ecoregion_id, RSYC_models$ecoregion_id),
+  identical(round_trip$ecodistrict_id, RSYC_models$ecodistrict_id),
   all(vapply(c("b1", "b2", "b3", "b4"), function(field) {
     isTRUE(all.equal(
       round_trip[[field]], RSYC_models[[field]],
@@ -84,13 +116,18 @@ status <- utils::zip(
 stopifnot(identical(status, 0L), file.exists(zip_path))
 
 manifest <- data.frame(
-  model_version = unique(RSYC_models$model_version),
+  model_version = contract$model_version,
+  upstream_git_commit = contract$upstream_git_commit,
+  source_rds_sha256 = contract$model$source_sha256,
+  forest_filter_filename = contract$forest_filter$source_filename,
+  forest_filter_sha256 = contract$forest_filter$source_sha256,
   filename = basename(zip_path),
   archive_member = basename(csv_path),
   rows = nrow(RSYC_models),
   columns = ncol(RSYC_models),
   bytes = file.info(zip_path)$size,
-  sha256 = digest::digest(zip_path, algo = "sha256", file = TRUE),
+  output_zip_sha256 = digest::digest(zip_path, algo = "sha256", file = TRUE),
+  built_at_utc = format(Sys.time(), tz = "UTC", usetz = TRUE),
   stringsAsFactors = FALSE
 )
 utils::write.csv(
@@ -101,4 +138,4 @@ utils::write.csv(
 )
 
 message("Built: ", zip_path)
-message("SHA-256: ", manifest$sha256)
+message("SHA-256: ", manifest$output_zip_sha256)

@@ -17,7 +17,7 @@ available values."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,20 +101,20 @@ choices.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">available_rsyc_models</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  response <span class="op">=</span> <span class="st">"volume"</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span>, strata_level <span class="op">=</span> <span class="st">"tile"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 324 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 344 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    model_id         response response_units strata_type strata_level strata_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rsyc_volume_nat… volume   m3/ha          tile        tile         A24        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rsyc_volume_nat… volume   m3/ha          tile        tile         A25        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B21        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B22        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B23        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B24        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B25        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B26        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_volume_nat… volume   m3/ha          tile        tile         C15        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_volume_nat… volume   m3/ha          tile        tile         C16        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 314 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rsyc_volume_nat… volume   m3/ha          tile        tile         A26        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B21        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B22        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B23        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B24        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B25        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B26        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B27        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 334 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: strata_id &lt;chr&gt;, species &lt;chr&gt;, model_group &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_version &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>

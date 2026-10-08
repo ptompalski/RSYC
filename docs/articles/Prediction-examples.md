@@ -1,7 +1,6 @@
 # Prediction examples
 
 ``` r
-
 library(RSYC)
 ```
 
@@ -12,18 +11,16 @@ name or tile ID. The following examples estimate AGB and volume for
 black spruce in tile H14 at three stand ages:
 
 ``` r
-
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
-#> [1] 27.49419 60.21335 74.19827
+#> [1] 26.85001 58.32616 71.92139
 predict_rsyc("volume", "PICE.MAR", c(20, 60, 120), "tile", "H14")
-#> [1]  40.10655 100.42185 127.42231
+#> [1]  39.04578  96.87074 123.04264
 ```
 
 The same function works for individual species and broad groups such as
 `coniferous` and `broadleaf`:
 
 ``` r
-
 species_predictions <- tibble::tibble(
   species = c("PICE.MAR", "PINU.BAN", "POPU.TRE", "coniferous", "broadleaf")
 ) |>
@@ -38,11 +35,11 @@ species_predictions
 #> # A tibble: 5 × 2
 #>   species    agb_80
 #>   <chr>       <dbl>
-#> 1 PICE.MAR     67.3
-#> 2 PINU.BAN     40.6
-#> 3 POPU.TRE     80.3
-#> 4 coniferous   54.3
-#> 5 broadleaf    79.6
+#> 1 PICE.MAR     65.2
+#> 2 PINU.BAN     38.7
+#> 3 POPU.TRE     80.9
+#> 4 coniferous   52.4
+#> 5 broadleaf    80.3
 ```
 
 ## Multiple tiles and species
@@ -52,7 +49,6 @@ measure, species, stand age, and tile. Each row of `tile_inputs`
 describes one combination:
 
 ``` r
-
 tile_inputs <- tidyr::crossing(
   response = c("agb", "volume"),
   species = c("PICE.MAR", "POPU.TRE", "coniferous"),
@@ -71,16 +67,16 @@ tile_inputs
 #> # A tibble: 36 × 6
 #>    response species      age strata_level strata_id prediction
 #>    <chr>    <chr>      <dbl> <chr>        <chr>          <dbl>
-#>  1 agb      coniferous    20 tile         F31             41.8
-#>  2 agb      coniferous    20 tile         H14             27.3
-#>  3 agb      coniferous    60 tile         F31             76.6
-#>  4 agb      coniferous    60 tile         H14             50.1
-#>  5 agb      coniferous   120 tile         F31             87.8
-#>  6 agb      coniferous   120 tile         H14             57.4
-#>  7 agb      PICE.MAR      20 tile         F31             34.3
-#>  8 agb      PICE.MAR      20 tile         H14             27.5
-#>  9 agb      PICE.MAR      60 tile         F31             75.2
-#> 10 agb      PICE.MAR      60 tile         H14             60.2
+#>  1 agb      coniferous    20 tile         F31             41.7
+#>  2 agb      coniferous    20 tile         H14             26.5
+#>  3 agb      coniferous    60 tile         F31             76.3
+#>  4 agb      coniferous    60 tile         H14             48.4
+#>  5 agb      coniferous   120 tile         F31             87.4
+#>  6 agb      coniferous   120 tile         H14             55.4
+#>  7 agb      PICE.MAR      20 tile         F31             35.5
+#>  8 agb      PICE.MAR      20 tile         H14             26.9
+#>  9 agb      PICE.MAR      60 tile         F31             77.1
+#> 10 agb      PICE.MAR      60 tile         H14             58.3
 #> # ℹ 26 more rows
 ```
 
@@ -97,7 +93,6 @@ Use the area name when it occurs only once at the selected ecological
 level:
 
 ``` r
-
 eco_inputs <- tibble::tribble(
   ~response, ~species,   ~age, ~strata_level, ~strata_id,
   "agb",     "PICE.MAR", 80,  "ecozone",
@@ -122,33 +117,32 @@ eco_inputs[c("strata_level", "strata_id", "prediction")]
 #> # A tibble: 4 × 3
 #>   strata_level strata_id                     prediction
 #>   <chr>        <chr>                              <dbl>
-#> 1 ecozone      Atlantic Maritime                   71.7
-#> 2 ecoprovince  Appalachian-Acadian Highlands       86.2
-#> 3 ecoregion    Appalachians                        85.1
-#> 4 ecodistrict  Windsor Lowlands                    50.2
+#> 1 ecozone      Atlantic Maritime                   71.6
+#> 2 ecoprovince  Appalachian-Acadian Highlands       87.1
+#> 3 ecoregion    Appalachians                        85.3
+#> 4 ecodistrict  Windsor Lowlands                    50.1
 ```
 
 Use
 [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md)
 to list area names and see where they lie within Canada’s ecological
-classification. For example, more than one ecodistrict named `Muskwa`
-has a curve for this species and forest measure:
+classification. For example, more than one ecodistrict named
+`Salmon River` has a curve for this species and forest measure:
 
 ``` r
-
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
-  dplyr::filter(strata_name == "Muskwa")
+  dplyr::filter(strata_name == "Salmon River")
 #> # A tibble: 2 × 3
-#>   strata_level strata_name strata_id                                            
-#>   <chr>        <chr>       <chr>                                                
-#> 1 ecodistrict  Muskwa      Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/…
-#> 2 ecodistrict  Muskwa      Taiga Plains/Hay-Slave Lowlands/Muskwa Plateau/Muskwa
+#>   strata_level strata_name  strata_id                                           
+#>   <chr>        <chr>        <chr>                                               
+#> 1 ecodistrict  Salmon River Boreal Cordillera/Northern Boreal Cordillera/Pelly …
+#> 2 ecodistrict  Salmon River Boreal Shield East/Newfoundland/Northern Penninsula…
 
 predict_rsyc(
   "agb", "PICE.MAR", 80, "ecodistrict",
-  "Boreal Cordillera/Hay-Slave Lowlands/Muskwa Plateau/Muskwa"
+  "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"
 )
-#> [1] 75.99985
+#> [1] 39.17884
 ```
 
 ## Several complete curves
@@ -157,7 +151,6 @@ This example estimates yield at ages 1 to 150 for each species and area
 listed in `curve_inputs`:
 
 ``` r
-
 curve_inputs <- tibble::tribble(
   ~response, ~species,     ~strata_level, ~strata_id,
   "agb",     "PICE.MAR",   "tile",       "H14",
@@ -188,16 +181,16 @@ curve_predictions
 #> # A tibble: 450 × 6
 #>    response species  strata_level strata_id   age prediction
 #>    <chr>    <chr>    <chr>        <chr>     <int>      <dbl>
-#>  1 agb      PICE.MAR tile         H14           1      0.812
-#>  2 agb      PICE.MAR tile         H14           2      1.96 
-#>  3 agb      PICE.MAR tile         H14           3      3.24 
-#>  4 agb      PICE.MAR tile         H14           4      4.62 
-#>  5 agb      PICE.MAR tile         H14           5      6.05 
-#>  6 agb      PICE.MAR tile         H14           6      7.51 
-#>  7 agb      PICE.MAR tile         H14           7      9.00 
-#>  8 agb      PICE.MAR tile         H14           8     10.5  
-#>  9 agb      PICE.MAR tile         H14           9     12.0  
-#> 10 agb      PICE.MAR tile         H14          10     13.5  
+#>  1 agb      PICE.MAR tile         H14           1      0.825
+#>  2 agb      PICE.MAR tile         H14           2      1.97 
+#>  3 agb      PICE.MAR tile         H14           3      3.25 
+#>  4 agb      PICE.MAR tile         H14           4      4.60 
+#>  5 agb      PICE.MAR tile         H14           5      6.01 
+#>  6 agb      PICE.MAR tile         H14           6      7.45 
+#>  7 agb      PICE.MAR tile         H14           7      8.90 
+#>  8 agb      PICE.MAR tile         H14           8     10.4  
+#>  9 agb      PICE.MAR tile         H14           9     11.8  
+#> 10 agb      PICE.MAR tile         H14          10     13.3  
 #> # ℹ 440 more rows
 ```
 
@@ -206,7 +199,6 @@ further analysis. AGB and volume are shown in separate panels because
 they use different units:
 
 ``` r
-
 curve_predictions |>
   dplyr::mutate(
     response = factor(

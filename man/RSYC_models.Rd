@@ -5,7 +5,7 @@
 \alias{RSYC_models}
 \title{Published RSYC Yield-Curve Data}
 \format{
-A table with 28,391 rows and 38 columns:
+A table with 27,208 rows and 42 columns:
 \describe{
 \item{model_id, model_version}{Unique name for the curve and the RSYC
 release in which it was published.}
@@ -13,6 +13,11 @@ release in which it was published.}
 units.}
 \item{strata_type, strata_level, strata_id}{Type and name of the area
 represented by the curve.}
+\item{ecozone_id, ecoprovince_id, ecoregion_id, ecodistrict_id}{Raw
+identifiers for the four levels of the ecological hierarchy.
+\code{ecoprovince_id} is stored as character; the other three are integers.
+Fields above the row's ecological level, and all four fields for tile
+rows, may be missing.}
 \item{scale, region_id}{Whether the curve was fitted across Canada or
 within a region, and the region name where applicable.}
 \item{species, model_group}{Species code or broad species group.}
@@ -22,7 +27,8 @@ RSYC curves were fitted for stand ages 1 to 150 years.}
 \item{b1_se, b2_se, b3_se, b4_se, sigma}{Measures of uncertainty around
 the fitted curve.}
 \item{parent_b1_random_effect, parent_b1_var, local_b1_var, residual_var}{
-Values retained for possible future adjustment of curves with local data.}
+Variance components and parent effects used by local calibration and
+retained for model provenance.}
 \item{has_cor_struct, has_var_struct, component_ok, component_message}{
 Checks recorded while each curve was fitted.}
 \item{n_obs, n_units, converged, singular_or_boundary, fit_ok, publish_ok,
@@ -31,7 +37,9 @@ checks used to decide whether the curve was suitable for publication.}
 }
 }
 \source{
-RSYC-Canada model products, version \code{v20260709}.
+RSYC-Canada model products, version \code{v20260923}, upstream Git commit
+\code{c799aba24b5d99a6a7953a4dcab1dd73b0925c2c}; source RDS SHA-256
+\verb{193ebfc1f3279ffc278d84c917d206b4b4bcaeae95f38acf25d9c84a040bd1d5}.
 }
 \usage{
 RSYC_models

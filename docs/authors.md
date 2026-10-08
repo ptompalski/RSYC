@@ -12,14 +12,15 @@
 Source:
 [`inst/CITATION`](https://github.com/ptompalski/RSYC/blob/HEAD/inst/CITATION)
 
-Tompalski, P. (2026). RSYC R package. R package version 0.1.0. Available
-at https://ptompalski.github.io/RSYC, https://github.com/ptompalski/RSYC
+Tompalski, P. (2026). RSYC R package. R package version 0.2.0.9000.
+Available at https://ptompalski.github.io/RSYC,
+https://github.com/ptompalski/RSYC
 
     @Manual{,
       title = {RSYC R package},
       author = {Piotr Tompalski},
       year = {2026},
-      note = {Version 0.1.0},
+      note = {Version 0.2.0.9000},
       url = {https://ptompalski.github.io/RSYC,
     https://github.com/ptompalski/RSYC},
     }

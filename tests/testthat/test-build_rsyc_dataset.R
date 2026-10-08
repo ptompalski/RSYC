@@ -54,7 +54,7 @@ test_that("dataset strata selection reports unavailable and ambiguous names", {
     "No requested tile model"
   )
   expect_error(
-    build_rsyc_dataset("agb", "PICE.MAR", 50, "ecodistrict", "Muskwa"),
+    build_rsyc_dataset("agb", "PICE.MAR", 50, "ecodistrict", "Salmon River"),
     "Matching hierarchical paths"
   )
 })

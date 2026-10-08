@@ -54,7 +54,7 @@ start of a curve. When a full ecological area sequence is needed, use
 
 ``` r
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
-#> [1] 27.49419 60.21335 74.19827
+#> [1] 26.85001 58.32616 71.92139
 predict_rsyc(
   response = "volume",
   species = "PICE.MAR",
@@ -62,5 +62,5 @@ predict_rsyc(
   strata_level = "ecozone",
   strata_id = "Boreal Shield East"
 )
-#> [1]  31.74320  82.23544 105.32608
+#> [1]  35.39177  91.53735 117.30550
 ```

@@ -1,2 +1,2 @@
-"model_version","filename","archive_member","rows","columns","bytes","sha256"
-"v20260709","RSYC_models.zip","RSYC_models.csv",28391,38,1412194,"adcbba80261f224a98a853e13e5c31517d04ce0c2e991505f0879673d7bb6d4a"
+"model_version","upstream_git_commit","source_rds_sha256","forest_filter_filename","forest_filter_sha256","filename","archive_member","rows","columns","bytes","output_zip_sha256","built_at_utc"
+"v20260923","c799aba24b5d99a6a7953a4dcab1dd73b0925c2c","193ebfc1f3279ffc278d84c917d206b4b4bcaeae95f38acf25d9c84a040bd1d5","forested_ecozones.gpkg","f8b51550f6a741878ae55c9aac1fda5c62a452d47b0c594055792e80c2697b60","RSYC_models.zip","RSYC_models.csv",27208,42,1468625,"31776c6432424bb2f7a80b94046cbbcbbf4f39250acf19d73b5e89d4f7a60890","2026-10-08 18:13:10 UTC"

@@ -19,7 +19,7 @@ four levels of Canada's ecological land classification."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ four levels of Canada's ecological land classification.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A table with 28,391 rows and 38 columns:</p><dl><dt>model_id, model_version</dt>
+    <p>A table with 27,208 rows and 42 columns:</p><dl><dt>model_id, model_version</dt>
 <dd><p>Unique name for the curve and the RSYC
 release in which it was published.</p></dd>
 
@@ -76,6 +76,13 @@ units.</p></dd>
 <dt>strata_type, strata_level, strata_id</dt>
 <dd><p>Type and name of the area
 represented by the curve.</p></dd>
+
+<dt>ecozone_id, ecoprovince_id, ecoregion_id, ecodistrict_id</dt>
+<dd><p>Raw
+identifiers for the four levels of the ecological hierarchy.
+<code>ecoprovince_id</code> is stored as character; the other three are integers.
+Fields above the row's ecological level, and all four fields for tile
+rows, may be missing.</p></dd>
 
 <dt>scale, region_id</dt>
 <dd><p>Whether the curve was fitted across Canada or
@@ -96,7 +103,8 @@ RSYC curves were fitted for stand ages 1 to 150 years.</p></dd>
 the fitted curve.</p></dd>
 
 <dt>parent_b1_random_effect, parent_b1_var, local_b1_var, residual_var</dt>
-<dd><p>Values retained for possible future adjustment of curves with local data.</p></dd>
+<dd><p>Variance components and parent effects used by local calibration and
+retained for model provenance.</p></dd>
 
 <dt>has_cor_struct, has_var_struct, component_ok, component_message</dt>
 <dd><p>Checks recorded while each curve was fitted.</p></dd>
@@ -110,7 +118,9 @@ checks used to decide whether the curve was suitable for publication.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="source">Source<a class="anchor" aria-label="anchor" href="#source"></a></h2>
-    <p>RSYC-Canada model products, version <code>v20260709</code>.</p>
+    <p>RSYC-Canada model products, version <code>v20260923</code>, upstream Git commit
+<code>c799aba24b5d99a6a7953a4dcab1dd73b0925c2c</code>; source RDS SHA-256
+<code>193ebfc1f3279ffc278d84c917d206b4b4bcaeae95f38acf25d9c84a040bd1d5</code>.</p>
     </div>
 
     <div class="section level2">
@@ -119,36 +129,32 @@ checks used to decide whether the curve was suitable for publication.</p></dd>
 <span class="r-in"><span>  <span class="va">RSYC_models</span>,</span></span>
 <span class="r-in"><span>  <span class="va">response</span> <span class="op">==</span> <span class="st">"volume"</span> <span class="op">&amp;</span> <span class="va">strata_level</span> <span class="op">==</span> <span class="st">"ecozone"</span> <span class="op">&amp;</span> <span class="va">species</span> <span class="op">==</span> <span class="st">"PICE.MAR"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 38</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 16 × 42</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    model_id       model_version response response_units strata_type strata_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> rsyc_volume_n… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> rsyc_volume_r… v20260709     volume   m3/ha          eco_strata  ecozone     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 32 more variables: strata_id &lt;chr&gt;, scale &lt;chr&gt;, region_id &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> rsyc_volume_n… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> rsyc_volume_r… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rsyc_volume_r… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> rsyc_volume_r… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> rsyc_volume_r… v20260923     volume   m3/ha          eco_strata  ecozone     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 36 more variables: strata_id &lt;chr&gt;, ecozone_id &lt;int&gt;, ecoprovince_id &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ecoregion_id &lt;int&gt;, ecodistrict_id &lt;int&gt;, scale &lt;chr&gt;, region_id &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   species &lt;chr&gt;, model_group &lt;chr&gt;, equation &lt;chr&gt;, age_min &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   age_max &lt;int&gt;, b1 &lt;dbl&gt;, b2 &lt;dbl&gt;, b3 &lt;dbl&gt;, b4 &lt;dbl&gt;, b1_se &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   b2_se &lt;dbl&gt;, b3_se &lt;dbl&gt;, b4_se &lt;dbl&gt;, sigma &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   parent_b1_random_effect &lt;dbl&gt;, parent_b1_var &lt;dbl&gt;, local_b1_var &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   residual_var &lt;dbl&gt;, has_cor_struct &lt;lgl&gt;, has_var_struct &lt;lgl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   component_ok &lt;lgl&gt;, component_message &lt;chr&gt;, n_obs &lt;int&gt;, n_units &lt;int&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   residual_var &lt;dbl&gt;, has_cor_struct &lt;lgl&gt;, has_var_struct &lt;lgl&gt;, …</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

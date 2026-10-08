@@ -1,3 +1,35 @@
+# RSYC 0.2.0.9000
+
+## Model release v20260923
+
+* Updated the packaged catalogue from model release `v20260709` to
+  `v20260923`. After limiting ecological models to the 12 forested ecozones,
+  the catalogue contains 27,208 rows and 42 columns. Curve
+  coefficients and model availability changed, so predictions and local
+  calibration results can differ from the previous package release.
+* Added the raw ecological hierarchy fields `ecozone_id`, `ecoprovince_id`,
+  `ecoregion_id`, and `ecodistrict_id`. They preserve upstream identifiers and
+  provenance; geographic selection continues to use `strata_id` names and
+  hierarchical paths in this development version.
+* Relative to `v20260709`, national coverage was lost for 10 combinations:
+  ecological AGB for `ALNU.INC`, `LARI.LAR`, and `QUER.RUB`; ecological volume
+  for `ALNU.INC`, `FRAX.NIG`, `LARI.LAR`, and `QUER.RUB`; tile AGB for
+  `LARI.LAR`; and tile volume for `FRAX.NIG` and `LARI.LAR`. These species had
+  relatively limited spatial coverage and their models had frequently caused
+  fitting problems in earlier model-development runs.
+* Fixed an upstream sampling bug in which a small number of samples were
+  drawn from the wrong ecodistricts. This issue affected ecological-strata
+  models only; tile models were unaffected.
+
+## Spatial products
+
+* Added ecological boundary release v2, aligned exactly to the `v20260923`
+  national model catalogue. It contains 12 forested ecozones, 36 ecoprovinces,
+  138 ecoregions, and 672 ecodistricts in EPSG:3978, with hierarchy names and raw
+  hierarchy identifiers preserved.
+* Boundary builds now record source and output checksums and validate complete,
+  one-to-one coverage of published national model strata.
+
 # RSYC 0.1.0
 
 This is a significant update to both the published RSYC models and the package

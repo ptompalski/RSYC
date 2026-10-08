@@ -1,7 +1,6 @@
 # Local calibration
 
 ``` r
-
 library(RSYC)
 ```
 
@@ -107,7 +106,6 @@ A single measurement is sufficient to adjust the asymptote. In this
 example a black spruce stand in tile H14 was measured once, at age 60:
 
 ``` r
-
 single <- calibrate_rsyc(
   response = "agb",
   species = "PICE.MAR",
@@ -118,19 +116,18 @@ single <- calibrate_rsyc(
 )
 
 single$shrinkage_factor
-#> [1] 0.8727496
+#> [1] 0.8777606
 single$b_pixel
-#> [1] 24.2757
+#> [1] 26.15953
 single$ratio_blup
-#> [1] 1.341872
+#> [1] 1.38336
 ```
 
-The estimated adjustment to the asymptote is 24.3 Mg/ha, corresponding
-to a ratio of 1.34, an increase of approximately 34% relative to the
+The estimated adjustment to the asymptote is 26.2 Mg/ha, corresponding
+to a ratio of 1.38, an increase of approximately 38% relative to the
 published curve. None of the constraints described below were reached:
 
 ``` r
-
 c(
   random_effect = single$random_effect_limited,
   ratio = single$ratio_limited,
@@ -145,7 +142,6 @@ published and calibrated curves running parallel, separated by the
 constant ratio:
 
 ``` r
-
 single_curve <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = 60, obs_response = 83.8,
@@ -192,7 +188,6 @@ side of the fitted trajectory, as repeated field measurements typically
 are:
 
 ``` r
-
 multiple <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = c(32, 48, 61, 77, 94),
@@ -209,16 +204,15 @@ tibble::tibble(
 #> # A tibble: 2 × 5
 #>   case               n_obs shrinkage_factor b_pixel ratio_blup
 #>   <chr>              <int>            <dbl>   <dbl>      <dbl>
-#> 1 single observation     1            0.873    24.3       1.34
-#> 2 five observations      5            0.971    13.0       1.18
+#> 1 single observation     1            0.878    26.2       1.38
+#> 2 five observations      5            0.972    15.0       1.22
 ```
 
-The shrinkage factor increases from 0.87 to 0.97, so a greater
+The shrinkage factor increases from 0.88 to 0.97, so a greater
 proportion of the estimated departure from the published curve is
 retained.
 
 ``` r
-
 multi_curve <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = c(32, 48, 61, 77, 94),
@@ -277,7 +271,6 @@ the mature level, so it is shrunk heavily. A measurement in a mature
 stand is trusted far more:
 
 ``` r
-
 model <- subset(
   RSYC_models,
   response == "agb" & scale == "national" &
@@ -323,7 +316,6 @@ ecoregion-level models for four species. Each stand is calibrated
 separately against its own model:
 
 ``` r
-
 field_plots <- tibble::tribble(
   ~plot, ~species,   ~ecoregion,                 ~age,          ~volume,
   "A",   "PICE.MAR", "Appalachians",             c(45, 62, 80), c(135.8, 165.7, 172.7),
@@ -354,10 +346,10 @@ field_plots |>
 #> # A tibble: 4 × 5
 #>   plot  species  n_obs shrinkage_factor ratio_blup
 #>   <chr> <chr>    <int>            <dbl>      <dbl>
-#> 1 A     PICE.MAR     3            0.956      1.18 
-#> 2 B     POPU.TRE     3            0.961      0.919
-#> 3 C     PICE.GLA     3            0.974      1.11 
-#> 4 D     PINU.BAN     3            0.949      0.937
+#> 1 A     PICE.MAR     3            0.955      1.18 
+#> 2 B     POPU.TRE     3            0.960      0.926
+#> 3 C     PICE.GLA     3            0.974      1.10 
+#> 4 D     PINU.BAN     3            0.938      0.961
 ```
 
 Ratios below 1 indicate stands less productive than the published curve
@@ -368,7 +360,6 @@ one ecozone, so the full hierarchical path is required to identify it;
 lists the available names and paths.
 
 ``` r
-
 plot_curves <- purrr::pmap(
   list(field_plots$plot, field_plots$species, field_plots$ecoregion),
   \(plot, species, ecoregion) {
@@ -440,7 +431,6 @@ above required any of them. Imposing a deliberately restrictive
 `ratio_limit` demonstrates the behaviour:
 
 ``` r
-
 constrained <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = 60, obs_response = 83.8,

@@ -64,7 +64,6 @@ local level anchor, not as a learned local growth trajectory.
 Core coefficient logic in `RSYC_blup_calibrate()`:
 
 ``` r
-
 blup_sum_gd = sum(blup_g_obs * (blup_response - blup_base_obs), na.rm = TRUE)
 blup_sum_g2 = sum(blup_g_obs^2, na.rm = TRUE)
 
@@ -81,7 +80,6 @@ AGB_RSYC_BLUP = blup_curve_value_assigned * ratio_BLUP
 With a single plot measurement, this becomes a one-point adjustment:
 
 ``` r
-
 blup_b_pixel =
   g(age) * (AGB_observed - base_AGB_at_age) /
   (g(age)^2 + residual_var / pixel_var)
