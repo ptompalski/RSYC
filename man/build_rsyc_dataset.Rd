@@ -28,10 +28,12 @@ lowercase letters are treated the same.}
 \item{strata_level}{Type of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
-\item{strata_id}{One or more tile IDs, ecological area names, or full
-sequences of ecological area names. By default, every area with a matching
-published curve is included. If an area name occurs in several places,
-the function asks for the full sequence of area names.}
+\item{strata_id}{One or more tile IDs, ecological area names or paths, or
+ecological codes. Numeric values and numeric-looking character values are
+interpreted as codes when no name or path matches. Quote ecoprovince codes
+such as \code{"10.1"}. By default, every area with a matching published curve
+is included. If an area name occurs in several places, the function asks
+for the full sequence of area names.}
 
 \item{output}{Location of an optional GeoPackage file. When supplied, the
 file contains a boundary map named \code{spatial}, a yield table named \code{curves},
@@ -46,8 +48,11 @@ uses its standard user data folder, returned by \code{\link[tools:userdir]{tools
 }
 \value{
 Three named results: \code{spatial}, an \code{sf} boundary map; \code{curves}, a
-table of yield estimates; and \code{metadata}, a one-row summary of the data and
-choices used.
+table of yield estimates containing canonical character \code{strata_code}
+values (\code{NA} for tiles); and \code{metadata}, a one-row summary of the data and
+choices used. Ecological spatial results contain \code{strata_code} plus the
+hierarchy names and source ID fields through the requested level. Tile
+spatial results contain \code{strata_id} and geometry.
 }
 \description{
 Estimate yield for one or more species across a set of tiles or ecological
@@ -59,6 +64,8 @@ The function currently uses only curves fitted across Canada. It does not
 substitute a curve from another type of area or from a regional fit.
 Ecological boundaries must first be downloaded with
 \code{\link[=download_rsyc_boundaries]{download_rsyc_boundaries()}}; tile boundaries are included with RSYC.
+Ecozone codes 5, 6, and 10 are ambiguous and must instead be supplied as a
+subdivision name or path.
 }
 \examples{
 tile_dataset <- build_rsyc_dataset(

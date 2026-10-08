@@ -18,8 +18,9 @@ lowercase letters are treated the same. The default includes all species.}
 all types.}
 }
 \value{
-A table with the short area name (\code{strata_name}) and its full
-location within Canada's ecological classification (\code{strata_id}).
+A table with the short area name (\code{strata_name}), its full location
+within Canada's ecological classification (\code{strata_id}), and its canonical
+character \code{strata_code}. Tile rows have \code{NA} codes.
 }
 \description{
 List Areas Available in RSYC Models

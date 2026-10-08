@@ -22,21 +22,34 @@ lowercase letters are treated the same. The default includes all species.}
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
 all types.}
 
-\item{strata_id}{One or more tile IDs, ecological area names, or full
-sequences of ecological area names. The default includes all areas.}
+\item{strata_id}{One or more tile IDs, ecological area names or paths, or
+ecological codes. Numeric values and numeric-looking character values are
+interpreted as codes when no name or path matches. Code searches require
+exactly one ecological \code{strata_level}. Quote ecoprovince codes such as
+\code{"10.1"}. The default includes all areas.}
 }
 \value{
 A table with one row for each published curve that matches the
-choices.
+choices. \code{strata_code} is the canonical character code for ecological
+rows and \code{NA} for tiles.
 }
 \description{
 List the published Canada-wide curves that match a forest measure, species,
 type of area, or area name. Leave a choice as \code{NULL} to include all of its
 available values.
 }
+\details{
+Character \code{strata_id} values are matched as names or paths before
+numeric-looking values are interpreted as ecological codes. Ecozone codes
+5 and 6 return both published named subdivisions. Ecozone code 10 is also
+ambiguous, but currently has no published national model rows.
+}
 \examples{
 available_rsyc_models(
   response = "volume", species = "PICE.MAR", strata_level = "tile"
+)
+available_rsyc_models(
+  response = "agb", strata_level = "ecoprovince", strata_id = "7.1"
 )
 
 }

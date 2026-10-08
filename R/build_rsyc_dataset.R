@@ -11,10 +11,12 @@
 #' @param age One or more stand ages in years.
 #' @param strata_level Type of area: `"tile"`, `"ecozone"`,
 #'   `"ecoprovince"`, `"ecoregion"`, or `"ecodistrict"`.
-#' @param strata_id One or more tile IDs, ecological area names, or full
-#'   sequences of ecological area names. By default, every area with a matching
-#'   published curve is included. If an area name occurs in several places,
-#'   the function asks for the full sequence of area names.
+#' @param strata_id One or more tile IDs, ecological area names or paths, or
+#'   ecological codes. Numeric values and numeric-looking character values are
+#'   interpreted as codes when no name or path matches. Quote ecoprovince codes
+#'   such as `"10.1"`. By default, every area with a matching published curve
+#'   is included. If an area name occurs in several places, the function asks
+#'   for the full sequence of area names.
 #' @param output Location of an optional GeoPackage file. When supplied, the
 #'   file contains a boundary map named `spatial`, a yield table named `curves`,
 #'   and a summary table named `metadata`.
@@ -22,14 +24,19 @@
 #' @inheritParams download_rsyc_boundaries
 #'
 #' @return Three named results: `spatial`, an `sf` boundary map; `curves`, a
-#'   table of yield estimates; and `metadata`, a one-row summary of the data and
-#'   choices used.
+#'   table of yield estimates containing canonical character `strata_code`
+#'   values (`NA` for tiles); and `metadata`, a one-row summary of the data and
+#'   choices used. Ecological spatial results contain `strata_code` plus the
+#'   hierarchy names and source ID fields through the requested level. Tile
+#'   spatial results contain `strata_id` and geometry.
 #'
 #' @details
 #' The function currently uses only curves fitted across Canada. It does not
 #' substitute a curve from another type of area or from a regional fit.
 #' Ecological boundaries must first be downloaded with
 #' [download_rsyc_boundaries()]; tile boundaries are included with RSYC.
+#' Ecozone codes 5, 6, and 10 are ambiguous and must instead be supplied as a
+#' subdivision name or path.
 #'
 #' @examples
 #' tile_dataset <- build_rsyc_dataset(
@@ -93,6 +100,7 @@ build_rsyc_dataset <- function(
   curves <- tibble::tibble(
     model_id = models$model_id[model_row],
     strata_id = models$strata_id[model_row],
+    strata_code = .rsyc_strata_codes(models)[model_row],
     species = models$species[model_row],
     age = curve_age,
     prediction = unname(CRdeclining2(
@@ -145,38 +153,7 @@ build_rsyc_dataset <- function(
 }
 
 .rsyc_resolve_dataset_strata <- function(models, strata_id, strata_level) {
-  if (!is.character(strata_id) || !length(strata_id) ||
-      anyNA(strata_id) || any(!nzchar(strata_id))) {
-    stop("`strata_id` must contain non-empty character values.", call. = FALSE)
-  }
-
-  available <- unique(models$strata_id)
-  resolved <- character()
-  for (id in strata_id) {
-    if (id %in% available) {
-      resolved <- c(resolved, id)
-      next
-    }
-    matches <- sort(available[.rsyc_strata_name(available) == id])
-    if (length(matches) > 1L) {
-      entries <- paste0("  - ", matches, collapse = "\n")
-      stop(
-        "The ", strata_level, " name '", id, "' is ambiguous.\n",
-        "Matching hierarchical paths:\n", entries, "\n",
-        "Use one of the full hierarchical paths as `strata_id`.",
-        call. = FALSE
-      )
-    }
-    if (!length(matches)) {
-      stop(
-        "No requested ", strata_level, " model was found for `strata_id = \"",
-        id, "\"` and the selected response/species.",
-        call. = FALSE
-      )
-    }
-    resolved <- c(resolved, matches)
-  }
-  unique(resolved)
+  .rsyc_resolve_strata(models, strata_id, strata_level, mode = "dataset")
 }
 
 .rsyc_write_dataset <- function(dataset, output, overwrite, quiet) {

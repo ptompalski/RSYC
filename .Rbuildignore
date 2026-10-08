@@ -16,3 +16,4 @@
 ^site_libs$
 ^vignettes/articles$
 ^AGENTS\.md$
+papers

@@ -151,6 +151,10 @@ test_that("ecological levels retain only their relevant hierarchy", {
     ecoprovince = NA_character_,
     ecoregion = NA_character_,
     ecodistrict = NA_character_,
+    ecozone_id = 6L,
+    ecoprovince_id = NA_character_,
+    ecoregion_id = NA_integer_,
+    ecodistrict_id = NA_integer_,
     join_key = "Boreal Shield",
     geom = sf::st_sfc(sf::st_point(c(0, 0)), crs = 3978)
   )
@@ -164,7 +168,11 @@ test_that("ecological levels retain only their relevant hierarchy", {
   result <- rsyc_boundaries("ecozone", cache_dir = cache)
   expect_s3_class(result, "sf")
   expect_identical(result$strata_id, "Boreal Shield")
-  expect_named(result, c("strata_id", "ecozone", "geometry"))
+  expect_identical(result$strata_code, "6")
+  expect_named(
+    result,
+    c("strata_id", "strata_code", "ecozone", "ecozone_id", "geometry")
+  )
 })
 
 test_that("boundary v2 layers satisfy their release and model-join contract", {
@@ -257,5 +265,40 @@ test_that("every national model stratum joins to exactly one boundary", {
 
     expect_true(all(match_counts == 1L), info = level)
     expect_setequal(boundary_keys, model_keys)
+  }
+})
+
+test_that("public ecological boundary codes agree with national models", {
+  skip_if_not_installed("sf")
+  source <- system.file("extdata", "RSYC_ecostrat.gpkg", package = "RSYC")
+  expect_true(nzchar(source))
+  cache <- tempfile("rsyc-ecostrat-cache-")
+  dir.create(cache)
+  expect_true(file.copy(source, file.path(cache, "RSYC_ecostrat.gpkg")))
+
+  for (level in c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")) {
+    boundaries <- rsyc_boundaries(level, cache_dir = cache)
+    field <- paste0(level, "_id")
+    hierarchy <- c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")
+    hierarchy <- hierarchy[seq_len(match(level, hierarchy))]
+    expect_named(
+      boundaries,
+      c("strata_id", "strata_code", hierarchy, paste0(hierarchy, "_id"), "geometry"),
+      info = level
+    )
+    models <- unique(RSYC_models[
+      RSYC_models$scale == "national" & RSYC_models$strata_level == level,
+      c("strata_id", field)
+    ])
+    matched <- match(models$strata_id, boundaries$strata_id)
+    expect_false(anyNA(matched), info = level)
+    expect_identical(
+      as.character(models[[field]]),
+      boundaries$strata_code[matched],
+      info = level
+    )
+    expect_identical(
+      models[[field]], boundaries[[field]][matched], info = level
+    )
   }
 })

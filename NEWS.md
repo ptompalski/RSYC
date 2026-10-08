@@ -9,8 +9,13 @@
   calibration results can differ from the previous package release.
 * Added the raw ecological hierarchy fields `ecozone_id`, `ecoprovince_id`,
   `ecoregion_id`, and `ecodistrict_id`. They preserve upstream identifiers and
-  provenance; geographic selection continues to use `strata_id` names and
-  hierarchical paths in this development version.
+  provenance. Ecological selection through `strata_id` now accepts these codes
+  as well as existing names and hierarchical paths; quoted ecoprovince codes
+  preserve values such as `"10.1"`.
+* Added canonical character `strata_code` columns to model and strata
+  discovery, generated curve tables, and ecological spatial results. Ambiguous
+  ecozone codes 5, 6, and 10 are reported explicitly in single-selection
+  workflows rather than silently choosing a named subdivision.
 * Relative to `v20260709`, national coverage was lost for 10 combinations:
   ecological AGB for `ALNU.INC`, `LARI.LAR`, and `QUER.RUB`; ecological volume
   for `ALNU.INC`, `FRAX.NIG`, `LARI.LAR`, and `QUER.RUB`; tile AGB for

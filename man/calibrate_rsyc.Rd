@@ -28,9 +28,11 @@ Uppercase and lowercase letters are treated the same.}
 \item{strata_level}{Type of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
-\item{strata_id}{Tile ID or ecological area name. A single area name can be
-used when it occurs only once. If the name occurs in several places, use
-the full sequence of area names shown by \code{rsyc_strata()}.}
+\item{strata_id}{Tile ID, ecological area name or path, or ecological code.
+A single area name can be used when it occurs only once. If the name occurs
+in several places, use the full sequence of area names shown by
+\code{rsyc_strata()}. Numeric values are interpreted as codes for the selected
+ecological \code{strata_level}; quote ecoprovince codes such as \code{"10.1"}.}
 
 \item{obs_age}{Stand ages, in years, of the local observations.}
 
@@ -109,13 +111,29 @@ should be read as a single-observation BLUP-anchored RSYC curve, not as a
 local growth trajectory learned from the data.
 }
 \examples{
+# One observation for a tile model selected by tile ID.
 calibrate_rsyc(
-  response = "agb",
-  species = "PICE.MAR",
-  strata_level = "tile",
-  strata_id = "H14",
+  "agb", "PICE.MAR", "tile", "H14",
+  obs_age = 45,
+  obs_response = 65
+)
+
+# Two observations for an ecoregion selected by numeric code.
+calibrate_rsyc(
+  "agb", "PICE.MAR", "ecoregion", 198,
   obs_age = c(45, 70),
-  obs_response = c(120, 165)
+  obs_response = c(52, 65)
+)
+
+# Four observations for an ecodistrict selected by full hierarchy path.
+calibrate_rsyc(
+  "agb", "PICE.MAR", "ecodistrict",
+  paste(
+    "Atlantic Maritime", "Fundy Uplands", "Annapolis-Minas Lowlands",
+    "Windsor Lowlands", sep = "/"
+  ),
+  obs_age = c(30, 50, 70, 90),
+  obs_response = c(22, 31, 36, 39)
 )
 
 }

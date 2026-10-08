@@ -253,3 +253,37 @@ test_that("calibrate_rsyc validates its inputs", {
     "positive number"
   )
 })
+
+test_that("calibrate_rsyc accepts ecological codes", {
+  model <- RSYC_models[
+    RSYC_models$scale == "national" & RSYC_models$response == "agb" &
+      RSYC_models$species == "PICE.MAR" &
+      RSYC_models$strata_level == "ecodistrict",
+    , drop = FALSE
+  ][1L, ]
+  args <- list(
+    response = "agb", species = "PICE.MAR", strata_level = "ecodistrict",
+    obs_age = c(45, 70), obs_response = c(120, 165)
+  )
+  by_path <- do.call(calibrate_rsyc, c(args, list(strata_id = model$strata_id)))
+  by_code <- do.call(calibrate_rsyc, c(args, list(strata_id = model$ecodistrict_id)))
+  expect_identical(by_code, by_path)
+
+  expected <- list(
+    `5` = c("Taiga Shield East", "Taiga Shield West"),
+    `6` = c("Boreal Shield East", "Boreal Shield West"),
+    `10` = c("Subhumid Prairies", "Semiarid Prairies")
+  )
+  for (code in names(expected)) {
+    error <- tryCatch(
+      calibrate_rsyc(
+        "agb", "PICE.MAR", "ecozone", as.numeric(code),
+        obs_age = 45, obs_response = 120
+      ),
+      error = identity
+    )
+    message <- conditionMessage(error)
+    expect_match(message, expected[[code]][[1L]], fixed = TRUE)
+    expect_match(message, expected[[code]][[2L]], fixed = TRUE)
+  }
+})

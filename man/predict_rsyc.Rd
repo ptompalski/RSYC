@@ -18,9 +18,11 @@ Uppercase and lowercase letters are treated the same.}
 \item{strata_level}{Type of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
-\item{strata_id}{Tile ID or ecological area name. A single area name can be
-used when it occurs only once. If the name occurs in several places, use
-the full sequence of area names shown by \code{rsyc_strata()}.}
+\item{strata_id}{Tile ID, ecological area name or path, or ecological code.
+A single area name can be used when it occurs only once. If the name occurs
+in several places, use the full sequence of area names shown by
+\code{rsyc_strata()}. Numeric values are interpreted as codes for the selected
+ecological \code{strata_level}; quote ecoprovince codes such as \code{"10.1"}.}
 }
 \value{
 One estimated value for each stand age. AGB is in Mg/ha and volume
@@ -36,15 +38,36 @@ fitted for stand ages 1 through 150 years. The function warns when asked to
 estimate outside this age range; age 0 is also allowed as the start of a
 curve. When a full ecological area sequence is needed, use \code{/} between the
 ecozone, ecoprovince, ecoregion, and ecodistrict names.
+
+Ecological codes are resolved only within the selected \code{strata_level}.
+Ecozone codes 5, 6, and 10 each identify two named package subdivisions and
+therefore cannot select a single curve; use the desired subdivision name.
 }
 \examples{
+# Select a tile model with its tile ID.
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+
+# Select an ecozone model with its unique name.
 predict_rsyc(
   response = "volume",
   species = "PICE.MAR",
   age = c(20, 60, 120),
   strata_level = "ecozone",
   strata_id = "Boreal Shield East"
+)
+
+# Select an ecoregion model with its numeric ecological code.
+predict_rsyc(
+  "agb", "PICE.MAR", c(40, 80), "ecoregion", 198
+)
+
+# A full hierarchy path is an unambiguous ecological selector.
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecodistrict",
+  paste(
+    "Atlantic Maritime", "Fundy Uplands", "Annapolis-Minas Lowlands",
+    "Windsor Lowlands", sep = "/"
+  )
 )
 
 }

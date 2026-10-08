@@ -16,8 +16,9 @@ test_that("a tile dataset contains normalized spatial and curve components", {
   expect_equal(nrow(dataset$curves), 4L)
   expect_identical(
     names(dataset$curves),
-    c("model_id", "strata_id", "species", "age", "prediction")
+    c("model_id", "strata_id", "strata_code", "species", "age", "prediction")
   )
+  expect_true(all(is.na(dataset$curves$strata_code)))
   expect_setequal(dataset$curves$species, c("PICE.MAR", "POPU.TRE"))
   expect_setequal(dataset$curves$age, c(50, 100))
   expect_equal(
@@ -135,4 +136,55 @@ test_that("dataset output paths are validated", {
   expect_error(write_dataset(dataset, tempfile(fileext = ".txt"), FALSE, TRUE), "gpkg")
   missing_parent <- file.path(tempfile(), "dataset.gpkg")
   expect_error(write_dataset(dataset, missing_parent, FALSE, TRUE), "parent directory")
+})
+
+test_that("dataset strata resolver accepts vector codes and mixed identifiers", {
+  skip_if_not_installed("sf")
+  models <- RSYC_models[
+    RSYC_models$response == "agb" & RSYC_models$species == "PICE.MAR" &
+      RSYC_models$strata_level == "ecoregion" & RSYC_models$scale == "national",
+    , drop = FALSE
+  ]
+  selected <- models[!duplicated(models$ecoregion_id), , drop = FALSE][1:2, ]
+  spatial <- sf::st_sf(
+    strata_id = selected$strata_id,
+    strata_code = as.character(selected$ecoregion_id),
+    geometry = sf::st_sfc(
+      sf::st_point(c(0, 0)), sf::st_point(c(1, 1)), crs = 3978
+    )
+  )
+  testthat::local_mocked_bindings(
+    rsyc_boundaries = function(...) spatial,
+    .package = "RSYC"
+  )
+
+  by_code <- build_rsyc_dataset(
+    "agb", "PICE.MAR", 50, "ecoregion", selected$ecoregion_id
+  )
+  mixed <- build_rsyc_dataset(
+    "agb", "PICE.MAR", 50, "ecoregion",
+    c(selected$strata_id[[1L]], as.character(selected$ecoregion_id[[2L]]))
+  )
+  expect_identical(by_code$curves, mixed$curves)
+  expect_identical(
+    unique(by_code$curves$strata_code),
+    as.character(selected$ecoregion_id[order(selected$strata_id)])
+  )
+})
+
+test_that("dataset rejects ambiguous ecozone codes", {
+  expected <- list(
+    `5` = c("Taiga Shield East", "Taiga Shield West"),
+    `6` = c("Boreal Shield East", "Boreal Shield West"),
+    `10` = c("Subhumid Prairies", "Semiarid Prairies")
+  )
+  for (code in names(expected)) {
+    error <- tryCatch(
+      build_rsyc_dataset("agb", "PICE.MAR", 50, "ecozone", as.numeric(code)),
+      error = identity
+    )
+    message <- conditionMessage(error)
+    expect_match(message, expected[[code]][[1L]], fixed = TRUE)
+    expect_match(message, expected[[code]][[2L]], fixed = TRUE)
+  }
 })

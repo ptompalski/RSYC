@@ -113,6 +113,19 @@ predict_rsyc(
 )
 ```
 
+Ecological codes can be passed through the same `strata_id` argument. The
+selected ecological level is required because codes can overlap between
+levels:
+
+```{r}
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecoregion", 198
+)
+```
+
+Use quoted ecoprovince codes such as `"10.1"`. Ecozone codes 5, 6, and 10 are
+ambiguous package subdivisions, so select those areas by name instead.
+
 ## Several complete curves
 
 This example estimates yield at ages 1 to 150 for each species and area listed

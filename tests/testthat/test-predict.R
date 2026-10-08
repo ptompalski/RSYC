@@ -142,3 +142,92 @@ test_that("documented tibble application patterns work", {
     )
   expect_true(all(lengths(inputs$prediction) == 20L))
 })
+
+test_that("ecological codes select the same prediction as full paths", {
+  models <- RSYC_models[
+    RSYC_models$scale == "national" & RSYC_models$response == "agb" &
+      RSYC_models$species == "PICE.MAR",
+    , drop = FALSE
+  ]
+  for (level in c("ecoregion", "ecodistrict")) {
+    model <- models[models$strata_level == level, , drop = FALSE][1L, ]
+    field <- paste0(level, "_id")
+    expect_identical(
+      predict_rsyc("agb", "PICE.MAR", c(50, 100), level, model[[field]]),
+      predict_rsyc("agb", "PICE.MAR", c(50, 100), level, model$strata_id)
+    )
+  }
+
+  province <- models[models$strata_level == "ecoprovince", , drop = FALSE][1L, ]
+  expected <- predict_rsyc(
+    "agb", "PICE.MAR", 50, "ecoprovince", province$strata_id
+  )
+  expect_identical(
+    predict_rsyc(
+      "agb", "PICE.MAR", 50, "ecoprovince", province$ecoprovince_id
+    ),
+    expected
+  )
+  expect_identical(
+    predict_rsyc(
+      "agb", "PICE.MAR", 50, "ecoprovince",
+      as.numeric(province$ecoprovince_id)
+    ),
+    expected
+  )
+})
+
+test_that("ecological code validation is explicit", {
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 50, "tile", 14),
+    "character tile ID"
+  )
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 50, "ecoregion", 198.5),
+    "must be integers"
+  )
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 50, "ecoregion", 999999),
+    "No ecoregion uses"
+  )
+  expect_error(
+    predict_rsyc("agb", "NOT.A.SPECIES", 50, "ecoregion", 198),
+    "valid, but no published"
+  )
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 50, "ecoregion", factor("198")),
+    "numeric code or one non-empty character"
+  )
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 50, "ecoregion", " "),
+    "whitespace-only"
+  )
+})
+
+test_that("ambiguous ecozone codes list every official name", {
+  expected <- list(
+    `5` = c("Taiga Shield East", "Taiga Shield West"),
+    `6` = c("Boreal Shield East", "Boreal Shield West"),
+    `10` = c("Subhumid Prairies", "Semiarid Prairies")
+  )
+  for (code in names(expected)) {
+    error <- tryCatch(
+      predict_rsyc("agb", "PICE.MAR", 50, "ecozone", as.numeric(code)),
+      error = identity
+    )
+    message <- conditionMessage(error)
+    expect_match(message, expected[[code]][[1L]], fixed = TRUE)
+    expect_match(message, expected[[code]][[2L]], fixed = TRUE)
+  }
+
+  model <- RSYC_models[
+    RSYC_models$scale == "national" & RSYC_models$response == "agb" &
+      RSYC_models$species == "PICE.MAR" & RSYC_models$strata_level == "ecozone" &
+      RSYC_models$ecozone_id == 4L,
+    , drop = FALSE
+  ][1L, ]
+  expect_identical(
+    predict_rsyc("agb", "PICE.MAR", 50, "ecozone", 4),
+    predict_rsyc("agb", "PICE.MAR", 50, "ecozone", model$strata_id)
+  )
+})

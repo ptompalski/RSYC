@@ -11,6 +11,8 @@ test_that("model catalog filters national models", {
   expect_false("scale" %in% names(models))
   expect_true(all(grepl("_national_", models$model_id, fixed = TRUE)))
   expect_true("strata_name" %in% names(models))
+  expect_true("strata_code" %in% names(models))
+  expect_true(all(is.na(models$strata_code)))
   expect_false(any(c("equation", "age_min", "age_max", "n_obs", "n_units") %in% names(models)))
   expect_identical(tail(names(models), 1L), "model_version")
 })
@@ -27,7 +29,10 @@ test_that("species and strata discovery helpers reflect model availability", {
   )
   expect_true(all(strata$strata_level == "ecozone"))
   expect_true("Boreal Shield East" %in% strata$strata_name)
-  expect_true(all(c("strata_level", "strata_name", "strata_id") %in% names(strata)))
+  expect_identical(
+    names(strata),
+    c("strata_level", "strata_name", "strata_id", "strata_code")
+  )
 })
 
 test_that("internal catalog exposes the complete published model dataset", {
@@ -89,4 +94,73 @@ test_that("catalog filters validate vector inputs", {
 test_that("internal species normalization rejects non-character vectors", {
   normalize <- getFromNamespace(".rsyc_normalize_species", "RSYC")
   expect_error(normalize(1, scalar = FALSE), "must be character")
+})
+
+test_that("catalog filters accept ecological codes", {
+  province <- RSYC_models[
+    RSYC_models$scale == "national" & RSYC_models$response == "agb" &
+      RSYC_models$species == "PICE.MAR" &
+      RSYC_models$strata_level == "ecoprovince",
+    , drop = FALSE
+  ][1L, ]
+  quoted <- available_rsyc_models(
+    "agb", "PICE.MAR", "ecoprovince", as.character(province$ecoprovince_id)
+  )
+  numeric <- available_rsyc_models(
+    "agb", "PICE.MAR", "ecoprovince", as.numeric(province$ecoprovince_id)
+  )
+  expect_identical(quoted, numeric)
+  expect_true(all(quoted$strata_code == province$ecoprovince_id))
+  expect_identical(
+    rsyc_species(
+      "agb", "ecoprovince", as.numeric(province$ecoprovince_id)
+    ),
+    rsyc_species("agb", "ecoprovince", province$strata_id)
+  )
+
+  for (code in c(5, 6)) {
+    found <- available_rsyc_models("agb", "PICE.MAR", "ecozone", code)
+    expect_identical(unique(found$strata_code), as.character(code))
+    expect_length(unique(found$strata_id), 2L)
+    expect_identical(unique(found$strata_id), sort(unique(found$strata_id)))
+  }
+})
+
+test_that("catalog code filters require one ecological level", {
+  expect_error(available_rsyc_models(strata_id = 198), "exactly one ecological")
+  expect_error(
+    available_rsyc_models(
+      strata_level = c("ecoregion", "ecodistrict"), strata_id = "198"
+    ),
+    "exactly one ecological"
+  )
+  expect_error(
+    available_rsyc_models(strata_level = "tile", strata_id = 198),
+    "character tile ID"
+  )
+  expect_error(
+    available_rsyc_models(strata_level = "ecoregion", strata_id = 999999),
+    "No ecoregion uses"
+  )
+  expect_error(
+    available_rsyc_models(strata_level = "ecozone", strata_id = 10),
+    "no published national RSYC model"
+  )
+})
+
+test_that("numeric code support does not add public arguments", {
+  expect_identical(
+    names(formals(available_rsyc_models)),
+    c("response", "species", "strata_level", "strata_id")
+  )
+  expect_identical(
+    names(formals(rsyc_species)),
+    c("response", "strata_level", "strata_id")
+  )
+  expect_identical(
+    names(formals(rsyc_strata)),
+    c("response", "species", "strata_level")
+  )
+  expect_false("strata_code" %in% names(formals(build_rsyc_dataset)))
+  expect_false("strata_code" %in% names(formals(calibrate_rsyc)))
 })

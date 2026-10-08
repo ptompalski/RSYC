@@ -14,8 +14,11 @@ and \code{"volume"} for total volume. The default includes both.}
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
 all types.}
 
-\item{strata_id}{One or more tile IDs, ecological area names, or full
-sequences of ecological area names. The default includes all areas.}
+\item{strata_id}{One or more tile IDs, ecological area names or paths, or
+ecological codes. Numeric values and numeric-looking character values are
+interpreted as codes when no name or path matches. Code searches require
+exactly one ecological \code{strata_level}. Quote ecoprovince codes such as
+\code{"10.1"}. The default includes all areas.}
 }
 \value{
 A table giving each species code, common name, and broad model group.

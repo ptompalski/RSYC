@@ -141,10 +141,10 @@ download_rsyc_boundaries <- function(
 #' @inheritParams download_rsyc_boundaries
 #' @param quiet Hide messages produced while the map is read?
 #'
-#' @return An `sf` map in the Canada Atlas Lambert projection (EPSG:3978). Every
-#'   map contains `strata_id`, which links an area to its RSYC curves, and the
-#'   area shape. Ecological maps also contain the names of the larger ecological
-#'   areas in which each area lies.
+#' @return An `sf` map in the Canada Atlas Lambert projection (EPSG:3978). Tile
+#'   maps contain `strata_id` and geometry. Ecological maps additionally contain
+#'   canonical character `strata_code` and the hierarchy names and source ID
+#'   fields through the requested level.
 #'
 #' @examples
 #' tiles <- rsyc_boundaries("tile")
@@ -185,6 +185,9 @@ rsyc_boundaries <- function(
     boundaries$strata_id <- as.character(boundaries$join_key)
     hierarchy_levels <- c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")
     hierarchy <- hierarchy_levels[seq_len(match(strata_level, hierarchy_levels))]
+    id_fields <- paste0(hierarchy, "_id")
+    code_field <- .rsyc_strata_code_field(strata_level)
+    boundaries$strata_code <- as.character(boundaries[[code_field]])
   }
 
   geometry <- attr(boundaries, "sf_column")
@@ -193,7 +196,10 @@ rsyc_boundaries <- function(
     sf::st_geometry(boundaries) <- "geometry"
     geometry <- "geometry"
   }
-  boundaries[c("strata_id", hierarchy, geometry)]
+  if (identical(strata_level, "tile")) {
+    return(boundaries[c("strata_id", geometry)])
+  }
+  boundaries[c("strata_id", "strata_code", hierarchy, id_fields, geometry)]
 }
 
 .rsyc_verify_ecostrat <- function(

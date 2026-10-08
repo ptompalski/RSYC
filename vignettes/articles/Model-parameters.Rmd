@@ -35,8 +35,9 @@ The four raw hierarchy identifier fields retain upstream codes for ecological
 areas. `ecozone_id`, `ecoregion_id`, and `ecodistrict_id` are integers;
 `ecoprovince_id` is character so codes such as `"10.1"` retain their source
 representation. These fields provide data provenance in this release.
-Ecological model selection continues to use `strata_id`, either as an
-unambiguous short name or a full hierarchical path.
+Ecological model selection uses `strata_id`, which accepts a numeric/code
+identifier, an unambiguous short name, or a full hierarchical path. Quote
+ecoprovince codes such as `"10.1"` to retain their source representation.
 
 For ecological areas, `strata_id` gives the full sequence of names from the
 ecozone down to the selected level, separated by `/`. `predict_rsyc()` also
@@ -50,6 +51,23 @@ rsyc_strata(
   strata_level = "ecoregion"
 )
 ```
+
+The discovery result includes the canonical character `strata_code`. The same
+value can be supplied through `strata_id` when exactly one ecological level is
+selected:
+
+```{r}
+available_rsyc_models(
+  response = "agb",
+  species = "PICE.MAR",
+  strata_level = "ecoprovince",
+  strata_id = "7.1"
+)
+```
+
+Ecozone codes 5, 6, and 10 each correspond to two named subdivisions. Use the
+desired name for prediction, calibration, or dataset construction; catalogue
+discovery returns all published matches.
 
 Use `available_rsyc_models()` to see which curves are available without viewing
 all of the fields used to fit and check the curves:

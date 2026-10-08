@@ -74,13 +74,29 @@
 #' biomass yield curves for Canada.
 #'
 #' @examples
+#' # One observation for a tile model selected by tile ID.
 #' calibrate_rsyc(
-#'   response = "agb",
-#'   species = "PICE.MAR",
-#'   strata_level = "tile",
-#'   strata_id = "H14",
+#'   "agb", "PICE.MAR", "tile", "H14",
+#'   obs_age = 45,
+#'   obs_response = 65
+#' )
+#'
+#' # Two observations for an ecoregion selected by numeric code.
+#' calibrate_rsyc(
+#'   "agb", "PICE.MAR", "ecoregion", 198,
 #'   obs_age = c(45, 70),
-#'   obs_response = c(120, 165)
+#'   obs_response = c(52, 65)
+#' )
+#'
+#' # Four observations for an ecodistrict selected by full hierarchy path.
+#' calibrate_rsyc(
+#'   "agb", "PICE.MAR", "ecodistrict",
+#'   paste(
+#'     "Atlantic Maritime", "Fundy Uplands", "Annapolis-Minas Lowlands",
+#'     "Windsor Lowlands", sep = "/"
+#'   ),
+#'   obs_age = c(30, 50, 70, 90),
+#'   obs_response = c(22, 31, 36, 39)
 #' )
 #'
 #' @export
@@ -104,7 +120,6 @@ calibrate_rsyc <- function(
     "strata_level",
     .rsyc_public_strata_levels
   )
-  .rsyc_assert_scalar_character(strata_id, "strata_id")
   .rsyc_assert_flag(apply_limits, "apply_limits")
 
   .rsyc_assert_age(obs_age)

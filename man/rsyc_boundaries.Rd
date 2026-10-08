@@ -20,10 +20,10 @@ uses its standard user data folder, returned by \code{\link[tools:userdir]{tools
 \item{quiet}{Hide messages produced while the map is read?}
 }
 \value{
-An \code{sf} map in the Canada Atlas Lambert projection (EPSG:3978). Every
-map contains \code{strata_id}, which links an area to its RSYC curves, and the
-area shape. Ecological maps also contain the names of the larger ecological
-areas in which each area lies.
+An \code{sf} map in the Canada Atlas Lambert projection (EPSG:3978). Tile
+maps contain \code{strata_id} and geometry. Ecological maps additionally contain
+canonical character \code{strata_code} and the hierarchy names and source ID
+fields through the requested level.
 }
 \description{
 Read the tile boundaries or ecological boundaries used for the RSYC yield
