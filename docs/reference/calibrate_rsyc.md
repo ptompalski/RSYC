@@ -43,10 +43,12 @@ calibrate_rsyc(
 
 - strata_id:
 
-  Tile ID or ecological area name. A single area name can be used when
-  it occurs only once. If the name occurs in several places, use the
-  full sequence of area names shown by
+  Tile ID, ecological area name or path, or ecological code. A single
+  area name can be used when it occurs only once. If the name occurs in
+  several places, use the full sequence of area names shown by
   [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md).
+  Numeric values are interpreted as codes for the selected ecological
+  `strata_level`; quote ecoprovince codes such as `"10.1"`.
 
 - obs_age:
 
@@ -157,35 +159,32 @@ biomass yield curves for Canada.
 ## Examples
 
 ``` r
+# One observation for a tile model selected by tile ID.
 calibrate_rsyc(
-  response = "agb",
-  species = "PICE.MAR",
-  strata_level = "tile",
-  strata_id = "H14",
-  obs_age = c(45, 70),
-  obs_response = c(120, 165)
+  "agb", "PICE.MAR", "tile", "H14",
+  obs_age = 45,
+  obs_response = 65
 )
 #> $predictions
-#> # A tibble: 2 × 3
+#> # A tibble: 1 × 3
 #>     age value value_uncalibrated
 #>   <dbl> <dbl>              <dbl>
-#> 1    45  104.               50.2
-#> 2    70  129.               62.2
+#> 1    45  62.6               50.2
 #> 
 #> $ratio_blup
-#> [1] 2.070796
+#> [1] 1.248941
 #> 
 #> $b_pixel
-#> [1] 73.06844
+#> [1] 16.9871
 #> 
 #> $shrinkage_factor
-#> [1] 0.9309152
+#> [1] 0.8415476
 #> 
 #> $n_obs
-#> [1] 2
+#> [1] 1
 #> 
 #> $random_effect_limited
-#> [1] TRUE
+#> [1] FALSE
 #> 
 #> $ratio_limited
 #> [1] FALSE
@@ -195,5 +194,87 @@ calibrate_rsyc(
 #> 
 #> $model_id
 #> [1] "rsyc_agb_national_tile_pice_mar_h14"
+#> 
+
+# Two observations for an ecoregion selected by numeric code.
+calibrate_rsyc(
+  "agb", "PICE.MAR", "ecoregion", 198,
+  obs_age = c(45, 70),
+  obs_response = c(52, 65)
+)
+#> $predictions
+#> # A tibble: 2 × 3
+#>     age value value_uncalibrated
+#>   <dbl> <dbl>              <dbl>
+#> 1    45  51.4               42.8
+#> 2    70  64.2               53.5
+#> 
+#> $ratio_blup
+#> [1] 1.198789
+#> 
+#> $b_pixel
+#> [1] 11.62953
+#> 
+#> $shrinkage_factor
+#> [1] 0.9291395
+#> 
+#> $n_obs
+#> [1] 2
+#> 
+#> $random_effect_limited
+#> [1] FALSE
+#> 
+#> $ratio_limited
+#> [1] FALSE
+#> 
+#> $value_limited
+#> [1] FALSE
+#> 
+#> $model_id
+#> [1] "rsyc_agb_national_ecoregion_pice_mar_montane_cordillera_northern_montane_cordillera_skeena_mountains"
+#> 
+
+# Four observations for an ecodistrict selected by full hierarchy path.
+calibrate_rsyc(
+  "agb", "PICE.MAR", "ecodistrict",
+  paste(
+    "Atlantic Maritime", "Fundy Uplands", "Annapolis-Minas Lowlands",
+    "Windsor Lowlands", sep = "/"
+  ),
+  obs_age = c(30, 50, 70, 90),
+  obs_response = c(22, 31, 36, 39)
+)
+#> $predictions
+#> # A tibble: 4 × 3
+#>     age value value_uncalibrated
+#>   <dbl> <dbl>              <dbl>
+#> 1    30  21.9               28.6
+#> 2    50  31.1               40.7
+#> 3    70  36.5               47.8
+#> 4    90  39.8               52.0
+#> 
+#> $ratio_blup
+#> [1] 0.7650299
+#> 
+#> $b_pixel
+#> [1] -12.26633
+#> 
+#> $shrinkage_factor
+#> [1] 0.9631163
+#> 
+#> $n_obs
+#> [1] 4
+#> 
+#> $random_effect_limited
+#> [1] FALSE
+#> 
+#> $ratio_limited
+#> [1] FALSE
+#> 
+#> $value_limited
+#> [1] FALSE
+#> 
+#> $model_id
+#> [1] "rsyc_agb_national_ecodistrict_pice_mar_atlantic_maritime_fundy_uplands_annapolis_minas_lowlands_windsor_lowlands"
 #> 
 ```

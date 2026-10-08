@@ -43,8 +43,10 @@ build_rsyc_dataset(
 
 - strata_id:
 
-  One or more tile IDs, ecological area names, or full sequences of
-  ecological area names. By default, every area with a matching
+  One or more tile IDs, ecological area names or paths, or ecological
+  codes. Numeric values and numeric-looking character values are
+  interpreted as codes when no name or path matches. Quote ecoprovince
+  codes such as `"10.1"`. By default, every area with a matching
   published curve is included. If an area name occurs in several places,
   the function asks for the full sequence of area names.
 
@@ -71,8 +73,11 @@ build_rsyc_dataset(
 ## Value
 
 Three named results: `spatial`, an `sf` boundary map; `curves`, a table
-of yield estimates; and `metadata`, a one-row summary of the data and
-choices used.
+of yield estimates containing canonical character `strata_code` values
+(`NA` for tiles); and `metadata`, a one-row summary of the data and
+choices used. Ecological spatial results contain `strata_code` plus the
+hierarchy names and source ID fields through the requested level. Tile
+spatial results contain `strata_id` and geometry.
 
 ## Details
 
@@ -80,7 +85,8 @@ The function currently uses only curves fitted across Canada. It does
 not substitute a curve from another type of area or from a regional fit.
 Ecological boundaries must first be downloaded with
 [`download_rsyc_boundaries()`](https://ptompalski.github.io/RSYC/reference/download_rsyc_boundaries.md);
-tile boundaries are included with RSYC.
+tile boundaries are included with RSYC. Ecozone codes 5, 6, and 10 are
+ambiguous and must instead be supplied as a subdivision name or path.
 
 ## Examples
 
@@ -102,19 +108,19 @@ tile_dataset$spatial
 #> 100       F31 POLYGON ((2139089 438648.1,...
 #> 146       H14 POLYGON ((-410910.5 738648....
 tile_dataset$curves
-#> # A tibble: 12 × 5
-#>    model_id                            strata_id species    age prediction
-#>    <chr>                               <chr>     <chr>    <dbl>      <dbl>
-#>  1 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR    50       70.4
-#>  2 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   100       91.6
-#>  3 rsyc_agb_national_tile_pice_mar_f31 F31       PICE.MAR   150       98.6
-#>  4 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE    50       91.6
-#>  5 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   100      110. 
-#>  6 rsyc_agb_national_tile_popu_tre_f31 F31       POPU.TRE   150      110. 
-#>  7 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR    50       53.3
-#>  8 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   100       69.3
-#>  9 rsyc_agb_national_tile_pice_mar_h14 H14       PICE.MAR   150       74.6
-#> 10 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE    50       69.2
-#> 11 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   100       83.2
-#> 12 rsyc_agb_national_tile_popu_tre_h14 H14       POPU.TRE   150       83.1
+#> # A tibble: 12 × 6
+#>    model_id                       strata_id strata_code species   age prediction
+#>    <chr>                          <chr>     <chr>       <chr>   <dbl>      <dbl>
+#>  1 rsyc_agb_national_tile_pice_m… F31       NA          PICE.M…    50       70.4
+#>  2 rsyc_agb_national_tile_pice_m… F31       NA          PICE.M…   100       91.6
+#>  3 rsyc_agb_national_tile_pice_m… F31       NA          PICE.M…   150       98.6
+#>  4 rsyc_agb_national_tile_popu_t… F31       NA          POPU.T…    50       91.6
+#>  5 rsyc_agb_national_tile_popu_t… F31       NA          POPU.T…   100      110. 
+#>  6 rsyc_agb_national_tile_popu_t… F31       NA          POPU.T…   150      110. 
+#>  7 rsyc_agb_national_tile_pice_m… H14       NA          PICE.M…    50       53.3
+#>  8 rsyc_agb_national_tile_pice_m… H14       NA          PICE.M…   100       69.3
+#>  9 rsyc_agb_national_tile_pice_m… H14       NA          PICE.M…   150       74.6
+#> 10 rsyc_agb_national_tile_popu_t… H14       NA          POPU.T…    50       69.2
+#> 11 rsyc_agb_national_tile_popu_t… H14       NA          POPU.T…   100       83.2
+#> 12 rsyc_agb_national_tile_popu_t… H14       NA          POPU.T…   150       83.1
 ```

@@ -19,7 +19,6 @@ Description: Provides published remote sensing-based yield curves for
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends: 
     R (>= 3.5)
 LazyData: true
@@ -43,3 +42,4 @@ URL: https://ptompalski.github.io/RSYC,
     https://github.com/ptompalski/RSYC
 BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown
+Config/roxygen2/version: 8.1.0

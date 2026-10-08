@@ -1,6 +1,7 @@
 # Prediction examples
 
 ``` r
+
 library(RSYC)
 ```
 
@@ -11,6 +12,7 @@ name or tile ID. The following examples estimate AGB and volume for
 black spruce in tile H14 at three stand ages:
 
 ``` r
+
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 #> [1] 26.85001 58.32616 71.92139
 predict_rsyc("volume", "PICE.MAR", c(20, 60, 120), "tile", "H14")
@@ -21,6 +23,7 @@ The same function works for individual species and broad groups such as
 `coniferous` and `broadleaf`:
 
 ``` r
+
 species_predictions <- tibble::tibble(
   species = c("PICE.MAR", "PINU.BAN", "POPU.TRE", "coniferous", "broadleaf")
 ) |>
@@ -49,6 +52,7 @@ measure, species, stand age, and tile. Each row of `tile_inputs`
 describes one combination:
 
 ``` r
+
 tile_inputs <- tidyr::crossing(
   response = c("agb", "volume"),
   species = c("PICE.MAR", "POPU.TRE", "coniferous"),
@@ -93,6 +97,7 @@ Use the area name when it occurs only once at the selected ecological
 level:
 
 ``` r
+
 eco_inputs <- tibble::tribble(
   ~response, ~species,   ~age, ~strata_level, ~strata_id,
   "agb",     "PICE.MAR", 80,  "ecozone",
@@ -130,13 +135,14 @@ classification. For example, more than one ecodistrict named
 `Salmon River` has a curve for this species and forest measure:
 
 ``` r
+
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
   dplyr::filter(strata_name == "Salmon River")
-#> # A tibble: 2 × 3
-#>   strata_level strata_name  strata_id                                           
-#>   <chr>        <chr>        <chr>                                               
-#> 1 ecodistrict  Salmon River Boreal Cordillera/Northern Boreal Cordillera/Pelly …
-#> 2 ecodistrict  Salmon River Boreal Shield East/Newfoundland/Northern Penninsula…
+#> # A tibble: 2 × 4
+#>   strata_level strata_name  strata_id                                strata_code
+#>   <chr>        <chr>        <chr>                                    <chr>      
+#> 1 ecodistrict  Salmon River Boreal Cordillera/Northern Boreal Cordi… 911        
+#> 2 ecodistrict  Salmon River Boreal Shield East/Newfoundland/Norther… 455
 
 predict_rsyc(
   "agb", "PICE.MAR", 80, "ecodistrict",
@@ -145,12 +151,29 @@ predict_rsyc(
 #> [1] 39.17884
 ```
 
+Ecological codes can be passed through the same `strata_id` argument.
+The selected ecological level is required because codes can overlap
+between levels:
+
+``` r
+
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecoregion", 198
+)
+#> [1] 56.18245
+```
+
+Use quoted ecoprovince codes such as `"10.1"`. Ecozone codes 5, 6, and
+10 are ambiguous package subdivisions, so select those areas by name
+instead.
+
 ## Several complete curves
 
 This example estimates yield at ages 1 to 150 for each species and area
 listed in `curve_inputs`:
 
 ``` r
+
 curve_inputs <- tibble::tribble(
   ~response, ~species,     ~strata_level, ~strata_id,
   "agb",     "PICE.MAR",   "tile",       "H14",
@@ -199,6 +222,7 @@ further analysis. AGB and volume are shown in separate panels because
 they use different units:
 
 ``` r
+
 curve_predictions |>
   dplyr::mutate(
     response = factor(

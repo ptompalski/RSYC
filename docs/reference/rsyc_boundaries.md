@@ -35,10 +35,10 @@ rsyc_boundaries(
 
 ## Value
 
-An `sf` map in the Canada Atlas Lambert projection (EPSG:3978). Every
-map contains `strata_id`, which links an area to its RSYC curves, and
-the area shape. Ecological maps also contain the names of the larger
-ecological areas in which each area lies.
+An `sf` map in the Canada Atlas Lambert projection (EPSG:3978). Tile
+maps contain `strata_id` and geometry. Ecological maps additionally
+contain canonical character `strata_code` and the hierarchy names and
+source ID fields through the requested level.
 
 ## Examples
 

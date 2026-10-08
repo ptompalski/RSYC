@@ -13,8 +13,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Understanding the yield-curve data">
 </head>
@@ -131,9 +131,11 @@ ecological areas. <code>ecozone_id</code>, <code>ecoregion_id</code>,
 and <code>ecodistrict_id</code> are integers;
 <code>ecoprovince_id</code> is character so codes such as
 <code>"10.1"</code> retain their source representation. These fields
-provide data provenance in this release. Ecological model selection
-continues to use <code>strata_id</code>, either as an unambiguous short
-name or a full hierarchical path.</p>
+provide data provenance in this release. Ecological model selection uses
+<code>strata_id</code>, which accepts a numeric/code identifier, an
+unambiguous short name, or a full hierarchical path. Quote ecoprovince
+codes such as <code>"10.1"</code> to retain their source
+representation.</p>
 <p>For ecological areas, <code>strata_id</code> gives the full sequence
 of names from the ecozone down to the selected level, separated by
 <code>/</code>. <code><a href="../reference/predict_rsyc.html">predict_rsyc()</a></code> also accepts the shorter
@@ -145,30 +147,50 @@ forest measure, species, and ecological level:</p>
 <span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span>
 <span>  strata_level <span class="op">=</span> <span class="st">"ecoregion"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 116 × 3</span></span></span>
-<span><span class="co">#&gt;    strata_level strata_name                   strata_id                         </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ecoregion    Abitibi Plains                Boreal Shield East/Mid-Boreal Shi…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ecoregion    Algonquin-Lake Nipissing      Boreal Shield East/Southern Borea…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ecoregion    Annapolis-Minas Lowlands      Atlantic Maritime/Fundy Uplands/A…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ecoregion    Anticosti Island              Boreal Shield East/Eastern Boreal…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ecoregion    Appalachians                  Atlantic Maritime/Appalachian-Aca…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion    Athabasca Plain               Boreal Shield West/Western Boreal…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ecoregion    Atlantic Coast                Atlantic Maritime/Fundy Uplands/A…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ecoregion    Avalon Forest                 Boreal Shield East/Newfoundland/A…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ecoregion    Big Trout Lake                Boreal Shield West/Western Boreal…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ecoregion    Boreal Mountains and Plateaus Boreal Cordillera/Southern Boreal…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 116 × 4</span></span></span>
+<span><span class="co">#&gt;    strata_level strata_name                   strata_id              strata_code</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ecoregion    Abitibi Plains                Boreal Shield East/Mi… 96         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ecoregion    Algonquin-Lake Nipissing      Boreal Shield East/So… 98         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ecoregion    Annapolis-Minas Lowlands      Atlantic Maritime/Fun… 126        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ecoregion    Anticosti Island              Boreal Shield East/Ea… 102        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ecoregion    Appalachians                  Atlantic Maritime/App… 117        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ecoregion    Athabasca Plain               Boreal Shield West/We… 87         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ecoregion    Atlantic Coast                Atlantic Maritime/Fun… 125        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ecoregion    Avalon Forest                 Boreal Shield East/Ne… 115        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ecoregion    Big Trout Lake                Boreal Shield West/We… 95         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ecoregion    Boreal Mountains and Plateaus Boreal Cordillera/Sou… 180        </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 106 more rows</span></span></span></code></pre></div>
+<p>The discovery result includes the canonical character
+<code>strata_code</code>. The same value can be supplied through
+<code>strata_id</code> when exactly one ecological level is
+selected:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/available_rsyc_models.html">available_rsyc_models</a></span><span class="op">(</span></span>
+<span>  response <span class="op">=</span> <span class="st">"agb"</span>,</span>
+<span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span>
+<span>  strata_level <span class="op">=</span> <span class="st">"ecoprovince"</span>,</span>
+<span>  strata_id <span class="op">=</span> <span class="st">"7.1"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 11</span></span></span>
+<span><span class="co">#&gt;   model_id          response response_units strata_type strata_level strata_name</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> rsyc_agb_nationa… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: strata_id &lt;chr&gt;, strata_code &lt;chr&gt;, species &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   model_group &lt;chr&gt;, model_version &lt;chr&gt;</span></span></span></code></pre></div>
+<p>Ecozone codes 5, 6, and 10 each correspond to two named subdivisions.
+Use the desired name for prediction, calibration, or dataset
+construction; catalogue discovery returns all published matches.</p>
 <p>Use <code><a href="../reference/available_rsyc_models.html">available_rsyc_models()</a></code> to see which curves are
 available without viewing all of the fields used to fit and check the
 curves:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/available_rsyc_models.html">available_rsyc_models</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span>
 <span>  strata_level <span class="op">=</span> <span class="st">"tile"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 344 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 344 × 11</span></span></span>
 <span><span class="co">#&gt;    model_id         response response_units strata_type strata_level strata_name</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> rsyc_volume_nat… volume   m3/ha          tile        tile         A24        </span></span>
@@ -182,8 +204,8 @@ curves:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B26        </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B27        </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 334 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: strata_id &lt;chr&gt;, species &lt;chr&gt;, model_group &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   model_version &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: strata_id &lt;chr&gt;, strata_code &lt;chr&gt;, species &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   model_group &lt;chr&gt;, model_version &lt;chr&gt;</span></span></span></code></pre></div>
 <p><code>RSYC_models</code> also contains measures of uncertainty and
 variation. <code>local_b1_var</code> and <code>residual_var</code>
 support local calibration with <code><a href="../reference/calibrate_rsyc.html">calibrate_rsyc()</a></code>;
@@ -202,7 +224,7 @@ catalogue.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -13,7 +13,7 @@ download_rsyc_boundaries(
 }
 \arguments{
 \item{cache_dir}{Folder in which to save the GeoPackage. By default, RSYC
-uses its standard user data folder, returned by \code{\link[tools:userdir]{tools::R_user_dir()}}.}
+uses its standard user data folder, returned by \code{\link[tools:R_user_dir]{tools::R_user_dir()}}.}
 
 \item{overwrite}{Replace a previously downloaded file?}
 

@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimate Biomass or Volume from an RSYC Yield Curve — predict_rsyc"><meta name="description" content="Estimate aboveground biomass or total volume at one or more stand ages. The
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimate Biomass or Volume from an RSYC Yield Curve — predict_rsyc"><meta name="description" content="Estimate aboveground biomass or total volume at one or more stand ages. The
 curve is selected by species and area."><meta property="og:description" content="Estimate aboveground biomass or total volume at one or more stand ages. The
 curve is selected by species and area."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -81,9 +81,11 @@ Uppercase and lowercase letters are treated the same.</p></dd>
 
 
 <dt id="arg-strata-id">strata_id<a class="anchor" aria-label="anchor" href="#arg-strata-id"></a></dt>
-<dd><p>Tile ID or ecological area name. A single area name can be
-used when it occurs only once. If the name occurs in several places, use
-the full sequence of area names shown by <code><a href="rsyc_strata.html">rsyc_strata()</a></code>.</p></dd>
+<dd><p>Tile ID, ecological area name or path, or ecological code.
+A single area name can be used when it occurs only once. If the name occurs
+in several places, use the full sequence of area names shown by
+<code><a href="rsyc_strata.html">rsyc_strata()</a></code>. Numeric values are interpreted as codes for the selected
+ecological <code>strata_level</code>; quote ecoprovince codes such as <code>"10.1"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -98,12 +100,18 @@ fitted for stand ages 1 through 150 years. The function warns when asked to
 estimate outside this age range; age 0 is also allowed as the start of a
 curve. When a full ecological area sequence is needed, use <code>/</code> between the
 ecozone, ecoprovince, ecoregion, and ecodistrict names.</p>
+<p>Ecological codes are resolved only within the selected <code>strata_level</code>.
+Ecozone codes 5, 6, and 10 each identify two named package subdivisions and
+therefore cannot select a single curve; use the desired subdivision name.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Select a tile model with its tile ID.</span></span></span>
+<span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 26.85001 58.32616 71.92139</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Select an ecozone model with its unique name.</span></span></span>
 <span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span></span>
 <span class="r-in"><span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span></span>
@@ -112,6 +120,22 @@ ecozone, ecoprovince, ecoregion, and ecodistrict names.</p>
 <span class="r-in"><span>  strata_id <span class="op">=</span> <span class="st">"Boreal Shield East"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  35.39177  91.53735 117.30550</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Select an ecoregion model with its numeric ecological code.</span></span></span>
+<span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">80</span><span class="op">)</span>, <span class="st">"ecoregion"</span>, <span class="fl">198</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 39.69784 56.18245</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># A full hierarchy path is an unambiguous ecological selector.</span></span></span>
+<span class="r-in"><span><span class="fu">predict_rsyc</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fl">80</span>, <span class="st">"ecodistrict"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Atlantic Maritime"</span>, <span class="st">"Fundy Uplands"</span>, <span class="st">"Annapolis-Minas Lowlands"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Windsor Lowlands"</span>, sep <span class="op">=</span> <span class="st">"/"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50.13418</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -124,7 +148,7 @@ ecozone, ecoprovince, ecoregion, and ecodistrict names.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

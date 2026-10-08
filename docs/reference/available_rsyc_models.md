@@ -34,12 +34,24 @@ available_rsyc_models(
 
 - strata_id:
 
-  One or more tile IDs, ecological area names, or full sequences of
-  ecological area names. The default includes all areas.
+  One or more tile IDs, ecological area names or paths, or ecological
+  codes. Numeric values and numeric-looking character values are
+  interpreted as codes when no name or path matches. Code searches
+  require exactly one ecological `strata_level`. Quote ecoprovince codes
+  such as `"10.1"`. The default includes all areas.
 
 ## Value
 
 A table with one row for each published curve that matches the choices.
+`strata_code` is the canonical character code for ecological rows and
+`NA` for tiles.
+
+## Details
+
+Character `strata_id` values are matched as names or paths before
+numeric-looking values are interpreted as ecological codes. Ecozone
+codes 5 and 6 return both published named subdivisions. Ecozone code 10
+is also ambiguous, but currently has no published national model rows.
 
 ## Examples
 
@@ -47,7 +59,7 @@ A table with one row for each published curve that matches the choices.
 available_rsyc_models(
   response = "volume", species = "PICE.MAR", strata_level = "tile"
 )
-#> # A tibble: 344 × 10
+#> # A tibble: 344 × 11
 #>    model_id         response response_units strata_type strata_level strata_name
 #>    <chr>            <chr>    <chr>          <chr>       <chr>        <chr>      
 #>  1 rsyc_volume_nat… volume   m3/ha          tile        tile         A24        
@@ -61,6 +73,29 @@ available_rsyc_models(
 #>  9 rsyc_volume_nat… volume   m3/ha          tile        tile         B26        
 #> 10 rsyc_volume_nat… volume   m3/ha          tile        tile         B27        
 #> # ℹ 334 more rows
-#> # ℹ 4 more variables: strata_id <chr>, species <chr>, model_group <chr>,
-#> #   model_version <chr>
+#> # ℹ 5 more variables: strata_id <chr>, strata_code <chr>, species <chr>,
+#> #   model_group <chr>, model_version <chr>
+available_rsyc_models(
+  response = "agb", strata_level = "ecoprovince", strata_id = "7.1"
+)
+#> # A tibble: 15 × 11
+#>    model_id         response response_units strata_type strata_level strata_name
+#>    <chr>            <chr>    <chr>          <chr>       <chr>        <chr>      
+#>  1 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  2 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  3 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  4 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  5 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  6 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  7 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  8 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#>  9 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 10 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 11 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 12 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 13 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 14 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> 15 rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> # ℹ 5 more variables: strata_id <chr>, strata_code <chr>, species <chr>,
+#> #   model_group <chr>, model_version <chr>
 ```

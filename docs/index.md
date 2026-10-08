@@ -56,6 +56,7 @@ starting point of a curve.
 ## Installation
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("ptompalski/RSYC")
 ```
@@ -68,6 +69,7 @@ Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20,
 60, and 120 years:
 
 ``` r
+
 library(RSYC)
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 #> [1] 27.49419 60.21335 74.19827
@@ -76,6 +78,7 @@ predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
 To estimate total volume instead, set `response = "volume"`:
 
 ``` r
+
 predict_rsyc(
   response = "volume",
   species = "PICE.MAR",
@@ -89,6 +92,7 @@ For ecological areas, the area name is enough when it occurs only once
 at the chosen level:
 
 ``` r
+
 predict_rsyc(
   response = "agb",
   species = "PICE.MAR",
@@ -111,6 +115,7 @@ stand ages, and tiles. Each row of `tile_inputs` describes one estimate.
 All combinations shown below have a published RSYC curve.
 
 ``` r
+
 tile_inputs <- tidyr::crossing(
   response = c("agb", "volume"),
   species = c("PICE.MAR", "POPU.TRE", "coniferous"),
@@ -134,6 +139,7 @@ Use the area name at the chosen ecological level when that name occurs
 only once.
 
 ``` r
+
 eco_inputs <- tibble::tribble(
   ~response, ~species,   ~age, ~strata_level, ~strata_id,
   "agb",     "PICE.MAR", 80,  "ecozone",
@@ -170,6 +176,7 @@ If a name occurs in several places, list the alternatives and use the
 full sequence from ecozone to the selected level:
 
 ``` r
+
 rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
   dplyr::filter(strata_name == "Salmon River")
 
@@ -185,6 +192,7 @@ The following example produces a complete set of estimates for ages 1 to
 150 for each species and area listed in `curve_inputs`:
 
 ``` r
+
 curve_inputs <- tibble::tribble(
   ~response, ~species,    ~strata_level, ~strata_id,
   "agb",     "PICE.MAR",  "tile",       "H14",
@@ -216,6 +224,7 @@ Plot the curves to compare how predicted yield changes with stand age.
 AGB and volume are shown separately because they use different units:
 
 ``` r
+
 curve_predictions |>
   dplyr::mutate(
     response = factor(
@@ -254,6 +263,7 @@ Three functions are provided to help identify which model to use:
   spruce at the ecozone level:
 
 ``` r
+
 available_rsyc_models(
   response = "volume",
   species = "PICE.MAR",
@@ -267,6 +277,7 @@ available_rsyc_models(
   AGB species available in tile H14:
 
 ``` r
+
 rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
 ```
 
@@ -278,6 +289,7 @@ rsyc_species(response = "agb", strata_level = "tile", strata_id = "H14")
   spruce:
 
 ``` r
+
 rsyc_strata(
   response = "volume",
   species = "PICE.MAR",
@@ -294,6 +306,7 @@ for every species and stand age. By default, the function estimates ages
 1 through 150:
 
 ``` r
+
 dataset <- build_rsyc_dataset(
   response = "volume",
   species = c("PICE.MAR", "POPU.TRE"),

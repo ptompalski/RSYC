@@ -7,6 +7,7 @@ release was built from upstream Git commit
 `c799aba24b5d99a6a7953a4dcab1dd73b0925c2c`.
 
 ``` r
+
 library(RSYC)
 head(RSYC_models[c(
   "model_id", "response", "response_units", "strata_level", "strata_id",
@@ -61,8 +62,10 @@ The four raw hierarchy identifier fields retain upstream codes for
 ecological areas. `ecozone_id`, `ecoregion_id`, and `ecodistrict_id` are
 integers; `ecoprovince_id` is character so codes such as `"10.1"` retain
 their source representation. These fields provide data provenance in
-this release. Ecological model selection continues to use `strata_id`,
-either as an unambiguous short name or a full hierarchical path.
+this release. Ecological model selection uses `strata_id`, which accepts
+a numeric/code identifier, an unambiguous short name, or a full
+hierarchical path. Quote ecoprovince codes such as `"10.1"` to retain
+their source representation.
 
 For ecological areas, `strata_id` gives the full sequence of names from
 the ecozone down to the selected level, separated by `/`.
@@ -71,26 +74,51 @@ also accepts the shorter `strata_name` when that name occurs only once
 for the chosen forest measure, species, and ecological level:
 
 ``` r
+
 rsyc_strata(
   response = "agb",
   species = "PICE.MAR",
   strata_level = "ecoregion"
 )
-#> # A tibble: 116 × 3
-#>    strata_level strata_name                   strata_id                         
-#>    <chr>        <chr>                         <chr>                             
-#>  1 ecoregion    Abitibi Plains                Boreal Shield East/Mid-Boreal Shi…
-#>  2 ecoregion    Algonquin-Lake Nipissing      Boreal Shield East/Southern Borea…
-#>  3 ecoregion    Annapolis-Minas Lowlands      Atlantic Maritime/Fundy Uplands/A…
-#>  4 ecoregion    Anticosti Island              Boreal Shield East/Eastern Boreal…
-#>  5 ecoregion    Appalachians                  Atlantic Maritime/Appalachian-Aca…
-#>  6 ecoregion    Athabasca Plain               Boreal Shield West/Western Boreal…
-#>  7 ecoregion    Atlantic Coast                Atlantic Maritime/Fundy Uplands/A…
-#>  8 ecoregion    Avalon Forest                 Boreal Shield East/Newfoundland/A…
-#>  9 ecoregion    Big Trout Lake                Boreal Shield West/Western Boreal…
-#> 10 ecoregion    Boreal Mountains and Plateaus Boreal Cordillera/Southern Boreal…
+#> # A tibble: 116 × 4
+#>    strata_level strata_name                   strata_id              strata_code
+#>    <chr>        <chr>                         <chr>                  <chr>      
+#>  1 ecoregion    Abitibi Plains                Boreal Shield East/Mi… 96         
+#>  2 ecoregion    Algonquin-Lake Nipissing      Boreal Shield East/So… 98         
+#>  3 ecoregion    Annapolis-Minas Lowlands      Atlantic Maritime/Fun… 126        
+#>  4 ecoregion    Anticosti Island              Boreal Shield East/Ea… 102        
+#>  5 ecoregion    Appalachians                  Atlantic Maritime/App… 117        
+#>  6 ecoregion    Athabasca Plain               Boreal Shield West/We… 87         
+#>  7 ecoregion    Atlantic Coast                Atlantic Maritime/Fun… 125        
+#>  8 ecoregion    Avalon Forest                 Boreal Shield East/Ne… 115        
+#>  9 ecoregion    Big Trout Lake                Boreal Shield West/We… 95         
+#> 10 ecoregion    Boreal Mountains and Plateaus Boreal Cordillera/Sou… 180        
 #> # ℹ 106 more rows
 ```
+
+The discovery result includes the canonical character `strata_code`. The
+same value can be supplied through `strata_id` when exactly one
+ecological level is selected:
+
+``` r
+
+available_rsyc_models(
+  response = "agb",
+  species = "PICE.MAR",
+  strata_level = "ecoprovince",
+  strata_id = "7.1"
+)
+#> # A tibble: 1 × 11
+#>   model_id          response response_units strata_type strata_level strata_name
+#>   <chr>             <chr>    <chr>          <chr>       <chr>        <chr>      
+#> 1 rsyc_agb_nationa… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…
+#> # ℹ 5 more variables: strata_id <chr>, strata_code <chr>, species <chr>,
+#> #   model_group <chr>, model_version <chr>
+```
+
+Ecozone codes 5, 6, and 10 each correspond to two named subdivisions.
+Use the desired name for prediction, calibration, or dataset
+construction; catalogue discovery returns all published matches.
 
 Use
 [`available_rsyc_models()`](https://ptompalski.github.io/RSYC/reference/available_rsyc_models.md)
@@ -98,12 +126,13 @@ to see which curves are available without viewing all of the fields used
 to fit and check the curves:
 
 ``` r
+
 available_rsyc_models(
   response = "volume",
   species = "PICE.MAR",
   strata_level = "tile"
 )
-#> # A tibble: 344 × 10
+#> # A tibble: 344 × 11
 #>    model_id         response response_units strata_type strata_level strata_name
 #>    <chr>            <chr>    <chr>          <chr>       <chr>        <chr>      
 #>  1 rsyc_volume_nat… volume   m3/ha          tile        tile         A24        
@@ -117,8 +146,8 @@ available_rsyc_models(
 #>  9 rsyc_volume_nat… volume   m3/ha          tile        tile         B26        
 #> 10 rsyc_volume_nat… volume   m3/ha          tile        tile         B27        
 #> # ℹ 334 more rows
-#> # ℹ 4 more variables: strata_id <chr>, species <chr>, model_group <chr>,
-#> #   model_version <chr>
+#> # ℹ 5 more variables: strata_id <chr>, strata_code <chr>, species <chr>,
+#> #   model_group <chr>, model_version <chr>
 ```
 
 `RSYC_models` also contains measures of uncertainty and variation.

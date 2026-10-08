@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="List Published RSYC Models — available_rsyc_models"><meta name="description" content="List the published Canada-wide curves that match a forest measure, species,
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="List Published RSYC Models — available_rsyc_models"><meta name="description" content="List the published Canada-wide curves that match a forest measure, species,
 type of area, or area name. Leave a choice as NULL to include all of its
 available values."><meta property="og:description" content="List the published Canada-wide curves that match a forest measure, species,
 type of area, or area name. Leave a choice as NULL to include all of its
@@ -86,14 +86,25 @@ all types.</p></dd>
 
 
 <dt id="arg-strata-id">strata_id<a class="anchor" aria-label="anchor" href="#arg-strata-id"></a></dt>
-<dd><p>One or more tile IDs, ecological area names, or full
-sequences of ecological area names. The default includes all areas.</p></dd>
+<dd><p>One or more tile IDs, ecological area names or paths, or
+ecological codes. Numeric values and numeric-looking character values are
+interpreted as codes when no name or path matches. Code searches require
+exactly one ecological <code>strata_level</code>. Quote ecoprovince codes such as
+<code>"10.1"</code>. The default includes all areas.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A table with one row for each published curve that matches the
-choices.</p>
+choices. <code>strata_code</code> is the canonical character code for ecological
+rows and <code>NA</code> for tiles.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Character <code>strata_id</code> values are matched as names or paths before
+numeric-looking values are interpreted as ecological codes. Ecozone codes
+5 and 6 return both published named subdivisions. Ecozone code 10 is also
+ambiguous, but currently has no published national model rows.</p>
     </div>
 
     <div class="section level2">
@@ -101,7 +112,7 @@ choices.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">available_rsyc_models</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  response <span class="op">=</span> <span class="st">"volume"</span>, species <span class="op">=</span> <span class="st">"PICE.MAR"</span>, strata_level <span class="op">=</span> <span class="st">"tile"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 344 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 344 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    model_id         response response_units strata_type strata_level strata_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rsyc_volume_nat… volume   m3/ha          tile        tile         A24        </span>
@@ -115,8 +126,31 @@ choices.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B26        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_volume_nat… volume   m3/ha          tile        tile         B27        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 334 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: strata_id &lt;chr&gt;, species &lt;chr&gt;, model_group &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_version &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: strata_id &lt;chr&gt;, strata_code &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_group &lt;chr&gt;, model_version &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="fu">available_rsyc_models</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  response <span class="op">=</span> <span class="st">"agb"</span>, strata_level <span class="op">=</span> <span class="st">"ecoprovince"</span>, strata_id <span class="op">=</span> <span class="st">"7.1"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model_id         response response_units strata_type strata_level strata_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> rsyc_agb_nation… agb      Mg/ha          eco_strata  ecoprovince  Appalachia…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: strata_id &lt;chr&gt;, strata_code &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_group &lt;chr&gt;, model_version &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -129,7 +163,7 @@ choices.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

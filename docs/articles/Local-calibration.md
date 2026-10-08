@@ -1,6 +1,7 @@
 # Local calibration
 
 ``` r
+
 library(RSYC)
 ```
 
@@ -106,6 +107,7 @@ A single measurement is sufficient to adjust the asymptote. In this
 example a black spruce stand in tile H14 was measured once, at age 60:
 
 ``` r
+
 single <- calibrate_rsyc(
   response = "agb",
   species = "PICE.MAR",
@@ -128,6 +130,7 @@ to a ratio of 1.38, an increase of approximately 38% relative to the
 published curve. None of the constraints described below were reached:
 
 ``` r
+
 c(
   random_effect = single$random_effect_limited,
   ratio = single$ratio_limited,
@@ -142,6 +145,7 @@ published and calibrated curves running parallel, separated by the
 constant ratio:
 
 ``` r
+
 single_curve <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = 60, obs_response = 83.8,
@@ -188,6 +192,7 @@ side of the fitted trajectory, as repeated field measurements typically
 are:
 
 ``` r
+
 multiple <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = c(32, 48, 61, 77, 94),
@@ -213,6 +218,7 @@ proportion of the estimated departure from the published curve is
 retained.
 
 ``` r
+
 multi_curve <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = c(32, 48, 61, 77, 94),
@@ -271,6 +277,7 @@ the mature level, so it is shrunk heavily. A measurement in a mature
 stand is trusted far more:
 
 ``` r
+
 model <- subset(
   RSYC_models,
   response == "agb" & scale == "national" &
@@ -316,6 +323,7 @@ ecoregion-level models for four species. Each stand is calibrated
 separately against its own model:
 
 ``` r
+
 field_plots <- tibble::tribble(
   ~plot, ~species,   ~ecoregion,                 ~age,          ~volume,
   "A",   "PICE.MAR", "Appalachians",             c(45, 62, 80), c(135.8, 165.7, 172.7),
@@ -360,6 +368,7 @@ one ecozone, so the full hierarchical path is required to identify it;
 lists the available names and paths.
 
 ``` r
+
 plot_curves <- purrr::pmap(
   list(field_plots$plot, field_plots$species, field_plots$ecoregion),
   \(plot, species, ecoregion) {
@@ -431,6 +440,7 @@ above required any of them. Imposing a deliberately restrictive
 `ratio_limit` demonstrates the behaviour:
 
 ``` r
+
 constrained <- calibrate_rsyc(
   "agb", "PICE.MAR", "tile", "H14",
   obs_age = 60, obs_response = 83.8,

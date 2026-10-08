@@ -11,7 +11,7 @@ represented by the Minister of Natural Resources Canada.
 
 # GNU General Public License
 
-*Version 3, 29 June 2007*  
+*Version 3, 29 June 2007*\
 *Copyright © 2007 Free Software Foundation, Inc. \<<http://fsf.org/>\>*
 
 Everyone is permitted to copy and distribute verbatim copies of this

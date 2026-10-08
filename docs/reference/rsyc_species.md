@@ -22,8 +22,11 @@ rsyc_species(response = NULL, strata_level = NULL, strata_id = NULL)
 
 - strata_id:
 
-  One or more tile IDs, ecological area names, or full sequences of
-  ecological area names. The default includes all areas.
+  One or more tile IDs, ecological area names or paths, or ecological
+  codes. Numeric values and numeric-looking character values are
+  interpreted as codes when no name or path matches. Code searches
+  require exactly one ecological `strata_level`. Quote ecoprovince codes
+  such as `"10.1"`. The default includes all areas.
 
 ## Value
 
