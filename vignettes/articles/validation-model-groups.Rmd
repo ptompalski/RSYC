@@ -1,0 +1,75 @@
+---
+title: "Validation by model group"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation by model group}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dpi = 96,
+  fig.align = "center",
+  out.width = "100%"
+)
+source(file.path("..", "..", "pkgdown", "validation-helpers.R"))
+bundle <- load_validation_bundle()
+```
+
+This page compares RSYC predictions with plot observations for every
+combination of response, model scale, and spatial level (model release
+**`r bundle$version`**). Each point is one age class of one curve: the
+weighted mean of the plot observations (x axis) against the mean RSYC
+prediction for the same plots (y axis). Panels show the generic model, the
+coniferous and broadleaf models, and the species models. Species are ordered
+by number of points.
+
+Below each scatterplot, boxplots show the prediction error
+(RSYC − plot) by age class. AGB points with plot means of 400 Mg/ha or
+more are excluded, and panels with fewer than three points are omitted. See
+[Model validation](validation.html) for the method and the
+[Validation explorer](validation-explorer.html) for individual curves.
+
+```{r figures, results = "asis"}
+for (y_var in names(response_names)) {
+  cat("##", response_names[[y_var]], "\n\n")
+  for (scale in names(scale_labels)) {
+    cat("###", scale_labels[[scale]], "models {.tabset}\n\n")
+    for (level in spatial_levels) {
+      points <- validation_points(bundle, y_var, scale, level)
+      if (nrow(points) == 0) {
+        next
+      }
+      n_panels <- n_distinct(points$species_name)
+      cat("####", spatial_labels[[level]], "\n\n")
+      cat(
+        sprintf(
+          "%s age-class points from %s curves.\n\n",
+          format(nrow(points), big.mark = ","),
+          format(n_distinct(points$key), big.mark = ",")
+        )
+      )
+      knit_figure(
+        validation_scatterplot(points, y_var),
+        height = figure_height(n_panels, 1.87, 3.75),
+        alt = sprintf(
+          "Scatterplots of %s RSYC predictions against plot means for %s %s models, one panel per model.",
+          response_names[[y_var]], scale, level
+        )
+      )
+      knit_figure(
+        validation_delta_by_age(points, y_var),
+        height = figure_height(n_panels, 1.28, 3.85),
+        alt = sprintf(
+          "Boxplots of %s prediction error by age class for %s %s models, one panel per model.",
+          response_names[[y_var]], scale, level
+        )
+      )
+    }
+  }
+}
+```

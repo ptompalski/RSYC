@@ -1,0 +1,31 @@
+---
+title: "Validation explorer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation explorer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Use this page to explore validation results for individual RSYC curves.
+Choose a response, scale, spatial level, and model, then click an area on the
+map. The map is coloured by the selected statistic. You can zoom with the
+mouse wheel and drag to pan.
+
+For the selected area, the left chart compares the national and regional
+curves (black lines) with the plot means and their 95% confidence intervals
+(red) for each 20-year age class. The right chart shows every validation
+point for the selected model and level, with the selected area in red. Bias
+is the RSYC prediction minus the plot mean. See
+[Model validation](validation.html) for the method.
+
+The address bar records the current selection, so you can share a link to
+any view.
+
+```{=html}
+<link rel="stylesheet" href="../validation/explorer.css">
+<div id="rsyc-validation-explorer" data-base="../validation/"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/dist/plot.umd.min.js"></script>
+<script src="../validation/explorer.js"></script>
+```

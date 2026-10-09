@@ -31,3 +31,19 @@ reference:
   contents:
   - RSYC_models
   - RSYC_tiles
+
+articles:
+- title: Using RSYC
+  navbar: ~
+  contents:
+  - articles/Prediction-examples
+  - articles/Local-calibration
+  - articles/Model-parameters
+
+- title: Validation
+  navbar: Validation
+  desc: How well RSYC curves agree with independent ground plots.
+  contents:
+  - articles/validation
+  - articles/validation-model-groups
+  - articles/validation-explorer

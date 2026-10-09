@@ -42,6 +42,7 @@ Config/testthat/edition: 3
 URL: https://ptompalski.github.io/RSYC,
     https://github.com/ptompalski/RSYC
 BugReports: https://github.com/ptompalski/RSYC/issues
-Config/Needs/website: rmarkdown
+Config/Needs/website: rmarkdown, jsonlite, scales, ggh4x, ggtext, yardstick,
+    ptompalski/scatter
 Config/roxygen2/version: 8.1.0
 RoxygenNote: 7.3.3

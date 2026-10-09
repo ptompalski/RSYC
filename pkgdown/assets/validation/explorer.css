@@ -1,0 +1,252 @@
+/* RSYC validation explorer (see explorer.js). */
+
+#rsyc-validation-explorer {
+  position: relative;
+  margin: 1rem 0 2rem;
+  font-size: 0.9rem;
+}
+
+#rsyc-validation-explorer [hidden] {
+  display: none !important;
+}
+
+.rve-status {
+  padding: 2rem;
+  text-align: center;
+  color: #555;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+}
+
+.rve-status.rve-error {
+  color: #a00;
+  border-color: #e6b0b0;
+}
+
+.rve-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.rve-controls label,
+.rve-strata-picker {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.rve-controls select,
+.rve-strata-picker select {
+  margin-top: 0.2rem;
+  font-weight: normal;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.3rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  max-width: 100%;
+}
+
+.rve-strata-picker {
+  margin: 0.75rem 0;
+  max-width: 28rem;
+}
+
+.rve-map-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.rve-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rve-map-title {
+  font-weight: 700;
+}
+
+.rve-reset {
+  font-size: 0.75rem;
+  border: 1px solid #bbb;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0.1rem 0.5rem;
+}
+
+.rve-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: grab;
+}
+
+.rve-base path {
+  fill: #f7f7f7;
+  stroke: #9a9a9a;
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.rve-units path {
+  stroke: #fff;
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+
+.rve-units path:hover {
+  stroke: #333;
+  stroke-width: 1;
+}
+
+.rve-units path.rve-selected {
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.rve-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.rve-legend svg {
+  overflow: visible;
+  font-size: 10px;
+}
+
+.rve-legend-title {
+  font-weight: 700;
+  font-size: 11px;
+  margin-right: 0.5rem;
+}
+
+.rve-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.rve-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.rve-swatch i {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid #aaa;
+}
+
+.rve-map-summary {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+.rve-detail-header h3 {
+  margin: 0.5rem 0 0.1rem;
+}
+
+.rve-path {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.rve-charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.rve-charts figure {
+  flex: 1 1 320px;
+  margin: 0;
+  min-width: 0;
+}
+
+.rve-charts figure svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.rve-charts figcaption {
+  font-size: 0.78rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+.rve-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-right: 1rem;
+}
+
+.rve-empty {
+  padding: 2rem 1rem;
+  color: #666;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.rve-tables {
+  margin-top: 1rem;
+}
+
+.rve-table {
+  font-size: 0.82rem;
+  width: auto;
+}
+
+.rve-table th,
+.rve-table td {
+  padding: 0.2rem 0.75rem !important;
+}
+
+.rve-table code {
+  font-size: 0.75rem;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.rve-tables details summary {
+  cursor: pointer;
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.rve-footer {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.rve-tooltip {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  max-width: 18rem;
+}

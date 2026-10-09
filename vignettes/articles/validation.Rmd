@@ -1,0 +1,93 @@
+---
+title: "Model validation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Model validation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dpi = 96,
+  fig.align = "center",
+  out.width = "100%"
+)
+source(file.path("..", "..", "pkgdown", "validation-helpers.R"))
+bundle <- load_validation_bundle()
+counts <- bundle$manifest$counts
+```
+
+RSYC yield curves were validated against independent ground plots from
+`r bundle$manifest$validation$reference`. Each curve was compared with the
+plots located in its tile or ecological unit. Plots were grouped into
+`r bundle$manifest$validation$age_class_width`-year age classes, and plots
+older than 150 years were excluded. For each age class, the weighted mean of
+the plot observations and its
+`r scales::percent(bundle$manifest$validation$ci_level)` confidence interval
+(CI) were compared with the mean RSYC prediction for the same plots.
+
+These results describe model release **`r bundle$version`**:
+`r format(counts$validated_models, big.mark = ",")` of
+`r format(counts$models, big.mark = ",")` published curves had enough plots
+to validate. The remaining curves could not be validated because too few
+suitable plots were available in their area.
+
+Validation results are presented in three ways:
+
+- this page summarises results across all models;
+- [Validation by model group](validation-model-groups.html) shows
+  scatterplots and errors by age for each response, scale, and spatial level;
+- the [Validation explorer](validation-explorer.html) maps the results and
+  shows the validation data for individual curves.
+
+## Reliability tiers
+
+Each validated curve was assigned a reliability tier based on its agreement
+with the plot data. Curves with too few plots or age classes are marked as
+having insufficient evidence.
+
+```{r tiers, fig.width = 7.5, fig.height = 4.5, fig.alt = "Stacked bars showing the share of validated models in each reliability tier by response, scale, and spatial level."}
+validation_tier_plot(bundle)
+```
+
+## Summary statistics
+
+Statistics are calculated for each curve from its age-class means and then
+summarised across curves. Bias is the mean difference between the RSYC
+prediction and the observed plot mean, so positive values mean the curve
+overestimates the plots. *Inside CI* is the share of age classes where the
+mean prediction falls inside the 95% CI of the observed mean.
+
+```{r summary-table}
+validation_summary_table(bundle) %>%
+  knitr::kable(digits = c(0, 0, 0, 0, 0, 2, 1, 1, 0))
+```
+
+## Agreement with the plot confidence intervals
+
+The proportion of curves whose prediction falls inside the plot CI, by age
+class and spatial level. Panel labels give the overall proportion for each
+level (EZ = ecozone, EP = ecoprovince, ER = ecoregion, ED = ecodistrict).
+Only species validated at all five levels are shown.
+
+```{r ci-coverage, results = "asis"}
+for (y_var in names(response_names)) {
+  cat("###", response_names[[y_var]], "{.tabset}\n\n")
+  for (scale in names(scale_labels)) {
+    cat("####", scale_labels[[scale]], "\n\n")
+    p <- validation_ci_coverage(bundle, y_var, scale)
+    knit_figure(
+      p,
+      height = figure_height(attr(p, "n_panels"), 1.4, 5.5) + 1,
+      alt = sprintf(
+        "Proportion of %s %s predictions inside the plot confidence interval by age class and spatial level, one panel per model.",
+        response_names[[y_var]], scale
+      )
+    )
+  }
+}
+```
