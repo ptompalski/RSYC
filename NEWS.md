@@ -1,4 +1,4 @@
-# RSYC 0.2.0.9000
+# RSYC 0.2.0
 
 ## Model release v20260923
 
