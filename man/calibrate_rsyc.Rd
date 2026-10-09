@@ -29,6 +29,7 @@ Uppercase and lowercase letters are treated the same.}
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
 \item{strata_id}{Tile ID, ecological area name or path, or ecological code.
+Tile IDs, names, and paths are matched ignoring case.
 A single area name can be used when it occurs only once. If the name occurs
 in several places, use the full sequence of area names shown by
 \code{rsyc_strata()}. Numeric values are interpreted as codes for the selected
@@ -36,9 +37,9 @@ ecological \code{strata_level}; quote ecoprovince codes such as \code{"10.1"}.}
 
 \item{obs_age}{Stand ages, in years, of the local observations.}
 
-\item{obs_response}{Observed values at \code{obs_age}. Aboveground biomass in
-Mg/ha or total volume in m3/ha, matching \code{response}. Must be the same
-length as \code{obs_age}.}
+\item{obs_response}{Observed non-negative values at \code{obs_age}. Aboveground
+biomass in Mg/ha or total volume in m3/ha, matching \code{response}. Must be the
+same length as \code{obs_age}.}
 
 \item{predict_age}{One or more stand ages at which to return calibrated
 predictions. Defaults to the sorted unique \code{obs_age}.}

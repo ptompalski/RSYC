@@ -26,6 +26,19 @@
   drawn from the wrong ecodistricts. This issue affected ecological-strata
   models only; tile models were unaffected.
 
+## Interface changes
+
+* Tile IDs, ecological area names, and hierarchical paths supplied through
+  `strata_id` are now matched ignoring case.
+* `available_rsyc_models()`, `rsyc_species()`, and `rsyc_strata()` now warn
+  when a `strata_id` value matches no published curve or when a species code
+  is unknown, instead of silently returning an empty table.
+* `build_rsyc_dataset()` now warns when requested species are omitted because
+  they are unknown or have no published curve for the selected response and
+  areas.
+* `calibrate_rsyc()` now rejects negative `obs_response` values, which could
+  previously produce negative calibrated curves.
+
 ## Spatial products
 
 * Added ecological boundary release v2, aligned exactly to the `v20260923`

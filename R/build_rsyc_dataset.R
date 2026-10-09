@@ -7,12 +7,15 @@
 #' @param response Forest measure to estimate: `"agb"` for aboveground biomass
 #'   or `"volume"` for total volume.
 #' @param species One or more species codes or broad groups. Uppercase and
-#'   lowercase letters are treated the same.
+#'   lowercase letters are treated the same. Requested species without a
+#'   published curve for the selected response and areas are omitted with a
+#'   warning.
 #' @param age One or more stand ages in years.
 #' @param strata_level Type of area: `"tile"`, `"ecozone"`,
 #'   `"ecoprovince"`, `"ecoregion"`, or `"ecodistrict"`.
 #' @param strata_id One or more tile IDs, ecological area names or paths, or
-#'   ecological codes. Numeric values and numeric-looking character values are
+#'   ecological codes. Tile IDs, names, and paths are matched ignoring case.
+#'   Numeric values and numeric-looking character values are
 #'   interpreted as codes when no name or path matches. Quote ecoprovince codes
 #'   such as `"10.1"`. By default, every area with a matching published curve
 #'   is included. If an area name occurs in several places, the function asks
@@ -88,6 +91,35 @@ build_rsyc_dataset <- function(
     stop(
       "No national RSYC models match the requested dataset. Use ",
       "`available_rsyc_models()` to inspect model availability.",
+      call. = FALSE
+    )
+  }
+  missing_species <- setdiff(
+    species,
+    .rsyc_normalize_species(models$species, scalar = FALSE)
+  )
+  if (length(missing_species)) {
+    unknown <- .rsyc_unknown_species(missing_species)
+    unavailable <- setdiff(missing_species, unknown)
+    details <- c(
+      if (length(unknown)) {
+        paste0(
+          "unknown species code(s): ",
+          paste0("'", unknown, "'", collapse = ", ")
+        )
+      },
+      if (length(unavailable)) {
+        paste0(
+          "no published national model for the selected response and ",
+          "strata: ",
+          paste0("'", unavailable, "'", collapse = ", ")
+        )
+      }
+    )
+    warning(
+      "Some requested species were omitted from the dataset (",
+      paste(details, collapse = "; "),
+      "). Use `available_rsyc_models()` to inspect model availability.",
       call. = FALSE
     )
   }

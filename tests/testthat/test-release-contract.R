@@ -1,12 +1,9 @@
-contract_environment <- new.env(parent = baseenv())
-sys.source(
-  testthat::test_path("..", "..", "data-raw", "release_contract.R"),
-  envir = contract_environment
-)
+contract_environment <- rsyc_release_contract_environment()
 release_contract <- contract_environment$.rsyc_release_contract
 release_source_path <- contract_environment$.rsyc_release_source_path
 
 test_that("v20260923 release contract is complete and internally consistent", {
+  skip_if_no_release_contract()
   expect_identical(release_contract$model_version, "v20260923")
   expect_match(release_contract$upstream_git_commit, "^[0-9a-f]{40}$")
 
@@ -56,6 +53,7 @@ test_that("v20260923 release contract is complete and internally consistent", {
 })
 
 test_that("release source paths support defaults and environment overrides", {
+  skip_if_no_release_contract()
   default <- release_source_path("model", environment = character())
   expect_match(
     gsub("\\\\", "/", default),

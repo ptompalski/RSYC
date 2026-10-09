@@ -232,6 +232,27 @@ test_that("calibrate_rsyc validates its inputs", {
   expect_error(
     calibrate_rsyc(
       "agb",
+      "PICE.MAR",
+      "tile",
+      "H14",
+      obs_age = c(45, 70),
+      obs_response = c(50, -1)
+    ),
+    "`obs_response` cannot contain negative values"
+  )
+  expect_no_error(
+    calibrate_rsyc(
+      "agb",
+      "PICE.MAR",
+      "tile",
+      "H14",
+      obs_age = c(45, 70),
+      obs_response = c(0, 0)
+    )
+  )
+  expect_error(
+    calibrate_rsyc(
+      "agb",
       "NOT.ASPECIES",
       "tile",
       "H14",

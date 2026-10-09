@@ -1,12 +1,14 @@
-model_contract_environment <- new.env(parent = baseenv())
-sys.source(
-  testthat::test_path("..", "..", "data-raw", "release_contract.R"),
-  envir = model_contract_environment
-)
-model_contract <- model_contract_environment$.rsyc_release_contract
-
-test_that("published model contract satisfies its invariants", {
+test_that("published model data match the v20260923 release", {
   expect_s3_class(RSYC_models, "data.frame")
+  expect_equal(nrow(RSYC_models), 27208L)
+  expect_equal(ncol(RSYC_models), 42L)
+  expect_identical(unique(RSYC_models$model_version), "v20260923")
+})
+
+test_that("published model data match the release contract", {
+  skip_if_no_release_contract()
+  model_contract <- rsyc_release_contract_environment()$.rsyc_release_contract
+
   expect_equal(nrow(RSYC_models), model_contract$model$rows)
   expect_equal(ncol(RSYC_models), model_contract$model$columns)
   expect_identical(names(RSYC_models), names(model_contract$model$column_types))
@@ -15,6 +17,14 @@ test_that("published model contract satisfies its invariants", {
     model_contract$model$column_types
   )
   expect_identical(unique(RSYC_models$model_version), model_contract$model_version)
+
+  ecological <- RSYC_models$strata_level %in%
+    c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")
+  model_ecozones <- sub("/.*$", "", RSYC_models$strata_id[ecological])
+  expect_setequal(model_ecozones, model_contract$forest_filter$ecozones)
+})
+
+test_that("published model contract satisfies its invariants", {
   expect_false(anyDuplicated(RSYC_models$model_id) > 0L)
 
   lookup <- RSYC_models[c(
@@ -84,10 +94,10 @@ test_that("documented ecozone IDs retain one-to-many name mappings", {
   )
 })
 
-test_that("ecological models are limited to forested ecozones", {
+test_that("ecological models are limited to the 12 forested ecozones", {
   ecological <- RSYC_models$strata_level %in%
     c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")
-  model_ecozones <- sub("/.*$", "", RSYC_models$strata_id[ecological])
+  model_ecozones <- unique(sub("/.*$", "", RSYC_models$strata_id[ecological]))
 
-  expect_setequal(model_ecozones, model_contract$forest_filter$ecozones)
+  expect_length(model_ecozones, 12L)
 })

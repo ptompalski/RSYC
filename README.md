@@ -62,7 +62,8 @@ starting point of a curve.
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("ptompalski/RSYC")
+# Development version with model release v20260923:
+remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
 ## Examples

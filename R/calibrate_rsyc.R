@@ -8,9 +8,9 @@
 #'
 #' @inheritParams predict_rsyc
 #' @param obs_age Stand ages, in years, of the local observations.
-#' @param obs_response Observed values at `obs_age`. Aboveground biomass in
-#'   Mg/ha or total volume in m3/ha, matching `response`. Must be the same
-#'   length as `obs_age`.
+#' @param obs_response Observed non-negative values at `obs_age`. Aboveground
+#'   biomass in Mg/ha or total volume in m3/ha, matching `response`. Must be the
+#'   same length as `obs_age`.
 #' @param predict_age One or more stand ages at which to return calibrated
 #'   predictions. Defaults to the sorted unique `obs_age`.
 #' @param apply_limits When `TRUE` (the default), apply the safeguards that
@@ -131,6 +131,9 @@ calibrate_rsyc <- function(
   }
   if (any(!is.finite(obs_response))) {
     stop("`obs_response` must contain only finite values.", call. = FALSE)
+  }
+  if (any(obs_response < 0)) {
+    stop("`obs_response` cannot contain negative values.", call. = FALSE)
   }
 
   if (is.null(predict_age)) {

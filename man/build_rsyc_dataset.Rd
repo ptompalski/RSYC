@@ -21,7 +21,9 @@ build_rsyc_dataset(
 or \code{"volume"} for total volume.}
 
 \item{species}{One or more species codes or broad groups. Uppercase and
-lowercase letters are treated the same.}
+lowercase letters are treated the same. Requested species without a
+published curve for the selected response and areas are omitted with a
+warning.}
 
 \item{age}{One or more stand ages in years.}
 
@@ -29,7 +31,8 @@ lowercase letters are treated the same.}
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
 \item{strata_id}{One or more tile IDs, ecological area names or paths, or
-ecological codes. Numeric values and numeric-looking character values are
+ecological codes. Tile IDs, names, and paths are matched ignoring case.
+Numeric values and numeric-looking character values are
 interpreted as codes when no name or path matches. Quote ecoprovince codes
 such as \code{"10.1"}. By default, every area with a matching published curve
 is included. If an area name occurs in several places, the function asks
@@ -42,7 +45,7 @@ and a summary table named \code{metadata}.}
 \item{overwrite}{Replace an existing GeoPackage at \code{output}?}
 
 \item{cache_dir}{Folder in which to save the GeoPackage. By default, RSYC
-uses its standard user data folder, returned by \code{\link[tools:R_user_dir]{tools::R_user_dir()}}.}
+uses its standard user data folder, returned by \code{\link[tools:userdir]{tools::R_user_dir()}}.}
 
 \item{quiet}{Hide download progress?}
 }

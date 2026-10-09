@@ -43,3 +43,4 @@ URL: https://ptompalski.github.io/RSYC,
 BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown
 Config/roxygen2/version: 8.1.0
+RoxygenNote: 7.3.3

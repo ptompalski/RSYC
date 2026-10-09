@@ -16,17 +16,20 @@ available_rsyc_models(
 and \code{"volume"} for total volume. The default includes both.}
 
 \item{species}{One or more species codes or broad groups. Uppercase and
-lowercase letters are treated the same. The default includes all species.}
+lowercase letters are treated the same. The default includes all species.
+Unknown species codes produce a warning.}
 
 \item{strata_level}{One or more types of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes
 all types.}
 
 \item{strata_id}{One or more tile IDs, ecological area names or paths, or
-ecological codes. Numeric values and numeric-looking character values are
+ecological codes. Tile IDs, names, and paths are matched ignoring case.
+Numeric values and numeric-looking character values are
 interpreted as codes when no name or path matches. Code searches require
 exactly one ecological \code{strata_level}. Quote ecoprovince codes such as
-\code{"10.1"}. The default includes all areas.}
+\code{"10.1"}. Values that match no published curve produce a warning. The
+default includes all areas.}
 }
 \value{
 A table with one row for each published curve that matches the

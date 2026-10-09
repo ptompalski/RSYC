@@ -69,6 +69,40 @@ test_that("dataset validation and empty selections are reported", {
   expect_error(build_rsyc_dataset("agb", "PICE.MAR", 50, quiet = NA), "TRUE.*FALSE")
 })
 
+test_that("dataset warns about omitted species", {
+  skip_if_not_installed("sf")
+  expect_warning(
+    dataset <- build_rsyc_dataset(
+      "agb", c("PICE.MAR", "NOT.A.SPECIES"), 50, "tile", "H14"
+    ),
+    "unknown species code\\(s\\): 'NOT.A.SPECIES'"
+  )
+  expect_identical(unique(dataset$curves$species), "PICE.MAR")
+
+  national <- RSYC_models[RSYC_models$scale == "national", , drop = FALSE]
+  tile_agb <- national$species[
+    national$response == "agb" & national$strata_level == "tile" &
+      national$strata_id == "H14"
+  ]
+  unavailable <- setdiff(unique(national$species), c(tile_agb, "generic", "coniferous", "broadleaf"))[[1L]]
+  expect_warning(
+    build_rsyc_dataset("agb", c("PICE.MAR", unavailable), 50, "tile", "H14"),
+    paste0(
+      "no published national model for the selected response and strata: '",
+      unavailable, "'"
+    ),
+    fixed = TRUE
+  )
+})
+
+test_that("dataset strata names and tile IDs ignore case", {
+  skip_if_not_installed("sf")
+  expect_identical(
+    build_rsyc_dataset("agb", "PICE.MAR", 50, "tile", "h14")$curves,
+    build_rsyc_dataset("agb", "PICE.MAR", 50, "tile", "H14")$curves
+  )
+})
+
 test_that("dataset strata resolver accepts full paths and removes duplicates", {
   resolve <- getFromNamespace(".rsyc_resolve_dataset_strata", "RSYC")
   models <- RSYC_models[

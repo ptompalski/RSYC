@@ -68,15 +68,50 @@ test_that("scale is not exposed by discovery helpers", {
   expect_error(rsyc_strata(scale = "regional"), "unused argument")
 })
 
-test_that("unavailable discovery combinations are empty", {
-  expect_equal(nrow(available_rsyc_models(strata_id = "NOT_A_STRATUM")), 0L)
-  expect_equal(
-    nrow(rsyc_species(strata_level = "tile", strata_id = "NOT_A_TILE")),
-    0L
+test_that("unavailable discovery combinations are empty and reported", {
+  expect_warning(
+    empty <- available_rsyc_models(strata_id = "NOT_A_STRATUM"),
+    "No published national RSYC model matches `strata_id` value\\(s\\): 'NOT_A_STRATUM'"
   )
-  expect_equal(
-    nrow(rsyc_strata(species = "NOT.A.SPECIES", strata_level = "tile")),
-    0L
+  expect_equal(nrow(empty), 0L)
+  expect_warning(
+    empty <- rsyc_species(strata_level = "tile", strata_id = "NOT_A_TILE"),
+    "'NOT_A_TILE'"
+  )
+  expect_equal(nrow(empty), 0L)
+  expect_warning(
+    empty <- rsyc_strata(species = "NOT.A.SPECIES", strata_level = "tile"),
+    "Unknown species code\\(s\\): 'NOT.A.SPECIES'"
+  )
+  expect_equal(nrow(empty), 0L)
+})
+
+test_that("discovery warns only about unmatched strata values", {
+  expect_warning(
+    found <- available_rsyc_models(
+      "agb", "PICE.MAR", "tile", c("H14", "NOT_A_TILE")
+    ),
+    "'NOT_A_TILE'"
+  )
+  expect_identical(unique(found$strata_id), "H14")
+  expect_no_warning(available_rsyc_models("agb", "PICE.MAR", "tile", "H14"))
+  expect_no_warning(available_rsyc_models(species = "pice.mar"))
+})
+
+test_that("catalog strata names, paths, and tile IDs ignore case", {
+  path <- "Atlantic Maritime/Fundy Uplands/Annapolis-Minas Lowlands/Windsor Lowlands"
+  expected <- available_rsyc_models("agb", "PICE.MAR", "ecodistrict", path)
+  expect_identical(
+    available_rsyc_models("agb", "PICE.MAR", "ecodistrict", "windsor LOWLANDS"),
+    expected
+  )
+  expect_identical(
+    available_rsyc_models("agb", "PICE.MAR", "ecodistrict", toupper(path)),
+    expected
+  )
+  expect_identical(
+    available_rsyc_models("agb", "PICE.MAR", "tile", "h14"),
+    available_rsyc_models("agb", "PICE.MAR", "tile", "H14")
   )
 })
 

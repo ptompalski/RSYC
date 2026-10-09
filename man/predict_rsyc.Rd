@@ -19,6 +19,7 @@ Uppercase and lowercase letters are treated the same.}
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
 \item{strata_id}{Tile ID, ecological area name or path, or ecological code.
+Tile IDs, names, and paths are matched ignoring case.
 A single area name can be used when it occurs only once. If the name occurs
 in several places, use the full sequence of area names shown by
 \code{rsyc_strata()}. Numeric values are interpreted as codes for the selected

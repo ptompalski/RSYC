@@ -11,7 +11,8 @@ rsyc_strata(response = NULL, species = NULL, strata_level = NULL)
 and \code{"volume"} for total volume. The default includes both.}
 
 \item{species}{One or more species codes or broad groups. Uppercase and
-lowercase letters are treated the same. The default includes all species.}
+lowercase letters are treated the same. The default includes all species.
+Unknown species codes produce a warning.}
 
 \item{strata_level}{One or more types of area: \code{"tile"}, \code{"ecozone"},
 \code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}. The default includes

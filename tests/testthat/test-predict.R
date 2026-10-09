@@ -63,6 +63,27 @@ test_that("species matching is case-insensitive", {
   )
 })
 
+test_that("strata names, paths, and tile IDs are case-insensitive", {
+  expect_equal(
+    predict_rsyc("agb", "PICE.MAR", 50, "tile", "h14"),
+    predict_rsyc("agb", "PICE.MAR", 50, "tile", "H14")
+  )
+  expect_equal(
+    predict_rsyc("agb", "PICE.MAR", 80, "ecodistrict", "windsor lowlands"),
+    predict_rsyc("agb", "PICE.MAR", 80, "ecodistrict", "Windsor Lowlands")
+  )
+  expect_equal(
+    predict_rsyc(
+      "agb", "PICE.MAR", 80, "ecozone", "boreal shield east"
+    ),
+    predict_rsyc("agb", "PICE.MAR", 80, "ecozone", "Boreal Shield East")
+  )
+  expect_error(
+    predict_rsyc("agb", "PICE.MAR", 80, "ecodistrict", "salmon river"),
+    "full hierarchical paths"
+  )
+})
+
 test_that("invalid inputs and extrapolation are reported", {
   expect_no_warning(
     predict_rsyc("agb", "PICE.MAR", c(0, 1, 150), "tile", "H14")

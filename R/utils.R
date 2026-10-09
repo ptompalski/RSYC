@@ -109,6 +109,28 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
   sub("^.*/", "", strata_id)
 }
 
+.rsyc_unknown_species <- function(species) {
+  models <- .rsyc_model_catalog()
+  known <- .rsyc_normalize_species(
+    unique(models$species[models$scale == "national"]),
+    scalar = FALSE
+  )
+  setdiff(species, known)
+}
+
+.rsyc_warn_unknown_species <- function(species) {
+  unknown <- .rsyc_unknown_species(species)
+  if (length(unknown)) {
+    warning(
+      "Unknown species code(s): ",
+      paste0("'", unknown, "'", collapse = ", "),
+      ". Use `species_codes()` or `rsyc_species()` to list valid codes.",
+      call. = FALSE
+    )
+  }
+  invisible(unknown)
+}
+
 .rsyc_strata_code_field <- function(strata_level) {
   switch(
     strata_level,
@@ -236,18 +258,22 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
   }
 
   available <- unique(models$strata_id)
+  available_key <- tolower(available)
+  available_name_key <- tolower(.rsyc_strata_name(available))
   resolved <- character()
+  unmatched <- character()
   for (value in strata_id) {
     is_code <- is.numeric(strata_id)
 
     if (!is_code) {
-      exact <- available[available == value]
+      value_key <- tolower(value)
+      exact <- available[available_key == value_key]
       if (length(exact)) {
         resolved <- c(resolved, exact)
         next
       }
 
-      matches <- sort(available[.rsyc_strata_name(available) == value])
+      matches <- sort(available[available_name_key == value_key])
       if (length(matches)) {
         if (length(matches) > 1L && !identical(mode, "catalog")) {
           entries <- paste0("  - ", matches, collapse = "\n")
@@ -265,6 +291,7 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
       is_code <- .rsyc_is_numeric_code(value)
       if (!is_code) {
         if (identical(mode, "catalog")) {
+          unmatched <- c(unmatched, value)
           next
         }
         if (identical(mode, "single")) {
@@ -330,6 +357,16 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
       )
     }
     resolved <- c(resolved, code_matches)
+  }
+
+  if (length(unmatched)) {
+    warning(
+      "No published national RSYC model matches `strata_id` value(s): ",
+      paste0("'", unique(unmatched), "'", collapse = ", "),
+      " for the selected response, species, and strata_level. ",
+      "Use `rsyc_strata()` to list available names and hierarchical paths.",
+      call. = FALSE
+    )
   }
 
   unique(resolved)

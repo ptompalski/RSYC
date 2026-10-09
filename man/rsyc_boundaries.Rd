@@ -15,7 +15,7 @@ rsyc_boundaries(
 \code{"ecoregion"}, or \code{"ecodistrict"}.}
 
 \item{cache_dir}{Folder in which to save the GeoPackage. By default, RSYC
-uses its standard user data folder, returned by \code{\link[tools:R_user_dir]{tools::R_user_dir()}}.}
+uses its standard user data folder, returned by \code{\link[tools:userdir]{tools::R_user_dir()}}.}
 
 \item{quiet}{Hide messages produced while the map is read?}
 }
