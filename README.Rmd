@@ -7,6 +7,10 @@ always_allow_html: true
 
 # RSYC: Remote Sensing-Based Yield Curves for Canada
 
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/ptompalski/RSYC/branch/dev/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/dev)
+<!-- badges: end -->
+
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,

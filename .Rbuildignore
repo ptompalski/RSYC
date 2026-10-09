@@ -17,3 +17,4 @@
 ^vignettes/articles$
 ^AGENTS\.md$
 papers
+^codecov\.yml$

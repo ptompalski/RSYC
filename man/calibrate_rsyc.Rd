@@ -80,6 +80,8 @@ indicating whether each safeguard altered the result.}
 }
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Adjust a published RSYC curve to local field data using a best linear
 unbiased predictor (BLUP) of the local level. Given one or more observed
 values (aboveground biomass or total volume) at known stand ages, the

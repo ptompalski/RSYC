@@ -1,5 +1,8 @@
 #' Calibrate an RSYC Yield Curve with Local Observations
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Adjust a published RSYC curve to local field data using a best linear
 #' unbiased predictor (BLUP) of the local level. Given one or more observed
 #' values (aboveground biomass or total volume) at known stand ages, the

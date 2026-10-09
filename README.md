@@ -1,6 +1,12 @@
 
 # RSYC: Remote Sensing-Based Yield Curves for Canada
 
+<!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/ptompalski/RSYC/branch/dev/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/dev)
+<!-- badges: end -->
+
 RSYC provides published yield curves for aboveground biomass (AGB,
 Mg/ha) and total volume (m3/ha). Curves are available for individual
 species and the `generic`, `coniferous`, and `broadleaf` model groups.

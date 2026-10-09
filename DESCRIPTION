@@ -25,6 +25,7 @@ LazyData: true
 Imports: 
     digest,
     glue,
+    lifecycle,
     magrittr,
     tibble
 Suggests:
