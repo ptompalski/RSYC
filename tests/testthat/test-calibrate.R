@@ -209,6 +209,13 @@ test_that("calibration works for volume models", {
 test_that("calibrate_rsyc validates its inputs", {
   expect_error(
     calibrate_rsyc(
+      "agb", "PICE.MAR", "tile", "H14",
+      obs_age = c(45, 70), obs_response = c(50, NA)
+    ),
+    "only finite values"
+  )
+  expect_error(
+    calibrate_rsyc(
       "agb",
       "PICE.MAR",
       "tile",
@@ -306,5 +313,56 @@ test_that("calibrate_rsyc accepts ecological codes", {
     message <- conditionMessage(error)
     expect_match(message, expected[[code]][[1L]], fixed = TRUE)
     expect_match(message, expected[[code]][[2L]], fixed = TRUE)
+  }
+})
+
+test_that("calibrated values above value_limit fall back to the bare curve", {
+  res <- calibrate_rsyc(
+    "agb", "PICE.MAR", "tile", "H14",
+    obs_age = 60, obs_response = 83.8,
+    predict_age = c(5, 60, 120),
+    value_limit = 20
+  )
+  expect_true(res$value_limited)
+  expect_true(all(
+    res$predictions$value <= 20 |
+      res$predictions$value == res$predictions$value_uncalibrated
+  ))
+  expect_equal(
+    res$predictions$value[res$predictions$age > 5],
+    res$predictions$value_uncalibrated[res$predictions$age > 5]
+  )
+  expect_false(
+    calibrate_rsyc(
+      "agb", "PICE.MAR", "tile", "H14",
+      obs_age = 60, obs_response = 83.8, value_limit = 20,
+      apply_limits = FALSE
+    )$value_limited
+  )
+})
+
+test_that("models without valid variance components cannot be calibrated", {
+  model <- RSYC_models[
+    RSYC_models$scale == "national" & RSYC_models$response == "agb" &
+      RSYC_models$species == "PICE.MAR" & RSYC_models$strata_level == "tile" &
+      RSYC_models$strata_id == "H14",
+    , drop = FALSE
+  ]
+  for (field in c("local_b1_var", "residual_var")) {
+    for (value in c(0, NA_real_)) {
+      broken <- model
+      broken[[field]] <- value
+      testthat::local_mocked_bindings(
+        .rsyc_select_model = function(...) broken,
+        .package = "RSYC"
+      )
+      expect_error(
+        calibrate_rsyc(
+          "agb", "PICE.MAR", "tile", "H14",
+          obs_age = 60, obs_response = 83.8
+        ),
+        "does not have valid variance components"
+      )
+    }
   }
 })

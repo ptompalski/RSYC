@@ -40,16 +40,6 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
   invisible(x)
 }
 
-.rsyc_assert_prob <- function(x, arg) {
-  if (!is.numeric(x) || length(x) != 1L || !is.finite(x) || x <= 0 || x >= 1) {
-    stop(
-      glue::glue("`{arg}` must be a single number between 0 and 1."),
-      call. = FALSE
-    )
-  }
-  invisible(x)
-}
-
 .rsyc_assert_age <- function(age) {
   if (!is.numeric(age) || length(age) == 0L) {
     stop("`age` must be a non-empty numeric vector.", call. = FALSE)
