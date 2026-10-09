@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, dev]
   pull_request:
   release:
     types: [published]
@@ -20,6 +20,8 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # Build the dev branch into docs/dev/ so it is served at <url>/dev/
+      PKGDOWN_DEV_MODE: ${{ github.ref_name == 'dev' && 'devel' || 'default' }}
     permissions:
       contents: write
     steps:
@@ -40,10 +42,20 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
-      - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
+      - name: Deploy main site to GitHub pages 🚀
+        if: github.event_name != 'pull_request' && github.ref_name != 'dev'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          clean: true
+          clean-exclude: dev
+          branch: gh-pages
+          folder: docs
+
+      - name: Deploy dev site to GitHub pages 🚀
+        if: github.event_name != 'pull_request' && github.ref_name == 'dev'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: true
           branch: gh-pages
-          folder: docs
+          folder: docs/dev
+          target-folder: dev
