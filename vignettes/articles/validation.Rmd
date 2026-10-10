@@ -36,21 +36,17 @@ These results describe model release **`r bundle$version`**:
 to validate. The remaining curves could not be validated because too few
 suitable plots were available in their area.
 
-Validation results are presented in three ways:
-
-- this page summarises results across all models;
-- [Validation by model group](validation-model-groups.html) shows
-  scatterplots and errors by age for each response, scale, and spatial level;
-- the [Validation explorer](validation-explorer.html) maps the results and
-  shows the validation data for individual curves.
+This page summarises the validation results and shows scatterplots for
+each response, model scale, and spatial level. The
+[Validation explorer](validation-explorer.html) maps the results and shows
+the validation data for individual curves.
 
 ## Summary statistics {.tabset}
 
 Statistics are calculated for each curve from its age-class means and then
 summarised across curves. Bias is the mean difference between the RSYC
 prediction and the observed plot mean, so positive values mean the curve
-overestimates the plots. *Inside CI* is the share of age classes where the
-mean prediction falls inside the 95% CI of the observed mean.
+overestimates the plots.
 
 ```{r summary-table, results = "asis"}
 summary_table <- validation_summary_table(bundle)
@@ -60,34 +56,50 @@ for (y_var in response_names) {
     summary_table %>%
       filter(Response == y_var, Scale == scale) %>%
       select(-Response, -Scale) %>%
-      knitr::kable(digits = c(0, 0, 0, 2, 1, 1, 0)) %>%
+      knitr::kable(digits = c(0, 0, 0, 2, 1, 1)) %>%
       print()
     cat("\n\n")
   }
 }
 ```
 
-## Agreement with the plot confidence intervals
+## Observed vs predicted
 
-The proportion of curves whose prediction falls inside the plot CI, by age
-class and spatial level. Panel labels give the overall proportion for each
-level (EZ = ecozone, EP = ecoprovince, ER = ecoregion, ED = ecodistrict).
-Only species validated at all five levels are shown.
+Each point is one age class of one curve: the weighted mean of the plot
+observations (x axis) against the mean RSYC prediction for the same plots
+(y axis). Panels show the generic model, the coniferous and broadleaf
+models, and the species models. Species are ordered by number of points.
+AGB points with plot means of 400 Mg/ha or more are excluded, and panels
+with fewer than three points are omitted.
 
-```{r ci-coverage, results = "asis"}
+```{r scatterplots, results = "asis"}
 for (y_var in names(response_names)) {
-  cat("###", response_names[[y_var]], "{.tabset}\n\n")
+  cat("###", response_names[[y_var]], "\n\n")
   for (scale in names(scale_labels)) {
-    cat("####", scale_labels[[scale]], "\n\n")
-    p <- validation_ci_coverage(bundle, y_var, scale)
-    knit_figure(
-      p,
-      height = figure_height(attr(p, "n_panels"), 1.4, 5.5) + 1,
-      alt = sprintf(
-        "Proportion of %s %s predictions inside the plot confidence interval by age class and spatial level, one panel per model.",
-        response_names[[y_var]], scale
+    cat("####", scale_labels[[scale]], "models {.tabset}\n\n")
+    for (level in spatial_levels) {
+      points <- validation_points(bundle, y_var, scale, level)
+      if (nrow(points) == 0) {
+        next
+      }
+      n_panels <- n_distinct(points$species_name)
+      cat("#####", spatial_labels[[level]], "\n\n")
+      cat(
+        sprintf(
+          "%s age-class points from %s curves.\n\n",
+          format(nrow(points), big.mark = ","),
+          format(n_distinct(points$key), big.mark = ",")
+        )
       )
-    )
+      knit_figure(
+        validation_scatterplot(points, y_var),
+        height = figure_height(n_panels, 1.87, 3.75),
+        alt = sprintf(
+          "Scatterplots of %s RSYC predictions against plot means for %s %s models, one panel per model.",
+          response_names[[y_var]], scale, level
+        )
+      )
+    }
   }
 }
 ```

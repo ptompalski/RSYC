@@ -45,5 +45,4 @@ articles:
   desc: How well RSYC curves agree with independent ground plots.
   contents:
   - articles/validation
-  - articles/validation-model-groups
   - articles/validation-explorer

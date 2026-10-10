@@ -1,4 +1,4 @@
-# Helpers for the validation articles (vignettes/articles/validation-*.Rmd).
+# Helpers for the validation article (vignettes/articles/validation.Rmd).
 #
 # The articles read the validation web bundle exported by
 # RSYC-Canada/R/5900_export_validation_web_bundle.R. Bundles live in
@@ -12,8 +12,8 @@
 #     Rscript R/5900_export_validation_web_bundle.R
 # then set "latest" in versions.json to the new model version.
 #
-# Figures follow the styling of the RSYC-Canada validation figure scripts
-# (5210 scatterplots, 5220 delta by age, 5230 CI coverage).
+# Scatterplots follow the styling of the RSYC-Canada validation figure script
+# 5210_figure_validation_scatterplots.R.
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -168,154 +168,6 @@ validation_scatterplot <- function(points, y_var) {
   p
 }
 
-# 5220_figure_validation_delta_by_age.R
-validation_delta_by_age <- function(points, y_var) {
-  settings <- switch(
-    y_var,
-    agb = list(
-      y_label = expression(AGB[RSYC] - AGB[Plot] ~ paste("[Mg/ha]")),
-      limits = c(-150, 150)
-    ),
-    volume = list(
-      y_label = expression(
-        Volume[RSYC] - Volume[Plot] ~ paste("[m"^3 * "/ha]")
-      ),
-      limits = c(-400, 400)
-    )
-  )
-
-  points %>%
-    mutate(
-      delta = pred_mean - obs_mean,
-      age_class_midpoint = factor(age_class + 10)
-    ) %>%
-    ggplot(aes(x = age_class_midpoint, y = delta)) +
-    geom_hline(yintercept = 0) +
-    geom_boxplot(outlier.shape = NA) +
-    ylab(settings$y_label) +
-    xlab("Age class") +
-    facet_wrap(vars(species_name), ncol = 4) +
-    coord_cartesian(ylim = settings$limits) +
-    scatter::theme_baseR(font_size = 10) +
-    theme(strip.text = element_text(margin = margin(b = 1)))
-}
-
-# 5230_figure_validation_ci_coverage.R
-validation_ci_coverage <- function(bundle, y_var, scale) {
-  plot_data <- bundle$age %>%
-    filter(
-      .data$response == .env$y_var,
-      .data$scale == .env$scale,
-      is.finite(pred_mean),
-      is.finite(obs_mean),
-      obs_mean > 0,
-      is.finite(ci_lower),
-      is.finite(ci_upper),
-      .data$response != "agb" | obs_mean < 400
-    ) %>%
-    mutate(
-      inside_ci = as.integer(pred_mean >= ci_lower & pred_mean <= ci_upper),
-      parameter_level = factor(parameter_level, levels = spatial_levels)
-    )
-
-  complete_panels <- plot_data %>%
-    distinct(species_name, parameter_level) %>%
-    count(species_name) %>%
-    filter(n == length(spatial_levels)) %>%
-    pull(species_name)
-
-  plot_data <- plot_data %>%
-    filter(species_name %in% complete_panels) %>%
-    order_species_panels()
-  panel_order <- levels(plot_data$species_name)
-
-  format_proportion <- function(x) if_else(is.na(x), "NA", sprintf("%.2f", x))
-
-  overall_labels <- plot_data %>%
-    group_by(species_name, parameter_level) %>%
-    summarise(value = format_proportion(mean(inside_ci)), .groups = "drop") %>%
-    pivot_wider(names_from = parameter_level, values_from = value) %>%
-    mutate(
-      label2 = paste0(
-        species_name,
-        "<br><span style='font-size:6.25pt'>",
-        "Tile=", tile,
-        "; EZ=", ecozone,
-        "; EP=", ecoprovince,
-        "<br>ER=", ecoregion,
-        "; ED=", ecodistrict,
-        "</span>"
-      )
-    ) %>%
-    arrange(factor(species_name, levels = panel_order))
-
-  line_data <- plot_data %>%
-    group_by(species_name, parameter_level, age_class) %>%
-    summarise(proportion_inside_ci = mean(inside_ci), .groups = "drop") %>%
-    left_join(
-      overall_labels %>% select(species_name, label2),
-      by = "species_name"
-    ) %>%
-    mutate(
-      label2 = factor(label2, levels = overall_labels$label2),
-      parameter_level = factor(
-        parameter_level,
-        levels = spatial_levels,
-        labels = unname(spatial_labels[spatial_levels])
-      )
-    )
-
-  model_colors <- c(
-    Tile = "#000000",
-    Ecozone = "#0072B2",
-    Ecoprovince = "#009E73",
-    Ecoregion = "#E69F00",
-    Ecodistrict = "#D55E00"
-  )
-  model_linetypes <- c(
-    Tile = "solid",
-    Ecozone = "dashed",
-    Ecoprovince = "dotdash",
-    Ecoregion = "longdash",
-    Ecodistrict = "twodash"
-  )
-
-  p <- line_data %>%
-    ggplot(aes(
-      x = age_class + 10,
-      y = proportion_inside_ci,
-      color = parameter_level,
-      linetype = parameter_level
-    )) +
-    ggh4x::geom_pointpath(mult = 0.15, shape = 1, key_glyph = "path") +
-    facet_wrap(vars(label2), ncol = 4) +
-    ylab("P") +
-    xlab("Age class") +
-    scale_y_continuous(breaks = c(0, 0.5, 1), limits = c(0, 1)) +
-    scale_x_continuous(breaks = sort(unique(line_data$age_class + 10))) +
-    scale_color_manual(values = model_colors, drop = FALSE) +
-    scale_linetype_manual(values = model_linetypes, drop = FALSE) +
-    guides(
-      color = guide_legend(
-        title = NULL,
-        nrow = 1,
-        override.aes = list(linewidth = 0.6)
-      ),
-      linetype = "none"
-    ) +
-    scatter::theme_baseR(font_size = 9) +
-    theme(
-      legend.position = "bottom",
-      legend.justification = c(0.5, 0.5),
-      legend.key.width = unit(0.35, "in"),
-      strip.text = ggtext::element_textbox_simple(lineheight = 0.9),
-      panel.spacing.y = unit(0.6, "lines")
-    )
-
-  attr(p, "n_panels") <- length(panel_order)
-  p
-}
-
 validation_summary_table <- function(bundle) {
   bundle$stats %>%
     mutate(
@@ -332,15 +184,13 @@ validation_summary_table <- function(bundle) {
       `Median R²` = median(rsq, na.rm = TRUE),
       `Median bias%` = median(rmd, na.rm = TRUE),
       `Median RMSE%` = median(rrmse, na.rm = TRUE),
-      `Inside CI` = mean(prop_inside_ci, na.rm = TRUE),
       .groups = "drop"
     ) %>%
     arrange(response, scale, parameter_level, model_group) %>%
     mutate(
       response = response_names[response],
       scale = scale_labels[scale],
-      parameter_level = spatial_labels[as.character(parameter_level)],
-      `Inside CI` = scales::percent(`Inside CI`, accuracy = 1)
+      parameter_level = spatial_labels[as.character(parameter_level)]
     ) %>%
     rename(
       Response = response,
