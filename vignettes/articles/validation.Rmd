@@ -44,17 +44,7 @@ Validation results are presented in three ways:
 - the [Validation explorer](validation-explorer.html) maps the results and
   shows the validation data for individual curves.
 
-## Reliability tiers
-
-Each validated curve was assigned a reliability tier based on its agreement
-with the plot data. Curves with too few plots or age classes are marked as
-having insufficient evidence.
-
-```{r tiers, fig.width = 7.5, fig.height = 4.5, fig.alt = "Stacked bars showing the share of validated models in each reliability tier by response, scale, and spatial level."}
-validation_tier_plot(bundle)
-```
-
-## Summary statistics
+## Summary statistics {.tabset}
 
 Statistics are calculated for each curve from its age-class means and then
 summarised across curves. Bias is the mean difference between the RSYC
@@ -62,9 +52,19 @@ prediction and the observed plot mean, so positive values mean the curve
 overestimates the plots. *Inside CI* is the share of age classes where the
 mean prediction falls inside the 95% CI of the observed mean.
 
-```{r summary-table}
-validation_summary_table(bundle) %>%
-  knitr::kable(digits = c(0, 0, 0, 0, 0, 2, 1, 1, 0))
+```{r summary-table, results = "asis"}
+summary_table <- validation_summary_table(bundle)
+for (y_var in response_names) {
+  for (scale in scale_labels) {
+    cat("###", y_var, "–", scale, "\n\n")
+    summary_table %>%
+      filter(Response == y_var, Scale == scale) %>%
+      select(-Response, -Scale) %>%
+      knitr::kable(digits = c(0, 0, 0, 2, 1, 1, 0)) %>%
+      print()
+    cat("\n\n")
+  }
+}
 ```
 
 ## Agreement with the plot confidence intervals

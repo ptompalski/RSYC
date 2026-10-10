@@ -33,32 +33,23 @@
     agb: { label: "AGB", name: "Aboveground biomass", units: "Mg/ha", ymax: 300 },
     volume: { label: "Volume", name: "Total volume", units: "m³/ha", ymax: 800 }
   };
-  const TIERS = ["Reliable", "Acceptable", "Poor", "Unreliable", "Insufficient evidence"];
-  const TIER_COLORS = {
-    Reliable: "#1A9850",
-    Acceptable: "#A6D96A",
-    Poor: "#FDAE61",
-    Unreliable: "#D73027",
-    "Insufficient evidence": "#BDBDBD"
-  };
   const COLOR_NO_MODEL = "#F0F0F0";
   const COLOR_NOT_VALIDATED = "#C9C9C9";
   const COLOR_NA = "#9E9E9E";
 
   const METRICS = {
+    rsq: { label: "R²", kind: "sequential", format: ".2f", domain: [0, 1] },
     rmd: { label: "Bias (%)", kind: "diverging", format: ".1f", suffix: "%" },
     md: { label: "Bias", kind: "diverging", format: ".1f", units: true },
     rrmse: { label: "RMSE (%)", kind: "sequential", format: ".1f", suffix: "%" },
     rmse: { label: "RMSE", kind: "sequential", format: ".1f", units: true },
-    rsq: { label: "R²", kind: "sequential", format: ".2f", domain: [0, 1] },
     prop_inside_ci: {
       label: "Age classes inside plot CI",
       kind: "sequential",
       format: ".0%",
       domain: [0, 1]
     },
-    n_plots: { label: "Validation plots", kind: "sqrt", format: ",d" },
-    tier: { label: "Reliability tier", kind: "categorical" }
+    n_plots: { label: "Validation plots", kind: "sqrt", format: ",d" }
   };
 
   const DEFAULT_STATE = {
@@ -66,7 +57,7 @@
     scale: "national",
     level: "ecoregion",
     species: "generic",
-    metric: "rmd",
+    metric: "rsq",
     strata: null
   };
 
@@ -197,9 +188,6 @@
   // species, so maps remain comparable when switching level or scale.
   function colorScale(state) {
     const spec = METRICS[state.metric];
-    if (spec.kind === "categorical") {
-      return (v) => TIER_COLORS[v] || COLOR_NA;
-    }
     const values = data.models
       .filter(
         (m) =>
@@ -402,7 +390,6 @@
 
   function formatMetric(metric, value) {
     const spec = METRICS[metric];
-    if (spec.kind === "categorical") return value || "–";
     let text = fmt(spec.format, value);
     if (value != null && spec.suffix) text += spec.suffix;
     if (value != null && spec.units) text += " " + RESPONSES[state.response].units;
@@ -466,8 +453,7 @@
           const s = data.statsByKey.get(m.key);
           html +=
             `<br>${METRICS[state.metric].label}: ${formatMetric(state.metric, metricValue(s, state.metric))}` +
-            `<br>Plots: ${fmt(",d", s.n_plots)}` +
-            (state.metric !== "tier" ? `<br>Tier: ${s.tier || "–"}` : "");
+            `<br>Plots: ${fmt(",d", s.n_plots)}`;
         }
         showTooltip(event, html);
       })
@@ -503,55 +489,45 @@
       ? `${spec.label} [${RESPONSES[state.response].units}]`
       : spec.label;
 
-    if (spec.kind === "categorical") {
-      const items = legend.append("div").attr("class", "rve-swatches");
-      items.append("span").attr("class", "rve-legend-title").text(title);
-      for (const tier of TIERS) {
-        const item = items.append("span").attr("class", "rve-swatch");
-        item.append("i").style("background", TIER_COLORS[tier]);
-        item.append("span").text(tier);
-      }
-    } else {
-      const width = 260;
-      const height = 44;
-      const ramp = legend
-        .append("svg")
-        .attr("width", width + 30)
-        .attr("height", height);
-      ramp
-        .append("text")
-        .attr("x", 15)
-        .attr("y", 11)
-        .attr("class", "rve-legend-title")
-        .text(title);
-      const domain = color.domain();
-      const lo = domain[0];
-      const hi = domain[domain.length - 1];
-      const axisScale = (spec.kind === "sqrt" ? d3.scaleSqrt() : d3.scaleLinear())
-        .domain([lo, hi])
-        .range([15, 15 + width]);
-      const steps = 64;
-      ramp
-        .append("g")
-        .selectAll("rect")
-        .data(d3.range(steps))
-        .join("rect")
-        .attr("x", (i) => 15 + (i * width) / steps)
-        .attr("y", 16)
-        .attr("width", width / steps + 0.5)
-        .attr("height", 10)
-        .attr("fill", (i) =>
-          color(axisScale.invert(15 + ((i + 0.5) * width) / steps))
-        );
-      const tickFormat = spec.format.includes("%")
-        ? d3.format(".0%")
-        : d3.format(spec.kind === "sqrt" ? ",d" : "~g");
-      ramp
-        .append("g")
-        .attr("transform", "translate(0,26)")
-        .call(d3.axisBottom(axisScale).ticks(5).tickSize(4).tickFormat(tickFormat))
-        .call((g) => g.select(".domain").remove());
-    }
+    const width = 260;
+    const height = 44;
+    const ramp = legend
+      .append("svg")
+      .attr("width", width + 30)
+      .attr("height", height);
+    ramp
+      .append("text")
+      .attr("x", 15)
+      .attr("y", 11)
+      .attr("class", "rve-legend-title")
+      .text(title);
+    const domain = color.domain();
+    const lo = domain[0];
+    const hi = domain[domain.length - 1];
+    const axisScale = (spec.kind === "sqrt" ? d3.scaleSqrt() : d3.scaleLinear())
+      .domain([lo, hi])
+      .range([15, 15 + width]);
+    const steps = 64;
+    ramp
+      .append("g")
+      .selectAll("rect")
+      .data(d3.range(steps))
+      .join("rect")
+      .attr("x", (i) => 15 + (i * width) / steps)
+      .attr("y", 16)
+      .attr("width", width / steps + 0.5)
+      .attr("height", 10)
+      .attr("fill", (i) =>
+        color(axisScale.invert(15 + ((i + 0.5) * width) / steps))
+      );
+    const tickFormat = spec.format.includes("%")
+      ? d3.format(".0%")
+      : d3.format(spec.kind === "sqrt" ? ",d" : "~g");
+    ramp
+      .append("g")
+      .attr("transform", "translate(0,26)")
+      .call(d3.axisBottom(axisScale).ticks(5).tickSize(4).tickFormat(tickFormat))
+      .call((g) => g.select(".domain").remove());
 
     const extra = legend.append("div").attr("class", "rve-swatches");
     for (const [label, fill] of [
@@ -819,7 +795,6 @@
     const units = RESPONSES[state.response].units;
     const rows = [
       ["Validated", (m, s) => (m.validated ? "Yes" : "No")],
-      ["Reliability tier", (m, s) => (s && s.tier) || "–"],
       ["Validation plots", (m, s) => fmt(",d", s && s.n_plots)],
       ["Age classes", (m, s) => fmt(",d", s && s.n_age_classes)],
       ["R²", (m, s) => fmt(".2f", s && s.rsq)],

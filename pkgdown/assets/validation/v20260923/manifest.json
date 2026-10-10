@@ -1,9 +1,9 @@
 {
   "bundle": "rsyc-validation-web",
   "schema_version": 1,
-  "model_version": "v20260709",
-  "build_time": "2026-10-09T15:14:27-0700",
-  "git_commit": "a79423e687c25a3233cf6890da1e1dbf076842e1",
+  "model_version": "v20260923",
+  "build_time": "2026-10-09T19:38:07-0700",
+  "git_commit": "4660f2f8ef8471a7a92ccc061519e83c21592ea2",
   "equation": "b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3",
   "age_range": {
     "min": 1,
@@ -29,6 +29,11 @@
       "species": "ABIE.LAS",
       "species_name": "Subalpine fir",
       "scientific_name": "Abies lasiocarpa"
+    },
+    {
+      "species": "ACER.MAC",
+      "species_name": "Bigleaf maple",
+      "scientific_name": "Acer macrophyllum"
     },
     {
       "species": "ACER.RUB",
@@ -146,6 +151,11 @@
       "scientific_name": "Pseudotsuga menziesii"
     },
     {
+      "species": "QUER.RUB",
+      "species_name": "Red oak",
+      "scientific_name": "Quercus rubra"
+    },
+    {
       "species": "THUJ.OCC",
       "species_name": "Eastern white-cedar",
       "scientific_name": "Thuja occidentalis"
@@ -185,12 +195,20 @@
     "reference": "MAGPlot (weighted plot means)",
     "age_class_width": 20,
     "age_class_note": "age_class is the lower bound of a 20-year class [age_class, age_class + 20); plots older than 150 years are excluded.",
-    "ci_level": 0.95
+    "ci_level": 0.95,
+    "provenance": {
+      "status": "current",
+      "problems": [],
+      "validation_run_time": "2026-10-09T19:31:04-0700",
+      "validation_git_commit": "4660f2f8ef8471a7a92ccc061519e83c21592ea2",
+      "params_fingerprint": "4c90ca02566dbaaa1b9794057ca84171",
+      "params_file_modified_time": "2026-10-07T15:44:12-0700"
+    }
   },
   "counts": {
-    "models": 28391,
-    "validated_models": 5966,
-    "validation_age_rows": 40192
+    "models": 28043,
+    "validated_models": 6434,
+    "validation_age_rows": 43303
   },
   "geometry": {
     "crs": "EPSG:4326",
@@ -214,42 +232,42 @@
     {
       "id": "models",
       "path": "models.json",
-      "size_bytes": 8471253
+      "size_bytes": 8230408
     },
     {
       "id": "validation_stats",
       "path": "validation_stats.json",
-      "size_bytes": 376437
+      "size_bytes": 365308
     },
     {
       "id": "validation_age",
       "path": "validation_age.json",
-      "size_bytes": 2193988
+      "size_bytes": 2362887
     },
     {
       "id": "ecozone",
       "path": "geometry/ecozones.geojson",
-      "size_bytes": 60378
+      "size_bytes": 90311
     },
     {
       "id": "ecoprovince",
       "path": "geometry/ecoprovinces.geojson",
-      "size_bytes": 434031
+      "size_bytes": 158826
     },
     {
       "id": "ecoregion",
       "path": "geometry/ecoregions.geojson",
-      "size_bytes": 641114
+      "size_bytes": 347199
     },
     {
       "id": "ecodistrict",
       "path": "geometry/ecodistricts.geojson",
-      "size_bytes": 1437369
+      "size_bytes": 1031731
     },
     {
       "id": "tile",
       "path": "geometry/tiles.geojson",
-      "size_bytes": 170823
+      "size_bytes": 187000
     }
   ],
   "fields": {

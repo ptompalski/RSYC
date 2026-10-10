@@ -51,22 +51,6 @@ scale_labels <- c(national = "National", regional = "Regional")
 
 response_names <- c(agb = "AGB", volume = "Volume")
 
-tier_levels <- c(
-  "Reliable",
-  "Acceptable",
-  "Poor",
-  "Unreliable",
-  "Insufficient evidence"
-)
-
-tier_colors <- c(
-  Reliable = "#1A9850",
-  Acceptable = "#A6D96A",
-  Poor = "#FDAE61",
-  Unreliable = "#D73027",
-  `Insufficient evidence` = "#BDBDBD"
-)
-
 load_validation_bundle <- function(version = NULL) {
   root <- validation_assets_dir()
   if (is.null(version)) {
@@ -330,35 +314,6 @@ validation_ci_coverage <- function(bundle, y_var, scale) {
 
   attr(p, "n_panels") <- length(panel_order)
   p
-}
-
-validation_tier_plot <- function(bundle) {
-  bundle$stats %>%
-    filter(!is.na(tier)) %>%
-    count(response, scale, parameter_level, tier) %>%
-    mutate(
-      response = factor(response_names[response], levels = response_names),
-      scale = factor(scale_labels[scale], levels = scale_labels),
-      parameter_level = factor(
-        spatial_labels[parameter_level],
-        levels = rev(spatial_labels)
-      ),
-      tier = factor(tier, levels = tier_levels)
-    ) %>%
-    ggplot(aes(x = n, y = parameter_level, fill = tier)) +
-    geom_col(position = position_fill(reverse = TRUE), width = 0.75) +
-    facet_grid(rows = vars(scale), cols = vars(response)) +
-    scale_x_continuous(
-      labels = scales::label_percent(),
-      expand = expansion(0)
-    ) +
-    scale_fill_manual(values = tier_colors, drop = FALSE) +
-    labs(x = "Share of validated models", y = NULL, fill = NULL) +
-    scatter::theme_baseR(font_size = 10) +
-    theme(
-      legend.position = "bottom",
-      panel.spacing.x = unit(2, "lines")
-    )
 }
 
 validation_summary_table <- function(bundle) {
