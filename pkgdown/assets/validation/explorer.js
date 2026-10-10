@@ -946,7 +946,15 @@
   function showError(error) {
     els.status.hidden = false;
     els.status.classList.add("rve-error");
-    els.status.textContent = "Could not load the validation explorer: " + error.message;
+    if (window.location.protocol === "file:") {
+      els.status.innerHTML =
+        "The validation explorer loads its data with the browser's fetch API, " +
+        "which is blocked for pages opened directly from disk (<code>file://</code>). " +
+        "Preview the site through a local web server instead, for example in R: " +
+        '<code>servr::httd("docs")</code>, or view the published site.';
+    } else {
+      els.status.textContent = "Could not load the validation explorer: " + error.message;
+    }
     console.error(error);
   }
 
