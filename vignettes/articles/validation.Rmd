@@ -38,13 +38,15 @@ suitable plots were available in their area.
 
 This page summarises the validation results and shows scatterplots for
 each response, model scale, and spatial level. The
-[Validation explorer](validation-explorer.html) maps the results and shows
-the validation data for individual curves.
+[Curve explorer](curve-explorer.html) maps the curves and their validation
+statistics and shows the validation data for individual curves.
 
 ## Summary statistics {.tabset}
 
 Statistics are calculated for each curve from its age-class means and then
-summarised across curves. Bias is the mean difference between the RSYC
+summarised across curves. CCC is Lin's concordance correlation coefficient,
+which measures agreement with the 1:1 line (1 = perfect agreement) and so,
+unlike R², is reduced by bias. Bias is the mean difference between the RSYC
 prediction and the observed plot mean, so positive values mean the curve
 overestimates the plots.
 
@@ -56,7 +58,7 @@ for (y_var in response_names) {
     summary_table %>%
       filter(Response == y_var, Scale == scale) %>%
       select(-Response, -Scale) %>%
-      knitr::kable(digits = c(0, 0, 0, 2, 1, 1)) %>%
+      knitr::kable(digits = c(0, 0, 0, 2, 2, 1, 1)) %>%
       print()
     cat("\n\n")
   }
@@ -70,7 +72,7 @@ observations (x axis) against the mean RSYC prediction for the same plots
 (y axis). Panels show the generic model, the coniferous and broadleaf
 models, and the species models. Species are ordered by number of points.
 AGB points with plot means of 400 Mg/ha or more are excluded, and panels
-with fewer than three points are omitted.
+with fewer than ten points are omitted.
 
 ```{r scatterplots, results = "asis"}
 for (y_var in names(response_names)) {
@@ -86,9 +88,10 @@ for (y_var in names(response_names)) {
       cat("#####", spatial_labels[[level]], "\n\n")
       cat(
         sprintf(
-          "%s age-class points from %s curves.\n\n",
+          "%s age-class points from %s curves. [Map these curves](%s) in the curve explorer.\n\n",
           format(nrow(points), big.mark = ","),
-          format(n_distinct(points$key), big.mark = ",")
+          format(n_distinct(points$key), big.mark = ","),
+          explorer_link(y_var, scale, level, metric = "ccc")
         )
       )
       knit_figure(

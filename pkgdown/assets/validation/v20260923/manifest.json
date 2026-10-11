@@ -1,9 +1,10 @@
 {
   "bundle": "rsyc-validation-web",
   "schema_version": 1,
+  "bundle_revision": 2,
   "model_version": "v20260923",
-  "build_time": "2026-10-09T19:38:07-0700",
-  "git_commit": "4660f2f8ef8471a7a92ccc061519e83c21592ea2",
+  "build_time": "2026-10-11T10:14:59-0700",
+  "git_commit": "7c1b88ed7b67e1a9445383d1f7315988c24d2daf",
   "equation": "b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3",
   "age_range": {
     "min": 1,
@@ -206,9 +207,38 @@
     }
   },
   "counts": {
-    "models": 28043,
+    "models": 27208,
     "validated_models": 6434,
     "validation_age_rows": 43303
+  },
+  "forest_filter": {
+    "rule": "Models at parameter_level ecozone/ecoprovince/ecoregion/ecodistrict (and their geometry features) are kept only if the first component of strata_id is a forested ecozone; tile models are always kept. Same rule as the RSYC package (data-raw/import_rsyc_models.R).",
+    "source": "forested_ecozones.gpkg",
+    "sha256": "f8b51550f6a741878ae55c9aac1fda5c62a452d47b0c594055792e80c2697b60",
+    "layer": "forested_ecozones",
+    "name_field": "ECOZONE_NA",
+    "ecozones": [
+      "Atlantic Maritime",
+      "Boreal Cordillera",
+      "Boreal Plains",
+      "Boreal Shield East",
+      "Boreal Shield West",
+      "Hudson Plains",
+      "Montane Cordillera",
+      "Pacific Maritime",
+      "Taiga Cordillera",
+      "Taiga Plains",
+      "Taiga Shield East",
+      "Taiga Shield West"
+    ],
+    "models_before": 28043,
+    "models_dropped": 835,
+    "geometry_features_dropped": {
+      "ecozones": 5,
+      "ecoprovinces": 8,
+      "ecoregions": 16,
+      "ecodistricts": 49
+    }
   },
   "geometry": {
     "crs": "EPSG:4326",
@@ -232,37 +262,37 @@
     {
       "id": "models",
       "path": "models.json",
-      "size_bytes": 8230408
+      "size_bytes": 7966829
     },
     {
       "id": "validation_stats",
       "path": "validation_stats.json",
-      "size_bytes": 365308
+      "size_bytes": 365290
     },
     {
       "id": "validation_age",
       "path": "validation_age.json",
-      "size_bytes": 2362887
+      "size_bytes": 2362780
     },
     {
       "id": "ecozone",
       "path": "geometry/ecozones.geojson",
-      "size_bytes": 90311
+      "size_bytes": 60355
     },
     {
       "id": "ecoprovince",
       "path": "geometry/ecoprovinces.geojson",
-      "size_bytes": 158826
+      "size_bytes": 128428
     },
     {
       "id": "ecoregion",
       "path": "geometry/ecoregions.geojson",
-      "size_bytes": 347199
+      "size_bytes": 310452
     },
     {
       "id": "ecodistrict",
       "path": "geometry/ecodistricts.geojson",
-      "size_bytes": 1031731
+      "size_bytes": 963679
     },
     {
       "id": "tile",

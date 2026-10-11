@@ -23,10 +23,12 @@ rsyc_species(response = NULL, strata_level = NULL, strata_id = NULL)
 - strata_id:
 
   One or more tile IDs, ecological area names or paths, or ecological
-  codes. Numeric values and numeric-looking character values are
-  interpreted as codes when no name or path matches. Code searches
-  require exactly one ecological `strata_level`. Quote ecoprovince codes
-  such as `"10.1"`. The default includes all areas.
+  codes. Tile IDs, names, and paths are matched ignoring case. Numeric
+  values and numeric-looking character values are interpreted as codes
+  when no name or path matches. Code searches require exactly one
+  ecological `strata_level`. Quote ecoprovince codes such as `"10.1"`.
+  Values that match no published curve produce a warning. The default
+  includes all areas.
 
 ## Value
 

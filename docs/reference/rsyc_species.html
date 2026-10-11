@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,9 +24,13 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
     <li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
-    <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Model validation</a></li>
+    <li><a class="dropdown-item" href="../articles/validation-explorer.html">Validation explorer</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -71,10 +75,12 @@ all types.</p></dd>
 
 <dt id="arg-strata-id">strata_id<a class="anchor" aria-label="anchor" href="#arg-strata-id"></a></dt>
 <dd><p>One or more tile IDs, ecological area names or paths, or
-ecological codes. Numeric values and numeric-looking character values are
+ecological codes. Tile IDs, names, and paths are matched ignoring case.
+Numeric values and numeric-looking character values are
 interpreted as codes when no name or path matches. Code searches require
 exactly one ecological <code>strata_level</code>. Quote ecoprovince codes such as
-<code>"10.1"</code>. The default includes all areas.</p></dd>
+<code>"10.1"</code>. Values that match no published curve produce a warning. The
+default includes all areas.</p></dd>
 
 </dl></div>
     <div class="section level2">

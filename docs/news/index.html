@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,9 +24,13 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
     <li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
-    <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Model validation</a></li>
+    <li><a class="dropdown-item" href="../articles/validation-explorer.html">Validation explorer</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -45,9 +49,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0.9000" id="rsyc-0209000">RSYC 0.2.0.9000<a class="anchor" aria-label="anchor" href="#rsyc-0209000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="rsyc-020">RSYC 0.2.0<a class="anchor" aria-label="anchor" href="#rsyc-020"></a></h2>
 <div class="section level3">
-<h3 id="model-release-v20260923-0-2-0-9000">Model release v20260923<a class="anchor" aria-label="anchor" href="#model-release-v20260923-0-2-0-9000"></a></h3>
+<h3 id="model-release-v20260923-0-2-0">Model release v20260923<a class="anchor" aria-label="anchor" href="#model-release-v20260923-0-2-0"></a></h3>
 <ul><li>Updated the packaged catalogue from model release <code>v20260709</code> to <code>v20260923</code>. After limiting ecological models to the 12 forested ecozones, the catalogue contains 27,208 rows and 42 columns. Curve coefficients and model availability changed, so predictions and local calibration results can differ from the previous package release.</li>
 <li>Added the raw ecological hierarchy fields <code>ecozone_id</code>, <code>ecoprovince_id</code>, <code>ecoregion_id</code>, and <code>ecodistrict_id</code>. They preserve upstream identifiers and provenance. Ecological selection through <code>strata_id</code> now accepts these codes as well as existing names and hierarchical paths; quoted ecoprovince codes preserve values such as <code>"10.1"</code>.</li>
 <li>Added canonical character <code>strata_code</code> columns to model and strata discovery, generated curve tables, and ecological spatial results. Ambiguous ecozone codes 5, 6, and 10 are reported explicitly in single-selection workflows rather than silently choosing a named subdivision.</li>
@@ -55,7 +59,17 @@
 <li>Fixed an upstream sampling bug in which a small number of samples were drawn from the wrong ecodistricts. This issue affected ecological-strata models only; tile models were unaffected.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="spatial-products-0-2-0-9000">Spatial products<a class="anchor" aria-label="anchor" href="#spatial-products-0-2-0-9000"></a></h3>
+<h3 id="interface-changes-0-2-0">Interface changes<a class="anchor" aria-label="anchor" href="#interface-changes-0-2-0"></a></h3>
+<ul><li>Tile IDs, ecological area names, and hierarchical paths supplied through <code>strata_id</code> are now matched ignoring case.</li>
+<li>
+<code><a href="../reference/available_rsyc_models.html">available_rsyc_models()</a></code>, <code><a href="../reference/rsyc_species.html">rsyc_species()</a></code>, and <code><a href="../reference/rsyc_strata.html">rsyc_strata()</a></code> now warn when a <code>strata_id</code> value matches no published curve or when a species code is unknown, instead of silently returning an empty table.</li>
+<li>
+<code><a href="../reference/build_rsyc_dataset.html">build_rsyc_dataset()</a></code> now warns when requested species are omitted because they are unknown or have no published curve for the selected response and areas.</li>
+<li>
+<code><a href="../reference/calibrate_rsyc.html">calibrate_rsyc()</a></code> now rejects negative <code>obs_response</code> values, which could previously produce negative calibrated curves.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="spatial-products-0-2-0">Spatial products<a class="anchor" aria-label="anchor" href="#spatial-products-0-2-0"></a></h3>
 <ul><li>Added ecological boundary release v2, aligned exactly to the <code>v20260923</code> national model catalogue. It contains 12 forested ecozones, 36 ecoprovinces, 138 ecoregions, and 672 ecodistricts in EPSG:3978, with hierarchy names and raw hierarchy identifiers preserved.</li>
 <li>Boundary builds now record source and output checksums and validate complete, one-to-one coverage of published national model strata.</li>
 </ul></div>

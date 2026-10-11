@@ -7,11 +7,8 @@ species and the `generic`, `coniferous`, and `broadleaf` model groups.
 Models are available for 150 x 150 km tiles and four nested ecological
 levels: ecozone, ecoprovince, ecoregion, and ecodistrict.
 
-This development version contains model release `v20260923`: 27,208
-published curve rows in a 42-column catalogue. The four raw hierarchy
-identifier fields (`ecozone_id`, `ecoprovince_id`, `ecoregion_id`, and
-`ecodistrict_id`) are included for provenance. Select ecological models
-by `strata_id` name or full hierarchical path.
+Models are periodically updated as new remote sensing data become
+available. The current release is **v20260923**.
 
 ![Species-specific RSYC curves across Canada’s 150 km tile
 grid.](reference/figures/RSYC_curves_species_gh.png)
@@ -30,12 +27,9 @@ volume models for tiles and ecological strata.
 
 - **Tile grid:**
   [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
-  (385 model-aligned v20260923 tiles)
 
 - **Ecological strata:**
   [RSYC_ecostrat.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg)
-  (temporary `dev` URL until the file is published as an immutable
-  release asset)
 
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:
@@ -50,15 +44,15 @@ where
 - *Age* is stand age (years)
 
 The curves were fitted for stand ages 1 to 150 years. RSYC warns when
-asked to estimate outside this age range. Age 0 is also allowed as the
-starting point of a curve.
+asked to estimate outside this age range.
 
 ## Installation
 
 ``` r
 
 # install.packages("remotes")
-remotes::install_github("ptompalski/RSYC")
+# Development version with model release v20260923:
+remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
 ## Examples
@@ -72,7 +66,7 @@ Estimate AGB for black spruce (`PICE.MAR`) in tile H14 at stand ages 20,
 
 library(RSYC)
 predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
-#> [1] 27.49419 60.21335 74.19827
+#> [1] 26.85001 58.32616 71.92139
 ```
 
 To estimate total volume instead, set `response = "volume"`:
@@ -88,8 +82,8 @@ predict_rsyc(
 )
 ```
 
-For ecological areas, the area name is enough when it occurs only once
-at the chosen level:
+For ecological strata, e.g. ecodistrict “Windsor Lowlands”, use the same
+function:
 
 ``` r
 
@@ -102,17 +96,10 @@ predict_rsyc(
 )
 ```
 
-Some area names occur in more than one part of Canada. In those cases,
-[`predict_rsyc()`](https://ptompalski.github.io/RSYC/reference/predict_rsyc.md)
-lists every match. Choose the intended area using the full sequence of
-ecological areas shown by
-[`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md).
-
-#### Compare species and tiles
+#### Several species and tiles
 
 The following example estimates AGB and volume for several species,
 stand ages, and tiles. Each row of `tile_inputs` describes one estimate.
-All combinations shown below have a published RSYC curve.
 
 ``` r
 
@@ -171,20 +158,6 @@ the areas they represent:
 levels.](reference/figures/PICE_MAR_nested_ecosystem_maps_and_volume_curves.png)
 
 Black spruce volume curves and maps at four nested ecological levels.
-
-If a name occurs in several places, list the alternatives and use the
-full sequence from ecozone to the selected level:
-
-``` r
-
-rsyc_strata("agb", "PICE.MAR", "ecodistrict") |>
-  dplyr::filter(strata_name == "Salmon River")
-
-predict_rsyc(
-  "agb", "PICE.MAR", 80, "ecodistrict",
-  "Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"
-)
-```
 
 #### Generate several complete curves
 

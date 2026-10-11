@@ -4,6 +4,14 @@ template:
   bootstrap: 5
   math-rendering: mathjax
 
+navbar:
+  structure:
+    left: [intro, reference, articles, explorer, tutorials, news]
+  components:
+    explorer:
+      text: Curve explorer
+      href: articles/curve-explorer.html
+
 reference:
 - title: Predict yield and build datasets
   desc: Estimate yield curves and combine predictions with spatial data.
@@ -40,9 +48,14 @@ articles:
   - articles/Local-calibration
   - articles/Model-parameters
 
+- title: Explore curves
+  navbar: ~
+  desc: Browse published curves on a map, with their parameters and validation results.
+  contents:
+  - articles/curve-explorer
+
 - title: Validation
   navbar: Validation
   desc: How well RSYC curves agree with independent ground plots.
   contents:
   - articles/validation
-  - articles/validation-explorer

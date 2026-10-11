@@ -1,6 +1,6 @@
 # Changelog
 
-## RSYC 0.2.0.9000
+## RSYC 0.2.0
 
 ### Model release v20260923
 
@@ -30,6 +30,23 @@
 - Fixed an upstream sampling bug in which a small number of samples were
   drawn from the wrong ecodistricts. This issue affected
   ecological-strata models only; tile models were unaffected.
+
+### Interface changes
+
+- Tile IDs, ecological area names, and hierarchical paths supplied
+  through `strata_id` are now matched ignoring case.
+- [`available_rsyc_models()`](https://ptompalski.github.io/RSYC/reference/available_rsyc_models.md),
+  [`rsyc_species()`](https://ptompalski.github.io/RSYC/reference/rsyc_species.md),
+  and
+  [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md)
+  now warn when a `strata_id` value matches no published curve or when a
+  species code is unknown, instead of silently returning an empty table.
+- [`build_rsyc_dataset()`](https://ptompalski.github.io/RSYC/reference/build_rsyc_dataset.md)
+  now warns when requested species are omitted because they are unknown
+  or have no published curve for the selected response and areas.
+- [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
+  now rejects negative `obs_response` values, which could previously
+  produce negative calibrated curves.
 
 ### Spatial products
 

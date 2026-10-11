@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +41,13 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/Local-calibration.html">Local calibration</a></li>
+<li><a class="dropdown-item" href="articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="articles/Local-calibration.html">Local calibration</a></li>
     <li><a class="dropdown-item" href="articles/Model-parameters.html">Understanding the yield-curve data</a></li>
-    <li><a class="dropdown-item" href="articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="articles/validation.html">Model validation</a></li>
+    <li><a class="dropdown-item" href="articles/validation-explorer.html">Validation explorer</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -63,9 +67,11 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="rsyc-remote-sensing-based-yield-curves-for-canada">RSYC: Remote Sensing-Based Yield Curves for Canada<a class="anchor" aria-label="anchor" href="#rsyc-remote-sensing-based-yield-curves-for-canada"></a>
 </h1></div>
+<!-- badges: start -->
+
 <p>RSYC provides published yield curves for aboveground biomass (AGB, Mg/ha) and total volume (m3/ha). Curves are available for individual species and the <code>generic</code>, <code>coniferous</code>, and <code>broadleaf</code> model groups.</p>
 <p>Models are available for 150 x 150 km tiles and four nested ecological levels: ecozone, ecoprovince, ecoregion, and ecodistrict.</p>
-<p>This development version contains model release <code>v20260923</code>: 27,208 published curve rows in a 42-column catalogue. The four raw hierarchy identifier fields (<code>ecozone_id</code>, <code>ecoprovince_id</code>, <code>ecoregion_id</code>, and <code>ecodistrict_id</code>) are included for provenance. Select ecological models by <code>strata_id</code> name or full hierarchical path.</p>
+<p>Models are periodically updated as new remote sensing data become available. The current release is <strong>v20260923</strong>.</p>
 <figure><img src="reference/figures/RSYC_curves_species_gh.png" alt="Species-specific RSYC curves across Canada’s 150 km tile grid."><figcaption aria-hidden="true">
 Species-specific RSYC curves across Canada’s 150 km tile grid.
 </figcaption></figure><div class="section level2">
@@ -74,8 +80,8 @@ Species-specific RSYC curves across Canada’s 150 km tile grid.
 <p>You don’t need to install the R package to use the models. All model parameters used in RSYC are available for direct download. The ZIP archive contains the updated <code>RSYC_models.csv</code> table, including AGB and volume models for tiles and ecological strata.</p>
 <ul>
 <li><p><strong>Model parameters:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/data-raw/RSYC_models.zip" class="external-link">RSYC_models.zip</a></p></li>
-<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a> (385 model-aligned v20260923 tiles)</p></li>
-<li><p><strong>Ecological strata:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a> (temporary <code>dev</code> URL until the file is published as an immutable release asset)</p></li>
+<li><p><strong>Tile grid:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg" class="external-link">RSYC_tiles.gpkg</a></p></li>
+<li><p><strong>Ecological strata:</strong> <a href="https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg" class="external-link">RSYC_ecostrat.gpkg</a></p></li>
 </ul>
 <p>The RSYC models predict aboveground biomass (AGB) or total volume as a function of stand age:</p>
 <p><span class="math display">\[
@@ -90,14 +96,15 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 <li>
 <em>Age</em> is stand age (years)</li>
 </ul>
-<p>The curves were fitted for stand ages 1 to 150 years. RSYC warns when asked to estimate outside this age range. Age 0 is also allowed as the starting point of a curve.</p>
+<p>The curves were fitted for stand ages 1 to 150 years. RSYC warns when asked to estimate outside this age range.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Development version with model release v20260923:</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ptompalski/RSYC"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -109,7 +116,7 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC">RSYC</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 27.49419 60.21335 74.19827</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 26.85001 58.32616 71.92139</span></span></code></pre></div>
 <p>To estimate total volume instead, set <code>response = "volume"</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span></span>
@@ -119,7 +126,7 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 <span>  strata_level <span class="op">=</span> <span class="st">"tile"</span>,</span>
 <span>  strata_id <span class="op">=</span> <span class="st">"H14"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>For ecological areas, the area name is enough when it occurs only once at the chosen level:</p>
+<p>For ecological strata, e.g. ecodistrict “Windsor Lowlands”, use the same function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"agb"</span>,</span>
@@ -128,11 +135,10 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 <span>  strata_level <span class="op">=</span> <span class="st">"ecodistrict"</span>,</span>
 <span>  strata_id <span class="op">=</span> <span class="st">"Windsor Lowlands"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Some area names occur in more than one part of Canada. In those cases, <code><a href="reference/predict_rsyc.html">predict_rsyc()</a></code> lists every match. Choose the intended area using the full sequence of ecological areas shown by <code><a href="reference/rsyc_strata.html">rsyc_strata()</a></code>.</p>
 <div class="section level4">
-<h4 id="compare-species-and-tiles">Compare species and tiles<a class="anchor" aria-label="anchor" href="#compare-species-and-tiles"></a>
+<h4 id="several-species-and-tiles">Several species and tiles<a class="anchor" aria-label="anchor" href="#several-species-and-tiles"></a>
 </h4>
-<p>The following example estimates AGB and volume for several species, stand ages, and tiles. Each row of <code>tile_inputs</code> describes one estimate. All combinations shown below have a published RSYC curve.</p>
+<p>The following example estimates AGB and volume for several species, stand ages, and tiles. Each row of <code>tile_inputs</code> describes one estimate.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tile_inputs</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand.html" class="external-link">crossing</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"volume"</span><span class="op">)</span>,</span>
@@ -179,21 +185,13 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 <p>The same species can have different curves at each nested ecological level. The example below shows black spruce volume curves together with the areas they represent:</p>
 <figure><img src="reference/figures/PICE_MAR_nested_ecosystem_maps_and_volume_curves.png" alt="Black spruce volume curves and maps at four nested ecological levels."><figcaption aria-hidden="true">
 Black spruce volume curves and maps at four nested ecological levels.
-</figcaption></figure><p>If a name occurs in several places, list the alternatives and use the full sequence from ecozone to the selected level:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/rsyc_strata.html">rsyc_strata</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="st">"ecodistrict"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">strata_name</span> <span class="op">==</span> <span class="st">"Salmon River"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span></span>
-<span>  <span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fl">80</span>, <span class="st">"ecodistrict"</span>,</span>
-<span>  <span class="st">"Boreal Cordillera/Northern Boreal Cordillera/Pelly Mountains/Salmon River"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+</figcaption></figure>
 </div>
 <div class="section level4">
 <h4 id="generate-several-complete-curves">Generate several complete curves<a class="anchor" aria-label="anchor" href="#generate-several-complete-curves"></a>
 </h4>
 <p>The following example produces a complete set of estimates for ages 1 to 150 for each species and area listed in <code>curve_inputs</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curve_inputs</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">response</span>, <span class="op">~</span><span class="va">species</span>,    <span class="op">~</span><span class="va">strata_level</span>, <span class="op">~</span><span class="va">strata_id</span>,</span>
 <span>  <span class="st">"agb"</span>,     <span class="st">"PICE.MAR"</span>,  <span class="st">"tile"</span>,       <span class="st">"H14"</span>,</span>
@@ -220,7 +218,7 @@ Black spruce volume curves and maps at four nested ecological levels.
 <span><span class="va">curve_predictions</span> <span class="op">&lt;-</span> <span class="va">curve_inputs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">prediction</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Plot the curves to compare how predicted yield changes with stand age. AGB and volume are shown separately because they use different units:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curve_predictions</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
@@ -252,7 +250,7 @@ Black spruce volume curves and maps at four nested ecological levels.
 <li>
 <code><a href="reference/available_rsyc_models.html">available_rsyc_models()</a></code> lists individual published curves that match a response, species, type of area, or area name. For example, list the volume curves for black spruce at the ecozone level:</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/available_rsyc_models.html">available_rsyc_models</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span>
@@ -262,13 +260,13 @@ Black spruce volume curves and maps at four nested ecological levels.
 <li>
 <code><a href="reference/rsyc_species.html">rsyc_species()</a></code> lists the species available for a selected response and area. It also gives each species’ common name and model group. For example, list the AGB species available in tile H14:</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/rsyc_species.html">rsyc_species</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"agb"</span>, strata_level <span class="op">=</span> <span class="st">"tile"</span>, strata_id <span class="op">=</span> <span class="st">"H14"</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>
 <code><a href="reference/rsyc_strata.html">rsyc_strata()</a></code> lists the areas for which models are available for a selected response and species. It gives both the short area name and the full hierarchical area identifier, which can distinguish repeated area names. For example, list the ecozones with volume models for black spruce:</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/rsyc_strata.html">rsyc_strata</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>  species <span class="op">=</span> <span class="st">"PICE.MAR"</span>,</span>
@@ -279,7 +277,7 @@ Black spruce volume curves and maps at four nested ecological levels.
 <h3 id="create-spatial-yield-curve-datasets">Create spatial yield-curve datasets<a class="anchor" aria-label="anchor" href="#create-spatial-yield-curve-datasets"></a>
 </h3>
 <p><code><a href="reference/build_rsyc_dataset.html">build_rsyc_dataset()</a></code> prepares yield estimates and the matching area boundaries. The boundaries are stored separately so the same map shape is not repeated for every species and stand age. By default, the function estimates ages 1 through 150:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_rsyc_dataset.html">build_rsyc_dataset</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PICE.MAR"</span>, <span class="st">"POPU.TRE"</span><span class="op">)</span>,</span>
@@ -335,7 +333,12 @@ Black spruce volume curves and maps at four nested ecological levels.
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://app.codecov.io/gh/ptompalski/RSYC/tree/dev" class="external-link"><img src="https://codecov.io/gh/ptompalski/RSYC/branch/dev/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

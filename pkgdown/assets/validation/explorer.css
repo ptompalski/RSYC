@@ -1,12 +1,12 @@
-/* RSYC validation explorer (see explorer.js). */
+/* RSYC yield curve explorer (see explorer.js). */
 
-#rsyc-validation-explorer {
+#rsyc-curve-explorer {
   position: relative;
   margin: 1rem 0 2rem;
   font-size: 0.9rem;
 }
 
-#rsyc-validation-explorer [hidden] {
+#rsyc-curve-explorer [hidden] {
   display: none !important;
 }
 
@@ -106,9 +106,16 @@
   stroke-width: 1;
 }
 
-.rve-units path.rve-selected {
+.rve-units path:not(.rve-has-model) {
+  cursor: default;
+}
+
+.rve-selected-layer path {
+  fill: none;
   stroke: #000;
   stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
 }
 
 .rve-legend {
@@ -229,6 +236,114 @@
   cursor: pointer;
   margin: 0.5rem 0;
   font-weight: 600;
+}
+
+.rve-table caption {
+  caption-side: top;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+  padding: 0 0 0.25rem;
+}
+
+.rve-check {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: normal !important;
+}
+
+.rve-chart-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.rve-chart-controls > label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.rve-chart-controls select {
+  margin-top: 0.2rem;
+  font-weight: normal;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.3rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.rve-compare {
+  flex: 1 1 18rem;
+  font-size: 0.85rem;
+}
+
+.rve-compare summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.rve-compare-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1rem;
+  margin-top: 0.3rem;
+}
+
+.rve-curve-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-top: 1rem;
+}
+
+.rve-section-title {
+  margin: 1.75rem 0 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #ddd;
+}
+
+.rve-validation-note p {
+  font-size: 0.85rem;
+  color: #444;
+}
+
+.rve-validation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem 2rem;
+}
+
+.rve-validation figure {
+  flex: 0 1 340px;
+  margin: 0;
+  min-width: 0;
+}
+
+.rve-validation figure svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.rve-validation figcaption {
+  font-size: 0.78rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+.rve-validation .rve-tables {
+  flex: 1 1 20rem;
+  margin-top: 0;
 }
 
 .rve-footer {

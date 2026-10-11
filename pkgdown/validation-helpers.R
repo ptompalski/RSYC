@@ -3,7 +3,8 @@
 # The articles read the validation web bundle exported by
 # RSYC-Canada/R/5900_export_validation_web_bundle.R. Bundles live in
 # pkgdown/assets/validation/<model_version>/ and are copied verbatim to the
-# site, where the interactive explorer (pkgdown/assets/validation/explorer.js)
+# site, where the curve explorer (pkgdown/assets/validation/explorer.js;
+# vignettes/articles/curve-explorer.Rmd)
 # reads the same files. pkgdown/assets/validation/versions.json selects the
 # bundle used by both the static articles and the explorer.
 #
@@ -66,6 +67,16 @@ load_validation_bundle <- function(version = NULL) {
   stats <- read_columnar_json(file.path(dir, "validation_stats.json"))
   age <- read_columnar_json(file.path(dir, "validation_age.json"))
 
+  # Lin's concordance correlation coefficient is not in the bundle; compute it
+  # per curve from the age-class means, as the bundle's other statistics are.
+  ccc <- age %>%
+    group_by(key) %>%
+    summarise(
+      ccc = round(yardstick::ccc_vec(obs_mean, pred_mean), 3),
+      .groups = "drop"
+    )
+  stats <- left_join(stats, ccc, by = "key")
+
   model_info <- models %>%
     select(
       key, model_id, response, scale, parameter_level, strata_id,
@@ -95,8 +106,10 @@ order_species_panels <- function(data) {
 }
 
 # Age-class points for one response x scale x parameter level, filtered as in
-# 5210/5220: positive observations, AGB < 400 Mg/ha, >= 3 points per panel.
-validation_points <- function(bundle, y_var, scale, parameter_level) {
+# 5210/5220: positive observations, AGB < 400 Mg/ha; panels need at least
+# `min_points` points.
+validation_points <- function(bundle, y_var, scale, parameter_level,
+                              min_points = 10) {
   bundle$age %>%
     filter(
       .data$response == .env$y_var,
@@ -109,7 +122,7 @@ validation_points <- function(bundle, y_var, scale, parameter_level) {
     ) %>%
     order_species_panels() %>%
     group_by(species_name) %>%
-    filter(n() >= 3) %>%
+    filter(n() >= min_points) %>%
     ungroup()
 }
 
@@ -137,6 +150,7 @@ validation_scatterplot <- function(points, y_var) {
       obs_mean,
       pred_mean,
       metrics = list(
+        "CCC" = yardstick::ccc,
         "R2" = yardstick::rsq,
         "bias" = scatter::md,
         "bias%" = scatter::rmd,
@@ -181,6 +195,7 @@ validation_summary_table <- function(bundle) {
     group_by(response, scale, parameter_level, model_group) %>%
     summarise(
       Models = n(),
+      `Median CCC` = median(ccc, na.rm = TRUE),
       `Median R²` = median(rsq, na.rm = TRUE),
       `Median bias%` = median(rmd, na.rm = TRUE),
       `Median RMSE%` = median(rrmse, na.rm = TRUE),
@@ -198,6 +213,15 @@ validation_summary_table <- function(bundle) {
       Level = parameter_level,
       `Model group` = model_group
     )
+}
+
+# Link to a view of the curve explorer (vignettes/articles/curve-explorer.Rmd).
+explorer_link <- function(response, scale, level, species = "generic",
+                          metric = "ccc") {
+  sprintf(
+    "curve-explorer.html#response=%s&scale=%s&level=%s&species=%s&metric=%s",
+    response, scale, level, species, metric
+  )
 }
 
 # Emit one knitr chunk per figure so that each can have its own height.

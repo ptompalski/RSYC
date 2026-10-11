@@ -1,5 +1,7 @@
 # Calibrate an RSYC Yield Curve with Local Observations
 
+**\[experimental\]**
+
 Adjust a published RSYC curve to local field data using a best linear
 unbiased predictor (BLUP) of the local level. Given one or more observed
 values (aboveground biomass or total volume) at known stand ages, the
@@ -43,9 +45,10 @@ calibrate_rsyc(
 
 - strata_id:
 
-  Tile ID, ecological area name or path, or ecological code. A single
-  area name can be used when it occurs only once. If the name occurs in
-  several places, use the full sequence of area names shown by
+  Tile ID, ecological area name or path, or ecological code. Tile IDs,
+  names, and paths are matched ignoring case. A single area name can be
+  used when it occurs only once. If the name occurs in several places,
+  use the full sequence of area names shown by
   [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md).
   Numeric values are interpreted as codes for the selected ecological
   `strata_level`; quote ecoprovince codes such as `"10.1"`.
@@ -56,9 +59,9 @@ calibrate_rsyc(
 
 - obs_response:
 
-  Observed values at `obs_age`. Aboveground biomass in Mg/ha or total
-  volume in m3/ha, matching `response`. Must be the same length as
-  `obs_age`.
+  Observed non-negative values at `obs_age`. Aboveground biomass in
+  Mg/ha or total volume in m3/ha, matching `response`. Must be the same
+  length as `obs_age`.
 
 - predict_age:
 

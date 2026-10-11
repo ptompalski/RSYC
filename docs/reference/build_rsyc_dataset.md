@@ -30,7 +30,8 @@ build_rsyc_dataset(
 - species:
 
   One or more species codes or broad groups. Uppercase and lowercase
-  letters are treated the same.
+  letters are treated the same. Requested species without a published
+  curve for the selected response and areas are omitted with a warning.
 
 - age:
 
@@ -44,11 +45,12 @@ build_rsyc_dataset(
 - strata_id:
 
   One or more tile IDs, ecological area names or paths, or ecological
-  codes. Numeric values and numeric-looking character values are
-  interpreted as codes when no name or path matches. Quote ecoprovince
-  codes such as `"10.1"`. By default, every area with a matching
-  published curve is included. If an area name occurs in several places,
-  the function asks for the full sequence of area names.
+  codes. Tile IDs, names, and paths are matched ignoring case. Numeric
+  values and numeric-looking character values are interpreted as codes
+  when no name or path matches. Quote ecoprovince codes such as
+  `"10.1"`. By default, every area with a matching published curve is
+  included. If an area name occurs in several places, the function asks
+  for the full sequence of area names.
 
 - output:
 

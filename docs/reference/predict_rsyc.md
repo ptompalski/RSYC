@@ -32,9 +32,10 @@ predict_rsyc(response, species, age, strata_level, strata_id)
 
 - strata_id:
 
-  Tile ID, ecological area name or path, or ecological code. A single
-  area name can be used when it occurs only once. If the name occurs in
-  several places, use the full sequence of area names shown by
+  Tile ID, ecological area name or path, or ecological code. Tile IDs,
+  names, and paths are matched ignoring case. A single area name can be
+  used when it occurs only once. If the name occurs in several places,
+  use the full sequence of area names shown by
   [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md).
   Numeric values are interpreted as codes for the selected ecological
   `strata_level`; quote ecoprovince codes such as `"10.1"`.

@@ -19,6 +19,7 @@ rsyc_strata(response = NULL, species = NULL, strata_level = NULL)
 
   One or more species codes or broad groups. Uppercase and lowercase
   letters are treated the same. The default includes all species.
+  Unknown species codes produce a warning.
 
 - strata_level:
 
