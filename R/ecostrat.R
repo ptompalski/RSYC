@@ -40,8 +40,9 @@
 #' @seealso [rsyc_boundaries()]
 #'
 #' @examples
-#' \dontrun{
-#' download_rsyc_boundaries()
+#' \donttest{
+#' # Save to a temporary folder here; omit `cache_dir` to use the default.
+#' path <- try(download_rsyc_boundaries(cache_dir = tempdir()))
 #' }
 #'
 #' @export
@@ -147,10 +148,16 @@ download_rsyc_boundaries <- function(
 #'   fields through the requested level.
 #'
 #' @examples
-#' tiles <- rsyc_boundaries("tile")
-#' \dontrun{
-#' download_rsyc_boundaries()
-#' districts <- rsyc_boundaries("ecodistrict")
+#' if (requireNamespace("sf", quietly = TRUE)) {
+#'   tiles <- rsyc_boundaries("tile")
+#' }
+#' \donttest{
+#' if (requireNamespace("sf", quietly = TRUE)) {
+#'   cache <- tempdir()
+#'   if (!inherits(try(download_rsyc_boundaries(cache_dir = cache)), "try-error")) {
+#'     districts <- rsyc_boundaries("ecodistrict", cache_dir = cache)
+#'   }
+#' }
 #' }
 #'
 #' @export

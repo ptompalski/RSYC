@@ -11,7 +11,7 @@ Provides published remote sensing-based yield curves for aboveground biomass and
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://ptompalski.github.io/RSYC}
+  \item \url{https://ptompalski.github.io/RSYC/}
   \item \url{https://github.com/ptompalski/RSYC}
   \item Report bugs at \url{https://github.com/ptompalski/RSYC/issues}
 }

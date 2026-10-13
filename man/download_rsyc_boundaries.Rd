@@ -34,8 +34,9 @@ ecozones, ecoprovinces, ecoregions, and ecodistricts, but no yield curves.
 Tile boundaries are already included with RSYC.
 }
 \examples{
-\dontrun{
-download_rsyc_boundaries()
+\donttest{
+# Save to a temporary folder here; omit `cache_dir` to use the default.
+path <- try(download_rsyc_boundaries(cache_dir = tempdir()))
 }
 
 }

@@ -32,10 +32,16 @@ are read from the file saved by \code{\link[=download_rsyc_boundaries]{download_
 never downloads data on its own.
 }
 \examples{
-tiles <- rsyc_boundaries("tile")
-\dontrun{
-download_rsyc_boundaries()
-districts <- rsyc_boundaries("ecodistrict")
+if (requireNamespace("sf", quietly = TRUE)) {
+  tiles <- rsyc_boundaries("tile")
+}
+\donttest{
+if (requireNamespace("sf", quietly = TRUE)) {
+  cache <- tempdir()
+  if (!inherits(try(download_rsyc_boundaries(cache_dir = cache)), "try-error")) {
+    districts <- rsyc_boundaries("ecodistrict", cache_dir = cache)
+  }
+}
 }
 
 }

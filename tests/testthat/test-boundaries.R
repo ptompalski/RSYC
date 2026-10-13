@@ -177,8 +177,7 @@ test_that("ecological levels retain only their relevant hierarchy", {
 
 test_that("boundary v2 layers satisfy their release and model-join contract", {
   skip_if_not_installed("sf")
-  path <- system.file("extdata", "RSYC_ecostrat.gpkg", package = "RSYC")
-  expect_true(nzchar(path))
+  path <- skip_if_no_bundled_ecostrat()
   verify <- getFromNamespace(".rsyc_verify_ecostrat", "RSYC")
   expect_invisible(verify(path))
 
@@ -235,11 +234,8 @@ test_that("boundary v2 layers satisfy their release and model-join contract", {
 test_that("every national model stratum joins to exactly one boundary", {
   skip_if_not_installed("sf")
   tile_path <- system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
-  ecological_path <- system.file(
-    "extdata", "RSYC_ecostrat.gpkg", package = "RSYC"
-  )
+  ecological_path <- skip_if_no_bundled_ecostrat()
   expect_true(nzchar(tile_path))
-  expect_true(nzchar(ecological_path))
 
   levels <- c("tile", "ecozone", "ecoprovince", "ecoregion", "ecodistrict")
   for (level in levels) {
@@ -270,8 +266,7 @@ test_that("every national model stratum joins to exactly one boundary", {
 
 test_that("public ecological boundary codes agree with national models", {
   skip_if_not_installed("sf")
-  source <- system.file("extdata", "RSYC_ecostrat.gpkg", package = "RSYC")
-  expect_true(nzchar(source))
+  source <- skip_if_no_bundled_ecostrat()
   cache <- tempfile("rsyc-ecostrat-cache-")
   dir.create(cache)
   expect_true(file.copy(source, file.path(cache, "RSYC_ecostrat.gpkg")))

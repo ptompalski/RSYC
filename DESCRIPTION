@@ -39,7 +39,7 @@ Suggests:
     tidyr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://ptompalski.github.io/RSYC,
+URL: https://ptompalski.github.io/RSYC/,
     https://github.com/ptompalski/RSYC
 BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown, jsonlite, scales, ggtext, yardstick,
