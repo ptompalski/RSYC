@@ -44,12 +44,11 @@ articles:
 - title: Using RSYC
   navbar: ~
   contents:
+  - articles/Model-parameters
   - articles/Prediction-examples
   - articles/Local-calibration
-  - articles/Model-parameters
 
 - title: Explore curves
-  navbar: ~
   desc: Browse published curves on a map, with their parameters and validation results.
   contents:
   - articles/curve-explorer

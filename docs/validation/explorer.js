@@ -87,6 +87,7 @@
     groups: new Map(),
     strata: new Map(),
     areas: new Map(),
+    strataCodes: {},
     geometry: new Map()
   };
 
@@ -130,12 +131,15 @@
 
   async function loadBundle(version) {
     const dir = version + "/";
-    const [manifest, models, stats, age] = await Promise.all([
+    const [manifest, models, stats, age, strataCodes] = await Promise.all([
       getJSON(dir + "manifest.json"),
       getJSON(dir + "models.json"),
       getJSON(dir + "validation_stats.json"),
-      getJSON(dir + "validation_age.json")
+      getJSON(dir + "validation_age.json"),
+      // Optional lookup of canonical ecological codes; names only if absent.
+      getJSON(dir + "strata_codes.json").catch(() => ({}))
     ]);
+    data.strataCodes = strataCodes;
 
     data.version = version;
     data.manifest = manifest;
@@ -194,6 +198,14 @@
     (data.species.get(code) && data.species.get(code).species_name) || code;
 
   const strataName = (strataId) => String(strataId).split("/").pop();
+
+  const strataCode = (strataId, level) =>
+    (data.strataCodes[level] || {})[strataId];
+
+  const strataLabel = (strataId, level) => {
+    const code = strataCode(strataId, level);
+    return strataName(strataId) + (code ? ` (${code})` : "");
+  };
 
   function sortSpecies(codes) {
     const groups = ["generic", "coniferous", "broadleaf"].filter((c) => codes.has(c));
@@ -547,7 +559,7 @@
       .classed("rve-has-model", (f) => models.has(f.properties.strata_id))
       .on("mousemove", (event, f) => {
         const m = models.get(f.properties.strata_id);
-        let html = `<strong>${esc(f.properties.name)}</strong>`;
+        let html = `<strong>${esc(strataLabel(f.properties.strata_id, state.level))}</strong>`;
         if (!m) {
           html += "<br>No model";
         } else {
@@ -902,7 +914,7 @@
           a.obs_mean > 0 &&
           (state.response !== "agb" || a.obs_mean < 400)
         ) {
-          points.push(Object.assign({ name: strataName(m.strata_id), strata_id: m.strata_id }, a));
+          points.push(Object.assign({ name: strataLabel(m.strata_id, m.parameter_level), strata_id: m.strata_id }, a));
         }
       }
     }
@@ -1006,7 +1018,7 @@
     const statsOf = (m) => (m.validated ? data.statsByKey.get(m.key) : null);
 
     const statsTable =
-      `<table class='table rve-table'><caption>Selected area: ${esc(strataName(state.strata))}</caption><thead><tr><th></th>` +
+      `<table class='table rve-table'><caption>Selected area: ${esc(strataLabel(state.strata, state.level))}</caption><thead><tr><th></th>` +
       scales.map((s) => `<th>${SCALE_LABELS[s]}${s === state.scale ? " (mapped)" : ""}</th>`).join("") +
       "</tr></thead><tbody>" +
       rows
@@ -1049,7 +1061,7 @@
     const latin = sp && sp.scientific_name ? ` (<em>${esc(sp.scientific_name)}</em>)` : "";
     const path = String(state.strata).split("/");
     els.detailHeader.innerHTML =
-      `<h3>${esc(path[path.length - 1])}</h3>` +
+      `<h3>${esc(strataLabel(state.strata, state.level))}</h3>` +
       (path.length > 1 ? `<div class="rve-path">${path.slice(0, -1).map(esc).join(" › ")}</div>` : "") +
       `<div class="rve-path">${RESPONSES[state.response].name} · ${esc(speciesName(state.species))}${latin} · ${LEVEL_LABELS[state.level]}</div>`;
   }
@@ -1078,7 +1090,7 @@
     const strataOptions = models
       .slice()
       .sort((a, b) => d3.ascending(strataName(a.strata_id), strataName(b.strata_id)))
-      .map((m) => [m.strata_id, strataName(m.strata_id) + (m.validated ? "" : " (not validated)")]);
+      .map((m) => [m.strata_id, strataLabel(m.strata_id, m.parameter_level) + (m.validated ? "" : " (not validated)")]);
     fillSelect(els.strata, [["", "— none —"], ...strataOptions], state.strata || "");
 
     els.mapTitle.textContent =

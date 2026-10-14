@@ -58,6 +58,14 @@
 - Boundary builds now record source and output checksums and validate
   complete, one-to-one coverage of published national model strata.
 
+### Documentation
+
+- Added a “Model validation” article summarizing how RSYC yield curves
+  compare with independent ground plots, grouped by age class.
+- Added an interactive “Yield curve explorer” to the package website for
+  browsing published RSYC yield curves together with their validation
+  results.
+
 ## RSYC 0.1.0
 
 This is a significant update to both the published RSYC models and the
