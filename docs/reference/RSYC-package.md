@@ -10,7 +10,7 @@ by species and area.
 
 Useful links:
 
-- <https://ptompalski.github.io/RSYC>
+- <https://ptompalski.github.io/RSYC/>
 
 - <https://github.com/ptompalski/RSYC>
 
@@ -20,6 +20,11 @@ Useful links:
 
 **Maintainer**: Piotr Tompalski <piotr.tompalski@NRCan-RNCan.gc.ca>
 \[copyright holder\]
+
+Authors:
+
+- Piotr Tompalski <piotr.tompalski@NRCan-RNCan.gc.ca> \[copyright
+  holder\]
 
 Other contributors:
 

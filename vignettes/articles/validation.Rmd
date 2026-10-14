@@ -28,27 +28,13 @@ plots located in its tile or ecological unit. Plots were grouped into
 older than 150 years were excluded. For each age class, the weighted mean of
 the plot observations and its
 `r scales::percent(bundle$manifest$validation$ci_level)` confidence interval
-(CI) were compared with the mean RSYC prediction for the same plots.
+(CI) were compared with the mean RSYC prediction for the same plots. See
+[Tompalski et al. (2025)](https://doi.org/10.1093/forestry/cpaf067) for more
+details about model validation.
 
-These results describe model release **`r bundle$version`**:
-`r format(counts$validated_models, big.mark = ",")` of
-`r format(counts$models, big.mark = ",")` published curves had enough plots
-to validate. The remaining curves could not be validated because too few
-suitable plots were available in their area.
-
-This page summarises the validation results and shows scatterplots for
-each response, model scale, and spatial level. The
-[Curve explorer](curve-explorer.html) maps the curves and their validation
-statistics and shows the validation data for individual curves.
 
 ## Summary statistics {.tabset}
 
-Statistics are calculated for each curve from its age-class means and then
-summarised across curves. CCC is Lin's concordance correlation coefficient,
-which measures agreement with the 1:1 line (1 = perfect agreement) and so,
-unlike R², is reduced by bias. Bias is the mean difference between the RSYC
-prediction and the observed plot mean, so positive values mean the curve
-overestimates the plots.
 
 ```{r summary-table, results = "asis"}
 summary_table <- validation_summary_table(bundle)
@@ -67,12 +53,6 @@ for (y_var in response_names) {
 
 ## Observed vs predicted
 
-Each point is one age class of one curve: the weighted mean of the plot
-observations (x axis) against the mean RSYC prediction for the same plots
-(y axis). Panels show the generic model, the coniferous and broadleaf
-models, and the species models. Species are ordered by number of points.
-AGB points with plot means of 400 Mg/ha or more are excluded, and panels
-with fewer than ten points are omitted.
 
 ```{r scatterplots, results = "asis"}
 for (y_var in names(response_names)) {

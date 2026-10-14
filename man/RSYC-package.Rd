@@ -20,6 +20,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Piotr Tompalski \email{piotr.tompalski@NRCan-RNCan.gc.ca} [copyright holder]
 
+Authors:
+\itemize{
+  \item Piotr Tompalski \email{piotr.tompalski@NRCan-RNCan.gc.ca} [copyright holder]
+}
+
 Other contributors:
 \itemize{
   \item His Majesty the King in Right of Canada, as represented by the Minister of Natural Resources Canada [copyright holder]

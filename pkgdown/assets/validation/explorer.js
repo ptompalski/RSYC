@@ -382,7 +382,6 @@
           <div class="rve-tables"></div>
         </div>
       </section>
-      <p class="rve-footer"></p>
     </div>
     <div class="rve-tooltip" hidden></div>`;
 
@@ -406,7 +405,6 @@
     validationNote: q(".rve-validation-note"),
     scatter: q(".rve-scatter"),
     tables: q(".rve-tables"),
-    footer: q(".rve-footer"),
     tooltip: q(".rve-tooltip")
   };
 
@@ -1124,13 +1122,6 @@
     await loadBundle(version);
     state = readHash();
     validateState();
-
-    const m = data.manifest;
-    els.footer.innerHTML =
-      `Model release <code>${esc(m.model_version)}</code>: ${m.counts.models.toLocaleString()} published curves, ` +
-      `${m.counts.validated_models.toLocaleString()} validated against ${esc(m.validation.reference)}. ` +
-      `Data bundle built ${esc(m.build_time.slice(0, 10))} from RSYC-Canada commit ` +
-      `<code>${esc(String(m.git_commit).slice(0, 7))}</code>.`;
 
     els.status.hidden = true;
     els.body.hidden = false;

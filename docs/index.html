@@ -44,12 +44,13 @@
 <li><a class="dropdown-item" href="articles/Prediction-examples.html">Prediction examples</a></li>
     <li><a class="dropdown-item" href="articles/Local-calibration.html">Local calibration</a></li>
     <li><a class="dropdown-item" href="articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+    <li><a class="dropdown-item" href="articles/curve-explorer.html">Yield curve explorer</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="articles/validation.html">Model validation</a></li>
-    <li><a class="dropdown-item" href="articles/validation-explorer.html">Validation explorer</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="articles/curve-explorer.html">Curve explorer</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -114,7 +115,7 @@ y = b_1 e^{-b_4 \mathrm{Age}} (1 - e^{-b_2 \mathrm{Age}})^{b_3}.
 </h3>
 <p>Estimate AGB for black spruce (<code>PICE.MAR</code>) in tile H14 at stand ages 20, 60, and 120 years:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC">RSYC</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC/">RSYC</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/predict_rsyc.html">predict_rsyc</a></span><span class="op">(</span><span class="st">"agb"</span>, <span class="st">"PICE.MAR"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">120</span><span class="op">)</span>, <span class="st">"tile"</span>, <span class="st">"H14"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 26.85001 58.32616 71.92139</span></span></code></pre></div>
 <p>To estimate total volume instead, set <code>response = "volume"</code>:</p>

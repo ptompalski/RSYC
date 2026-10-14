@@ -12,99 +12,145 @@ returns the published national curve for a given species and area. Where
 local field measurements are available — observed aboveground biomass
 (AGB) or total volume at known stand ages —
 [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
-adjusts that curve to the measured stand.
+adjusts that curve to the measured plot.
+
+RSYC curves have a nested (hierarchical) structure: each calibration
+plot is treated as a pixel nested within a tile (or within an ecological
+unit, for curves published at an ecological level). Knowing the tile in
+which the calibration plot is located is therefore a prerequisite for
+local calibration, because the tile determines which published curve,
+and which tile-level random effect, the calibration starts from. Where
+plot coordinates are known, the tile can be identified by overlaying
+them on the tile boundaries returned by `rsyc_boundaries("tile")`.
 
 The adjustment is an empirical best linear unbiased predictor (EBLUP) of
-the pixel-level random effect on the curve’s asymptote. A single level
-adjustment is estimated for the stand and substituted into the curve
-equation. The estimate is shrunk toward zero in proportion to the
-strength of the local evidence, so a curve supported by one measurement
-is adjusted conservatively, whereas a curve supported by several
-consistent measurements is adjusted more fully.
+the pixel-level random effect on the curve’s asymptote parameter.
+Because all tiles in the target population were represented in the
+fitting data, the fixed asymptote parameter and the tile-level random
+effects were obtained directly from the fitted nonlinear mixed-effects
+model and are already incorporated into the published curves. Only the
+pixel-level random effect requires calibration. A single adjustment is
+estimated for the calibration plot (assumed to coincide with pixel \\j\\
+within tile \\i\\) and substituted into the curve equation. The estimate
+is shrunk toward zero in proportion to the strength of the local
+evidence, so a curve supported by one measurement is adjusted
+conservatively, whereas a curve supported by several consistent
+measurements is adjusted more fully.
 
 ## The method
 
 ### The published curve
 
 RSYC curves were fitted as nonlinear mixed-effects models in which the
-tile- and pixel-level random effects act on the scale (asymptote)
-parameter \\\beta_1\\:
+tile- and pixel-level random effects act on \\\beta_1\\, the parameter
+associated with the maximum biomass (or volume) potential of a site,
+referred to below as the asymptote parameter:
 
 \\AGB\_{ijk} = \left(\beta_1 + b_i + b\_{ij}\right) e^{-\beta_4
 age\_{ijk}}\left(1 - e^{-\beta_2 age\_{ijk}}\right)^{\beta_3} +
 \epsilon\_{ijk}\\
 
-where \\b_i\\ is the random effect for area \\i\\, \\b\_{ij}\\ the
-random effect for pixel \\j\\ within that area, and \\\epsilon\_{ijk}\\
-the residual error. Writing the shape separately,
+where \\AGB\_{ijk}\\ is the AGB of pixel \\j\\ within tile \\i\\ at the
+\\k\\-th age \\age\_{ijk}\\, \\b_i\\ is the random effect for tile
+\\i\\, \\b\_{ij}\\ the random effect for pixel \\j\\ nested within tile
+\\i\\, and \\\epsilon\_{ijk}\\ the residual error. The random effects
+and residual errors were assumed to be independent and normally
+distributed with mean zero: \\b_i \sim N(0, \sigma^2\_{t})\\, \\b\_{ij}
+\sim N(0, \sigma^2_b)\\ and \\\epsilon\_{ijk} \sim N(0,
+\sigma^2\_\epsilon)\\. The implications of this assumption are discussed
+under [Summary and recommendations](#summary-and-recommendations). The
+remaining parameters are fixed: \\\beta_2\\ is the rate (scale)
+parameter, which determines how quickly the curve approaches its
+maximum, \\\beta_3\\ is the shape parameter, and \\\beta_4\\ controls
+the decline at older ages. Writing the age-related modifier separately,
 
 \\g(age) = e^{-\beta_4 age}\left(1 - e^{-\beta_2 age}\right)^{\beta_3}\\
 
-the curve is a **level** multiplied by a dimensionless **shape** that
-rises from 0 toward about 1. Only \\\beta_1\\ carries the random
-effects; \\\beta_2\\, \\\beta_3\\ and \\\beta_4\\ are fixed, so the
-random effects change the magnitude of the trajectory but never its
-age-dependent form.
+the curve is the **maximum biomass potential** multiplied by a
+dimensionless **age-related modifier** that rises from 0 toward about 1.
+Only \\\beta_1\\ carries the random effects; \\\beta_2\\, \\\beta_3\\
+and \\\beta_4\\ are fixed, so the random effects change the magnitude of
+the trajectory but never its age-dependent form.
 
-The `b1` coefficient published in `RSYC_models` for a given stratum is
-already the *stratum-level asymptote* \\\beta_1 + b_i\\, not the bare
-population fixed effect. (`parent_b1_random_effect` stores \\b_i\\
-separately for reference; it must not be added to `b1`.) So the
-uncalibrated trajectory returned by
-[`predict_rsyc()`](https://ptompalski.github.io/RSYC/reference/predict_rsyc.md)
-is
+From this point onward, a hat denotes a value estimated from the fitting
+data (e.g. \\\hat\beta_1\\, \\\hat b_i\\), and \\\hat g(age)\\ denotes
+the age-related modifier evaluated with the estimated \\\hat\beta_2\\,
+\\\hat\beta_3\\ and \\\hat\beta_4\\.
 
-\\AGB\_{RSYC}(age) = \left(\beta_1 + b_i\right) g(age) =
-\texttt{b1}\cdot g(age)\\
+The `b1` coefficient published in `RSYC_models` for a given tile is
+already the *tile-level asymptote parameter* \\\hat\beta_1 + \hat b_i\\,
+not the bare population fixed effect. (`parent_b1_random_effect` stores
+\\\hat b_i\\ separately for reference; it must not be added to `b1`.)
+The yield curve based on the tile-level conditional prediction, returned
+by
+[`predict_rsyc()`](https://ptompalski.github.io/RSYC/reference/predict_rsyc.md),
+is therefore
+
+\\\widehat{AGB}\_{RSYC}(age) = \left(\hat\beta_1 + \hat b_i\right) \hat
+g(age) = \texttt{b1}\cdot \hat g(age)\\
 
 ### Estimating the local random effect
 
-For a stand that was not part of model fitting, the pixel-level effect
-\\b\_{ij}\\ is not available from the fitted model and must be predicted
-from local observations. Because \\b\_{ij}\\ enters linearly through the
-scale parameter, its prediction reduces to the empirical best linear
-unbiased predictor (EBLUP) for a random coefficient. Given observations
-\\y_j\\ at ages \\age_j\\, with \\g_j = g(age_j)\\,
+For a calibration plot (represented by pixel \\j\\ within tile \\i\\)
+that was not part of model fitting, the pixel-level effect \\b\_{ij}\\
+is not available from the fitted model and must be calibrated from local
+observations. Because \\b\_{ij}\\ enters linearly through the asymptote
+parameter, its prediction reduces to the empirical best linear unbiased
+predictor (EBLUP) for a random coefficient. Given \\n\_{ij}\\
+observations \\y\_{ijk}\\ at ages \\age\_{ijk}\\, with \\m\_{ijk} = \hat
+g(age\_{ijk})\\,
 
-\\b = \frac{\sum_j g_j\left(y_j - \texttt{b1}\cdot g_j\right)} {\sum_j
-g_j^2 + \dfrac{\sigma^2\_\epsilon}{\sigma^2_b}}\\
+\\\hat b\_{ij} = \frac{\sum\_{k=1}^{n\_{ij}} m\_{ijk}\left(y\_{ijk} -
+\texttt{b1}\cdot m\_{ijk}\right)} {\sum\_{k=1}^{n\_{ij}} m\_{ijk}^2 +
+\dfrac{\hat\sigma^2\_\epsilon}{\hat\sigma^2_b}}\\
 
-where \\\sigma^2_b\\ is the pixel-level random-effect variance
-(`local_b1_var`) and \\\sigma^2\_\epsilon\\ the residual variance
-(`residual_var`) of the assigned model.
+where \\\hat\sigma^2_b\\ is the estimated pixel-level (nested within
+tile) random-effect variance (`local_b1_var`) and
+\\\hat\sigma^2\_\epsilon\\ the estimated residual variance
+(`residual_var`) of the selected model, both estimated from the fitting
+sample.
 
 Without the variance term this would be an ordinary least-squares
 estimate of the level shift, which would force the curve exactly through
-the observations. The added \\\sigma^2\_\epsilon/\sigma^2_b\\ shrinks
-the estimate toward zero, recognising that the observations themselves
-carry measurement error. The strength of that pull is summarised by the
-**shrinkage factor**
+the observations. The added \\\hat\sigma^2\_\epsilon/\hat\sigma^2_b\\
+shrinks the estimate toward zero, recognising that the observations
+themselves carry measurement error. The strength of that pull is
+summarised by the **shrinkage factor**
 
-\\\lambda = \frac{\sum_j g_j^2}{\sum_j g_j^2 +
-\dfrac{\sigma^2\_\epsilon}{\sigma^2_b}} \in \[0, 1\]\\
+\\\lambda = \frac{\sum_k m\_{ijk}^2}{\sum_k m\_{ijk}^2 +
+\dfrac{\hat\sigma^2\_\epsilon}{\hat\sigma^2_b}} \in \[0, 1\]\\
 
 Values near 1 mean the local estimate is retained almost in full; values
 near 0 mean it is pulled back to the published curve. Because
-\\\sigma^2\_\epsilon/\sigma^2_b\\ is fixed by the model, \\\lambda\\
-rises toward 1 as \\\sum_j g_j^2\\ grows — with more observations, and
-with observations at ages where \\g_j\\ is large.
+\\\hat\sigma^2\_\epsilon/\hat\sigma^2_b\\ is fixed by the fitted model,
+\\\lambda\\ rises toward 1 as \\\sum_k m\_{ijk}^2\\ grows — with more
+observations, and with observations at ages where \\\hat g(age)\\ is
+large. The formula treats the observations of a plot as independent
+given \\b\_{ij}\\, and the calibrated pixel as independent of its
+neighbours (see [Summary and
+recommendations](#summary-and-recommendations)).
 
 ### The calibrated curve
 
-The estimated effect is substituted back into the asymptote:
+The estimated effect is substituted back into the asymptote parameter:
 
-\\AGB^{cal}(age) = \left(\beta_1 + b_i + b\right) g(age) =
-\left(\texttt{b1} + b\right) g(age)\\
+\\\widehat{AGB}^{cal}(age) = \left(\hat\beta_1 + \hat b_i + \hat
+b\_{ij}\right) \hat g(age) = \left(\texttt{b1} + \hat b\_{ij}\right)
+\hat g(age)\\
 
 Equivalently, this scales the published curve by the age-independent
-ratio \\(\texttt{b1} + b)/\texttt{b1}\\, reported as `ratio_blup`. The
-two statements are the same operation written differently, since
-\\g(age)\\ cancels.
+ratio \\(\texttt{b1} + \hat b\_{ij})/\texttt{b1}\\, reported as
+`ratio_blup` (with \\\hat b\_{ij}\\ reported as `b_pixel`). The two
+statements are the same operation written differently, since \\\hat
+g(age)\\ cancels.
 
 ## Example 1: a single observation
 
-A single measurement is sufficient to adjust the asymptote. In this
-example a black spruce stand in tile H14 was measured once, at age 60:
+A single measurement is sufficient to calibrate \\\hat b\_{ij}\\,
+although the weight it receives depends on the age at which it was taken
+(see [How shrinkage depends on age](#how-shrinkage-depends-on-age)). In
+this example a black spruce plot in tile H14 was measured once, at age
+60:
 
 ``` r
 
@@ -125,9 +171,10 @@ single$ratio_blup
 #> [1] 1.38336
 ```
 
-The estimated adjustment to the asymptote is 26.2 Mg/ha, corresponding
-to a ratio of 1.38, an increase of approximately 38% relative to the
-published curve. None of the constraints described below were reached:
+The estimated adjustment to the asymptote parameter, \\\hat b\_{ij}\\,
+is 26.2 Mg/ha, corresponding to a ratio of 1.38, an increase of
+approximately 38% relative to the published curve. None of the
+constraints described below were reached:
 
 ``` r
 
@@ -260,21 +307,22 @@ H14.](Local-calibration_files/figure-html/multi-curve-1.png)
 
 The calibrated curve passes among the observations rather than through
 them, and retains the shape of the published curve. Both properties
-follow from the method: only the asymptote is adjusted, and that
-adjustment is shrunk by \\\lambda\\. Here \\\lambda \approx 0.97\\, so
-approximately 97% of the estimated departure is retained. The remainder
-reflects the model attributing part of the discrepancy to residual error
-rather than to a genuine difference in site productivity. An ordinary
-least-squares fit would reproduce the observations exactly, but would
-also propagate their measurement error to predictions at all other ages.
+follow from the method: only the asymptote parameter is adjusted, and
+that adjustment is shrunk by \\\lambda\\. Here \\\lambda \approx 0.97\\,
+so approximately 97% of the estimated departure is retained. The
+remainder reflects the model attributing part of the discrepancy to
+residual error rather than to a genuine difference in site productivity.
+An ordinary least-squares fit would reproduce the observations exactly,
+but would also propagate their measurement error to predictions at all
+other ages.
 
 ## How shrinkage depends on age
 
-Because \\\lambda\\ depends on \\\sum_j g_j^2\\, a single observation
-does not always carry the same weight. A measurement in a young stand
-sits low on the shape function (\\g \approx 0\\) and says little about
-the mature level, so it is shrunk heavily. A measurement in a mature
-stand is trusted far more:
+Because \\\lambda\\ depends on \\\sum_k m\_{ijk}^2\\, a single
+observation does not always carry the same weight. A measurement in a
+young stand sits low on the age-related modifier (\\\hat g(age) \approx
+0\\) and says little about the maximum biomass potential, so it is
+shrunk heavily. A measurement in a mature stand is trusted far more:
 
 ``` r
 
@@ -285,12 +333,12 @@ model <- subset(
 )
 variance_ratio <- model$residual_var[[1L]] / model$local_b1_var[[1L]]
 
-shape <- exp(-model$b4[[1L]] * (1:150)) *
+modifier <- exp(-model$b4[[1L]] * (1:150)) *
   (1 - exp(-model$b2[[1L]] * (1:150)))^model$b3[[1L]]
 
 shrinkage_by_age <- tibble::tibble(
   age = 1:150,
-  shrinkage_factor = shape^2 / (shape^2 + variance_ratio)
+  shrinkage_factor = modifier^2 / (modifier^2 + variance_ratio)
 )
 
 ggplot2::ggplot(
@@ -310,10 +358,22 @@ ggplot2::ggplot(
 which it was
 measured.](Local-calibration_files/figure-html/shrinkage-age-1.png)
 
+For this model, the shrinkage factor of a single observation is 0.27 at
+age 10, 0.86 at age 50 and 0.91 at age 100: it rises steeply in young
+stands and changes little after about age 50. A young stand has not yet
+expressed much of its eventual productivity potential, so a single
+young-age measurement provides little information about the asymptote
+parameter and the EBLUP is shrunk strongly toward zero. In older stands
+the development trajectory is more predictable; the same reasoning
+underlies the common use of an index age of 50 years for site index in
+Canada.
+
 Consequently the number of observations alone does not determine the
 weight given to local data: several measurements in young stands may be
-less informative about the asymptote than one measurement in a mature
-stand.
+less informative about the asymptote parameter than one measurement in a
+mature stand. When collecting data for calibration, plots in stands that
+have already expressed much of their productivity potential (e.g. older
+than about 50 years) should be preferred.
 
 ## Calibrating volume across several stands
 
@@ -425,8 +485,8 @@ ecoregions.](Local-calibration_files/figure-html/volume-plots-1.png)
 By default (`apply_limits = TRUE`) three constraints prevent implausible
 adjustments arising from extreme or sparse observations:
 
-- the local effect \\b\\ is constrained to
-  \\\pm\\`random_effect_limit_sd` \\\times\\\sigma_b\\, which at the
+- the local effect \\\hat b\_{ij}\\ is constrained to
+  \\\pm\\`random_effect_limit_sd` \\\times\\\hat\sigma_b\\, which at the
   default of 3 corresponds to the central 99.7% of the fitted
   pixel-level random-effect distribution;
 - an adjustment ratio exceeding `ratio_limit` is discarded, and the
@@ -457,3 +517,39 @@ Setting `apply_limits = FALSE` returns the unconstrained shrunk
 estimate. This is useful when quantifying how often the constraints are
 reached, but it removes the protection against unstable local fits, so
 the defaults are recommended for routine use.
+
+## Summary and recommendations
+
+Local calibration requires:
+
+- the tile (or ecological unit) in which the calibration plot is
+  located, usually derived from the plot’s XY coordinates and
+  [`rsyc_boundaries()`](https://ptompalski.github.io/RSYC/reference/rsyc_boundaries.md);
+- the species and response (`"agb"` or `"volume"`);
+- one or more local measurements with the corresponding stand ages;
+- the model parameters and variance components (\\\texttt{b1}\\,
+  \\\hat\beta_2\\, \\\hat\beta_3\\, \\\hat\beta_4\\, \\\hat\sigma^2_b\\,
+  \\\hat\sigma^2\_\epsilon\\), which
+  [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
+  takes automatically from `RSYC_models`.
+
+Calibration works best with repeated measurements of the same plot and
+with measurements taken at or after about age 50, when the stand has
+expressed much of its productivity potential. The default constraints
+should normally be kept.
+
+Several limitations should be kept in mind:
+
+- Calibration adjusts only the asymptote parameter. It re-levels the
+  published curve but cannot change its age-dependent form.
+- The pixel-level random effects were assumed to be independent. This
+  was reasonable for model fitting, because the fitting sample was
+  spaced 500 m apart, but neighbouring pixels are likely to be spatially
+  autocorrelated. The model therefore provides no basis for transferring
+  a calibration from the measured plot to adjacent pixels, and it does
+  not represent local (microsite) variation in productivity within a
+  stand.
+- Predictions for an individual pixel or plot are consequently the least
+  reliable. Because forest management decisions are usually made at
+  stand or landscape scales, predictions aggregated to those scales are
+  likely to be more reliable.

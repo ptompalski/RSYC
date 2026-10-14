@@ -37,8 +37,8 @@
 #'     `predict_age`, together with the bare-curve `value_uncalibrated`.}
 #'     \item{ratio_blup}{The multiplicative local adjustment applied to the
 #'     curve.}
-#'     \item{b_pixel}{The estimated local random effect (capped and shrunk when
-#'     `apply_limits` is `TRUE`).}
+#'     \item{b_pixel}{The estimated pixel-level random effect
+#'     \eqn{\hat b_{ij}}{b_ij_hat} (capped and shrunk when `apply_limits` is `TRUE`).}
 #'     \item{shrinkage_factor}{The shrinkage weight in `[0, 1]`; values near 0
 #'     mean weak local evidence pulled toward no adjustment.}
 #'     \item{n_obs}{Number of observations used.}
@@ -49,24 +49,34 @@
 #'
 #' @details
 #' The RSYC models are nonlinear mixed-effects models in which the tile- and
-#' pixel-level random effects act on the asymptote:
-#' \deqn{AGB_{ijk} = (\beta_1 + b_i + b_{ij})\,g(age) + \epsilon_{ijk}}
-#' The `b1` coefficient published in [RSYC_models] is the stratum-level
-#' asymptote, already equal to \eqn{\beta_1 + b_i}, so the uncalibrated
-#' trajectory is `b1 * g(age)`.
+#' pixel-level random effects act on \eqn{\beta_1}, the parameter associated
+#' with the maximum biomass (or volume) potential (the asymptote parameter):
+#' \deqn{AGB_{ijk} = (\beta_1 + b_i + b_{ij})\,g(age_{ijk}) + \epsilon_{ijk}}{AGB_ijk = (beta1 + b_i + b_ij) * g(age_ijk) + e_ijk}
+#' where \eqn{i} indexes the tile, \eqn{j} the pixel nested within the tile,
+#' \eqn{k} the age, and
+#' \eqn{g(age) = e^{-\beta_4 age}(1 - e^{-\beta_2 age})^{\beta_3}}{g(age) = exp(-beta4 * age) * (1 - exp(-beta2 * age))^beta3} is the
+#' age-related modifier. The random effects and residual errors are assumed to
+#' be independent and normally distributed with mean zero. Hats denote
+#' estimated values. The `b1` coefficient published in [RSYC_models] is the
+#' tile-level asymptote parameter, already equal to
+#' \eqn{\hat\beta_1 + \hat b_i}{beta1_hat + b_i_hat}, so the yield curve based on the tile-level
+#' conditional prediction is \eqn{\texttt{b1} \cdot \hat g(age)}{b1 * g_hat(age)}.
 #'
-#' Local calibration estimates the further pixel-level random effect
-#' \eqn{b_{ij}} conditional on the fitted model:
-#' \deqn{b = \frac{\sum_j g_j (y_j - b_1 g_j)}{\sum_j g_j^2 +
-#'   \sigma^2_\epsilon / \sigma^2_b}}
-#' where \eqn{g_j} is the unit-scale growth at age \eqn{j}, \eqn{\sigma^2_b} is
-#' the pixel-level random-effect variance, and \eqn{\sigma^2_\epsilon} is the
-#' residual variance. The \eqn{\sigma^2_\epsilon / \sigma^2_b} term shrinks weak
-#' local evidence toward no adjustment. The calibrated curve substitutes the
-#' adjusted asymptote into the same equation,
-#' \deqn{(b_1 + b)\,g(age)}
+#' Local calibration estimates the pixel-level random effect \eqn{b_{ij}} of
+#' the calibration plot (assumed to coincide with pixel \eqn{j} within tile
+#' \eqn{i}) conditional on the fitted model. Given observations \eqn{y_{ijk}}
+#' at ages \eqn{age_{ijk}}, with \eqn{m_{ijk} = \hat g(age_{ijk})}{m_ijk = g_hat(age_ijk)},
+#' \deqn{\hat b_{ij} = \frac{\sum_k m_{ijk} (y_{ijk} - \texttt{b1} \cdot
+#'   m_{ijk})}{\sum_k m_{ijk}^2 + \hat\sigma^2_\epsilon / \hat\sigma^2_b}}{b_ij_hat = sum_k m_ijk * (y_ijk - b1 * m_ijk) / (sum_k m_ijk^2 + sigma2_e_hat / sigma2_b_hat)}
+#' where \eqn{\hat\sigma^2_b}{sigma2_b_hat} is the estimated pixel-level (nested within
+#' tile) random-effect variance and \eqn{\hat\sigma^2_\epsilon}{sigma2_e_hat} is the
+#' estimated residual variance. The
+#' \eqn{\hat\sigma^2_\epsilon / \hat\sigma^2_b}{sigma2_e_hat / sigma2_b_hat} term shrinks weak local
+#' evidence toward no adjustment. The calibrated curve substitutes the adjusted
+#' asymptote parameter into the same equation,
+#' \deqn{(\texttt{b1} + \hat b_{ij})\,\hat g(age)}{(b1 + b_ij_hat) * g_hat(age)}
 #' which is equivalent to scaling the published curve by
-#' \eqn{(b_1 + b) / b_1}, reported as `ratio_blup`.
+#' \eqn{(\texttt{b1} + \hat b_{ij}) / \texttt{b1}}{(b1 + b_ij_hat) / b1}, reported as `ratio_blup`.
 #'
 #' With a single observation this becomes a one-point level anchor. The result
 #' should be read as a single-observation BLUP-anchored RSYC curve, not as a

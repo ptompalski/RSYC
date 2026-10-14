@@ -50,7 +50,9 @@ location without printing it.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-download_rsyc_boundaries()
-} # }
+# \donttest{
+# Save to a temporary folder here; omit `cache_dir` to use the default.
+path <- try(download_rsyc_boundaries(cache_dir = tempdir()))
+#> Cached RSYC ecological stratification at: K:/TEMP/Rtmp\RtmpGWLeJK/RSYC_ecostrat.gpkg
+# }
 ```

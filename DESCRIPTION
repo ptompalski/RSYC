@@ -45,4 +45,3 @@ BugReports: https://github.com/ptompalski/RSYC/issues
 Config/Needs/website: rmarkdown, jsonlite, scales, ggtext, yardstick,
     ptompalski/scatter
 Config/roxygen2/version: 8.1.0
-RoxygenNote: 7.3.3

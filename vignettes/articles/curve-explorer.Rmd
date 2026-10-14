@@ -8,31 +8,9 @@ vignette: >
 ---
 
 Use this page to browse the published RSYC yield curves and their validation
-results. Choose a response, scale, spatial level, and model, then click an
-area on the map. You can zoom with the mouse wheel and drag to pan.
+results. See [Model validation](validation.html) for more information about the validation method. 
 
-The map can be coloured by the curve asymptote (parameter b1) or by a
-validation statistic (CCC, R², bias, or RMSE). Most curves could not be
-validated because too few ground plots were available in their area; these
-are marked as not validated in the map tooltip and area list.
 
-For the selected area, the explorer shows:
-
-- the national and regional curves (black lines; regional dashed) up to age
-  150 and, if the curve was validated, the validation plot means and their
-  95% confidence intervals (red) for each 20-year age class;
-- optional curves for other models (species) available in the same area;
-- the curve parameters;
-- validation statistics for the selected curve, and a scatterplot of all
-  validated curves for the selected model and level, with the selected area
-  in red.
-
-See [Model validation](validation.html) for the validation method. Maximum
-yield in the curve table is searched up to age 300. Bias is the RSYC
-prediction minus the plot mean.
-
-The address bar records the current selection, so you can share a link to
-any view.
 
 ```{=html}
 <link rel="stylesheet" href="../validation/explorer.css">

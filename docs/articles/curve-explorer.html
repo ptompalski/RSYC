@@ -13,8 +13,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Yield curve explorer">
 </head>
@@ -79,31 +79,8 @@
     
     
 <p>Use this page to browse the published RSYC yield curves and their
-validation results. Choose a response, scale, spatial level, and model,
-then click an area on the map. You can zoom with the mouse wheel and
-drag to pan.</p>
-<p>The map can be coloured by the curve asymptote (parameter b1) or by a
-validation statistic (CCC, R², bias, or RMSE). Most curves could not be
-validated because too few ground plots were available in their area;
-these are marked as not validated in the map tooltip and area list.</p>
-<p>For the selected area, the explorer shows:</p>
-<ul>
-<li>the national and regional curves (black lines; regional dashed) up
-to age 150 and, if the curve was validated, the validation plot means
-and their 95% confidence intervals (red) for each 20-year age
-class;</li>
-<li>optional curves for other models (species) available in the same
-area;</li>
-<li>the curve parameters;</li>
-<li>validation statistics for the selected curve, and a scatterplot of
-all validated curves for the selected model and level, with the selected
-area in red.</li>
-</ul>
-<p>See <a href="validation.html">Model validation</a> for the validation
-method. Maximum yield in the curve table is searched up to age 300. Bias
-is the RSYC prediction minus the plot mean.</p>
-<p>The address bar records the current selection, so you can share a
-link to any view.</p>
+validation results. See <a href="validation.html">Model validation</a>
+for more information about the validation method.</p>
 <link rel="stylesheet" href="../validation/explorer.css">
 <div id="rsyc-curve-explorer" data-base="../validation/"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/dist/plot.umd.min.js"></script><script src="../validation/explorer.js"></script></main>
@@ -116,7 +93,7 @@ link to any view.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
