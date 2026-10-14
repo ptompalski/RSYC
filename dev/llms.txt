@@ -370,11 +370,26 @@ Model metadata and the bundled tile grid.
 
 # Articles
 
-### All vignettes
+### Using RSYC
 
-- [Local
-  calibration](https://ptompalski.github.io/RSYC/dev/articles/Local-calibration.md):
 - [Understanding the yield-curve
   data](https://ptompalski.github.io/RSYC/dev/articles/Model-parameters.md):
 - [Prediction
   examples](https://ptompalski.github.io/RSYC/dev/articles/Prediction-examples.md):
+- [Local
+  calibration](https://ptompalski.github.io/RSYC/dev/articles/Local-calibration.md):
+
+### Explore curves
+
+Browse published curves on a map, with their parameters and validation
+results.
+
+- [Yield curve
+  explorer](https://ptompalski.github.io/RSYC/dev/articles/curve-explorer.md):
+
+### Validation
+
+How well RSYC curves agree with independent ground plots.
+
+- [Model
+  validation](https://ptompalski.github.io/RSYC/dev/articles/validation.md):

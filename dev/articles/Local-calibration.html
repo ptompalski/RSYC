@@ -40,11 +40,17 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
-    <li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+<li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
     <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Model validation</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../articles/curve-explorer.html">Curve explorer</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -75,7 +81,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC">RSYC</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ptompalski.github.io/RSYC/">RSYC</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
 </h2>
@@ -83,11 +89,25 @@
 a given species and area. Where local field measurements are available —
 observed aboveground biomass (AGB) or total volume at known stand ages —
 <code><a href="../reference/calibrate_rsyc.html">calibrate_rsyc()</a></code> adjusts that curve to the measured
-stand.</p>
+plot.</p>
+<p>RSYC curves have a nested (hierarchical) structure: each calibration
+plot is treated as a pixel nested within a tile (or within an ecological
+unit, for curves published at an ecological level). Knowing the tile in
+which the calibration plot is located is therefore a prerequisite for
+local calibration, because the tile determines which published curve,
+and which tile-level random effect, the calibration starts from. Where
+plot coordinates are known, the tile can be identified by overlaying
+them on the tile boundaries returned by
+<code>rsyc_boundaries("tile")</code>.</p>
 <p>The adjustment is an empirical best linear unbiased predictor (EBLUP)
-of the pixel-level random effect on the curve’s asymptote. A single
-level adjustment is estimated for the stand and substituted into the
-curve equation. The estimate is shrunk toward zero in proportion to the
+of the pixel-level random effect on the curve’s asymptote parameter.
+Because all tiles in the target population were represented in the
+fitting data, the fixed asymptote parameter and the tile-level random
+effects were obtained directly from the fitted nonlinear mixed-effects
+model and are already incorporated into the published curves. Only the
+pixel-level random effect requires calibration. A single adjustment is
+estimated for the calibration plot (assumed to coincide with pixel <span class="math inline">\(j\)</span> within tile <span class="math inline">\(i\)</span>) and substituted into the curve
+equation. The estimate is shrunk toward zero in proportion to the
 strength of the local evidence, so a curve supported by one measurement
 is adjusted conservatively, whereas a curve supported by several
 consistent measurements is adjusted more fully.</p>
@@ -99,82 +119,111 @@ consistent measurements is adjusted more fully.</p>
 <h3 id="the-published-curve">The published curve<a class="anchor" aria-label="anchor" href="#the-published-curve"></a>
 </h3>
 <p>RSYC curves were fitted as nonlinear mixed-effects models in which
-the tile- and pixel-level random effects act on the scale (asymptote)
-parameter <span class="math inline">\(\beta_1\)</span>:</p>
+the tile- and pixel-level random effects act on <span class="math inline">\(\beta_1\)</span>, the parameter associated with
+the maximum biomass (or volume) potential of a site, referred to below
+as the asymptote parameter:</p>
 <p><span class="math display">\[AGB_{ijk} = \left(\beta_1 + b_i +
 b_{ij}\right)
 e^{-\beta_4 age_{ijk}}\left(1 - e^{-\beta_2 age_{ijk}}\right)^{\beta_3}
 + \epsilon_{ijk}\]</span></p>
-<p>where <span class="math inline">\(b_i\)</span> is the random effect
-for area <span class="math inline">\(i\)</span>, <span class="math inline">\(b_{ij}\)</span> the random effect for pixel <span class="math inline">\(j\)</span> within that area, and <span class="math inline">\(\epsilon_{ijk}\)</span> the residual error.
-Writing the shape separately,</p>
+<p>where <span class="math inline">\(AGB_{ijk}\)</span> is the AGB of
+pixel <span class="math inline">\(j\)</span> within tile <span class="math inline">\(i\)</span> at the <span class="math inline">\(k\)</span>-th age <span class="math inline">\(age_{ijk}\)</span>, <span class="math inline">\(b_i\)</span> is the random effect for tile <span class="math inline">\(i\)</span>, <span class="math inline">\(b_{ij}\)</span> the random effect for pixel <span class="math inline">\(j\)</span> nested within tile <span class="math inline">\(i\)</span>, and <span class="math inline">\(\epsilon_{ijk}\)</span> the residual error. The
+random effects and residual errors were assumed to be independent and
+normally distributed with mean zero: <span class="math inline">\(b_i
+\sim N(0, \sigma^2_{t})\)</span>, <span class="math inline">\(b_{ij}
+\sim N(0, \sigma^2_b)\)</span> and <span class="math inline">\(\epsilon_{ijk} \sim N(0,
+\sigma^2_\epsilon)\)</span>. The implications of this assumption are
+discussed under <a href="#summary-and-recommendations">Summary and
+recommendations</a>. The remaining parameters are fixed: <span class="math inline">\(\beta_2\)</span> is the rate (scale) parameter,
+which determines how quickly the curve approaches its maximum, <span class="math inline">\(\beta_3\)</span> is the shape parameter, and <span class="math inline">\(\beta_4\)</span> controls the decline at older
+ages. Writing the age-related modifier separately,</p>
 <p><span class="math display">\[g(age) = e^{-\beta_4 age}\left(1 -
 e^{-\beta_2 age}\right)^{\beta_3}\]</span></p>
-<p>the curve is a <strong>level</strong> multiplied by a dimensionless
-<strong>shape</strong> that rises from 0 toward about 1. Only <span class="math inline">\(\beta_1\)</span> carries the random effects; <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span> and <span class="math inline">\(\beta_4\)</span> are fixed, so the random effects
+<p>the curve is the <strong>maximum biomass potential</strong>
+multiplied by a dimensionless <strong>age-related modifier</strong> that
+rises from 0 toward about 1. Only <span class="math inline">\(\beta_1\)</span> carries the random effects; <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span> and <span class="math inline">\(\beta_4\)</span> are fixed, so the random effects
 change the magnitude of the trajectory but never its age-dependent
 form.</p>
+<p>From this point onward, a hat denotes a value estimated from the
+fitting data (e.g. <span class="math inline">\(\hat\beta_1\)</span>,
+<span class="math inline">\(\hat b_i\)</span>), and <span class="math inline">\(\hat g(age)\)</span> denotes the age-related
+modifier evaluated with the estimated <span class="math inline">\(\hat\beta_2\)</span>, <span class="math inline">\(\hat\beta_3\)</span> and <span class="math inline">\(\hat\beta_4\)</span>.</p>
 <p>The <code>b1</code> coefficient published in <code>RSYC_models</code>
-for a given stratum is already the <em>stratum-level asymptote</em>
-<span class="math inline">\(\beta_1 + b_i\)</span>, not the bare
-population fixed effect. (<code>parent_b1_random_effect</code> stores
-<span class="math inline">\(b_i\)</span> separately for reference; it
-must not be added to <code>b1</code>.) So the uncalibrated trajectory
-returned by <code><a href="../reference/predict_rsyc.html">predict_rsyc()</a></code> is</p>
-<p><span class="math display">\[AGB_{RSYC}(age) = \left(\beta_1 +
-b_i\right) g(age) = \texttt{b1}\cdot g(age)\]</span></p>
+for a given tile is already the <em>tile-level asymptote parameter</em>
+<span class="math inline">\(\hat\beta_1 + \hat b_i\)</span>, not the
+bare population fixed effect. (<code>parent_b1_random_effect</code>
+stores <span class="math inline">\(\hat b_i\)</span> separately for
+reference; it must not be added to <code>b1</code>.) The yield curve
+based on the tile-level conditional prediction, returned by
+<code><a href="../reference/predict_rsyc.html">predict_rsyc()</a></code>, is therefore</p>
+<p><span class="math display">\[\widehat{AGB}_{RSYC}(age) =
+\left(\hat\beta_1 + \hat b_i\right) \hat g(age)
+= \texttt{b1}\cdot \hat g(age)\]</span></p>
 </div>
 <div class="section level3">
 <h3 id="estimating-the-local-random-effect">Estimating the local random effect<a class="anchor" aria-label="anchor" href="#estimating-the-local-random-effect"></a>
 </h3>
-<p>For a stand that was not part of model fitting, the pixel-level
-effect <span class="math inline">\(b_{ij}\)</span> is not available from
-the fitted model and must be predicted from local observations. Because
-<span class="math inline">\(b_{ij}\)</span> enters linearly through the
-scale parameter, its prediction reduces to the empirical best linear
-unbiased predictor (EBLUP) for a random coefficient. Given observations
-<span class="math inline">\(y_j\)</span> at ages <span class="math inline">\(age_j\)</span>, with <span class="math inline">\(g_j = g(age_j)\)</span>,</p>
-<p><span class="math display">\[b = \frac{\sum_j g_j\left(y_j -
-\texttt{b1}\cdot g_j\right)}
-{\sum_j g_j^2 + \dfrac{\sigma^2_\epsilon}{\sigma^2_b}}\]</span></p>
-<p>where <span class="math inline">\(\sigma^2_b\)</span> is the
-pixel-level random-effect variance (<code>local_b1_var</code>) and <span class="math inline">\(\sigma^2_\epsilon\)</span> the residual variance
-(<code>residual_var</code>) of the assigned model.</p>
+<p>For a calibration plot (represented by pixel <span class="math inline">\(j\)</span> within tile <span class="math inline">\(i\)</span>) that was not part of model fitting,
+the pixel-level effect <span class="math inline">\(b_{ij}\)</span> is
+not available from the fitted model and must be calibrated from local
+observations. Because <span class="math inline">\(b_{ij}\)</span> enters
+linearly through the asymptote parameter, its prediction reduces to the
+empirical best linear unbiased predictor (EBLUP) for a random
+coefficient. Given <span class="math inline">\(n_{ij}\)</span>
+observations <span class="math inline">\(y_{ijk}\)</span> at ages <span class="math inline">\(age_{ijk}\)</span>, with <span class="math inline">\(m_{ijk} = \hat g(age_{ijk})\)</span>,</p>
+<p><span class="math display">\[\hat b_{ij} = \frac{\sum_{k=1}^{n_{ij}}
+m_{ijk}\left(y_{ijk} - \texttt{b1}\cdot m_{ijk}\right)}
+{\sum_{k=1}^{n_{ij}} m_{ijk}^2 +
+\dfrac{\hat\sigma^2_\epsilon}{\hat\sigma^2_b}}\]</span></p>
+<p>where <span class="math inline">\(\hat\sigma^2_b\)</span> is the
+estimated pixel-level (nested within tile) random-effect variance
+(<code>local_b1_var</code>) and <span class="math inline">\(\hat\sigma^2_\epsilon\)</span> the estimated
+residual variance (<code>residual_var</code>) of the selected model,
+both estimated from the fitting sample.</p>
 <p>Without the variance term this would be an ordinary least-squares
 estimate of the level shift, which would force the curve exactly through
-the observations. The added <span class="math inline">\(\sigma^2_\epsilon/\sigma^2_b\)</span> shrinks the
-estimate toward zero, recognising that the observations themselves carry
-measurement error. The strength of that pull is summarised by the
-<strong>shrinkage factor</strong></p>
-<p><span class="math display">\[\lambda = \frac{\sum_j g_j^2}{\sum_j
-g_j^2 + \dfrac{\sigma^2_\epsilon}{\sigma^2_b}}
+the observations. The added <span class="math inline">\(\hat\sigma^2_\epsilon/\hat\sigma^2_b\)</span>
+shrinks the estimate toward zero, recognising that the observations
+themselves carry measurement error. The strength of that pull is
+summarised by the <strong>shrinkage factor</strong></p>
+<p><span class="math display">\[\lambda = \frac{\sum_k m_{ijk}^2}{\sum_k
+m_{ijk}^2 + \dfrac{\hat\sigma^2_\epsilon}{\hat\sigma^2_b}}
 \in [0, 1]\]</span></p>
 <p>Values near 1 mean the local estimate is retained almost in full;
 values near 0 mean it is pulled back to the published curve. Because
-<span class="math inline">\(\sigma^2_\epsilon/\sigma^2_b\)</span> is
-fixed by the model, <span class="math inline">\(\lambda\)</span> rises
-toward 1 as <span class="math inline">\(\sum_j g_j^2\)</span> grows —
-with more observations, and with observations at ages where <span class="math inline">\(g_j\)</span> is large.</p>
+<span class="math inline">\(\hat\sigma^2_\epsilon/\hat\sigma^2_b\)</span> is
+fixed by the fitted model, <span class="math inline">\(\lambda\)</span>
+rises toward 1 as <span class="math inline">\(\sum_k m_{ijk}^2\)</span>
+grows — with more observations, and with observations at ages where
+<span class="math inline">\(\hat g(age)\)</span> is large. The formula
+treats the observations of a plot as independent given <span class="math inline">\(b_{ij}\)</span>, and the calibrated pixel as
+independent of its neighbours (see <a href="#summary-and-recommendations">Summary and
+recommendations</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="the-calibrated-curve">The calibrated curve<a class="anchor" aria-label="anchor" href="#the-calibrated-curve"></a>
 </h3>
-<p>The estimated effect is substituted back into the asymptote:</p>
-<p><span class="math display">\[AGB^{cal}(age) = \left(\beta_1 + b_i +
-b\right) g(age)
-= \left(\texttt{b1} + b\right) g(age)\]</span></p>
+<p>The estimated effect is substituted back into the asymptote
+parameter:</p>
+<p><span class="math display">\[\widehat{AGB}^{cal}(age) =
+\left(\hat\beta_1 + \hat b_i + \hat b_{ij}\right) \hat g(age)
+= \left(\texttt{b1} + \hat b_{ij}\right) \hat g(age)\]</span></p>
 <p>Equivalently, this scales the published curve by the age-independent
-ratio <span class="math inline">\((\texttt{b1} +
-b)/\texttt{b1}\)</span>, reported as <code>ratio_blup</code>. The two
-statements are the same operation written differently, since <span class="math inline">\(g(age)\)</span> cancels.</p>
+ratio <span class="math inline">\((\texttt{b1} + \hat
+b_{ij})/\texttt{b1}\)</span>, reported as <code>ratio_blup</code> (with
+<span class="math inline">\(\hat b_{ij}\)</span> reported as
+<code>b_pixel</code>). The two statements are the same operation written
+differently, since <span class="math inline">\(\hat g(age)\)</span>
+cancels.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="example-1-a-single-observation">Example 1: a single observation<a class="anchor" aria-label="anchor" href="#example-1-a-single-observation"></a>
 </h2>
-<p>A single measurement is sufficient to adjust the asymptote. In this
-example a black spruce stand in tile H14 was measured once, at age
-60:</p>
+<p>A single measurement is sufficient to calibrate <span class="math inline">\(\hat b_{ij}\)</span>, although the weight it
+receives depends on the age at which it was taken (see <a href="#how-shrinkage-depends-on-age">How shrinkage depends on age</a>).
+In this example a black spruce plot in tile H14 was measured once, at
+age 60:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calibrate_rsyc.html">calibrate_rsyc</a></span><span class="op">(</span></span>
 <span>  response <span class="op">=</span> <span class="st">"agb"</span>,</span>
@@ -191,10 +240,10 @@ example a black spruce stand in tile H14 was measured once, at age
 <span><span class="co">#&gt; [1] 26.15953</span></span>
 <span><span class="va">single</span><span class="op">$</span><span class="va">ratio_blup</span></span>
 <span><span class="co">#&gt; [1] 1.38336</span></span></code></pre></div>
-<p>The estimated adjustment to the asymptote is 26.2 Mg/ha,
-corresponding to a ratio of 1.38, an increase of approximately 38%
-relative to the published curve. None of the constraints described below
-were reached:</p>
+<p>The estimated adjustment to the asymptote parameter, <span class="math inline">\(\hat b_{ij}\)</span>, is 26.2 Mg/ha, corresponding
+to a ratio of 1.38, an increase of approximately 38% relative to the
+published curve. None of the constraints described below were
+reached:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  random_effect <span class="op">=</span> <span class="va">single</span><span class="op">$</span><span class="va">random_effect_limited</span>,</span>
@@ -308,8 +357,8 @@ retained.</p>
 <p><img src="Local-calibration_files/figure-html/multi-curve-1.png" class="r-plt" alt="Published and calibrated AGB curves fitted to five scattered observations in tile H14." width="672"></p>
 <p>The calibrated curve passes among the observations rather than
 through them, and retains the shape of the published curve. Both
-properties follow from the method: only the asymptote is adjusted, and
-that adjustment is shrunk by <span class="math inline">\(\lambda\)</span>. Here <span class="math inline">\(\lambda \approx 0.97\)</span>, so approximately
+properties follow from the method: only the asymptote parameter is
+adjusted, and that adjustment is shrunk by <span class="math inline">\(\lambda\)</span>. Here <span class="math inline">\(\lambda \approx 0.97\)</span>, so approximately
 97% of the estimated departure is retained. The remainder reflects the
 model attributing part of the discrepancy to residual error rather than
 to a genuine difference in site productivity. An ordinary least-squares
@@ -319,11 +368,12 @@ their measurement error to predictions at all other ages.</p>
 <div class="section level2">
 <h2 id="how-shrinkage-depends-on-age">How shrinkage depends on age<a class="anchor" aria-label="anchor" href="#how-shrinkage-depends-on-age"></a>
 </h2>
-<p>Because <span class="math inline">\(\lambda\)</span> depends on <span class="math inline">\(\sum_j g_j^2\)</span>, a single observation does
-not always carry the same weight. A measurement in a young stand sits
-low on the shape function (<span class="math inline">\(g \approx
-0\)</span>) and says little about the mature level, so it is shrunk
-heavily. A measurement in a mature stand is trusted far more:</p>
+<p>Because <span class="math inline">\(\lambda\)</span> depends on <span class="math inline">\(\sum_k m_{ijk}^2\)</span>, a single observation
+does not always carry the same weight. A measurement in a young stand
+sits low on the age-related modifier (<span class="math inline">\(\hat
+g(age) \approx 0\)</span>) and says little about the maximum biomass
+potential, so it is shrunk heavily. A measurement in a mature stand is
+trusted far more:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
 <span>  <span class="va">RSYC_models</span>,</span>
@@ -332,12 +382,12 @@ heavily. A measurement in a mature stand is trusted far more:</p>
 <span><span class="op">)</span></span>
 <span><span class="va">variance_ratio</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="va">residual_var</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">model</span><span class="op">$</span><span class="va">local_b1_var</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">$</span><span class="va">b4</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span></span>
+<span><span class="va">modifier</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">$</span><span class="va">b4</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span></span>
 <span>  <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">$</span><span class="va">b2</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="va">model</span><span class="op">$</span><span class="va">b3</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">shrinkage_by_age</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  age <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">150</span>,</span>
-<span>  shrinkage_factor <span class="op">=</span> <span class="va">shape</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">shape</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">variance_ratio</span><span class="op">)</span></span>
+<span>  shrinkage_factor <span class="op">=</span> <span class="va">modifier</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">modifier</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">variance_ratio</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
@@ -352,10 +402,21 @@ heavily. A measurement in a mature stand is trusted far more:</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Local-calibration_files/figure-html/shrinkage-age-1.png" class="r-plt" alt="Shrinkage factor for a single observation as a function of the age at which it was measured." width="672"></p>
+<p>For this model, the shrinkage factor of a single observation is 0.27
+at age 10, 0.86 at age 50 and 0.91 at age 100: it rises steeply in young
+stands and changes little after about age 50. A young stand has not yet
+expressed much of its eventual productivity potential, so a single
+young-age measurement provides little information about the asymptote
+parameter and the EBLUP is shrunk strongly toward zero. In older stands
+the development trajectory is more predictable; the same reasoning
+underlies the common use of an index age of 50 years for site index in
+Canada.</p>
 <p>Consequently the number of observations alone does not determine the
 weight given to local data: several measurements in young stands may be
-less informative about the asymptote than one measurement in a mature
-stand.</p>
+less informative about the asymptote parameter than one measurement in a
+mature stand. When collecting data for calibration, plots in stands that
+have already expressed much of their productivity potential (e.g. older
+than about 50 years) should be preferred.</p>
 </div>
 <div class="section level2">
 <h2 id="calibrating-volume-across-several-stands">Calibrating volume across several stands<a class="anchor" aria-label="anchor" href="#calibrating-volume-across-several-stands"></a>
@@ -460,9 +521,9 @@ paths.</p>
 prevent implausible adjustments arising from extreme or sparse
 observations:</p>
 <ul>
-<li>the local effect <span class="math inline">\(b\)</span> is
+<li>the local effect <span class="math inline">\(\hat b_{ij}\)</span> is
 constrained to <span class="math inline">\(\pm\)</span><code>random_effect_limit_sd</code>
-<span class="math inline">\(\times\,\sigma_b\)</span>, which at the
+<span class="math inline">\(\times\,\hat\sigma_b\)</span>, which at the
 default of 3 corresponds to the central 99.7% of the fitted pixel-level
 random-effect distribution;</li>
 <li>an adjustment ratio exceeding <code>ratio_limit</code> is discarded,
@@ -489,6 +550,43 @@ examples above required any of them. Imposing a deliberately restrictive
 shrunk estimate. This is useful when quantifying how often the
 constraints are reached, but it removes the protection against unstable
 local fits, so the defaults are recommended for routine use.</p>
+</div>
+<div class="section level2">
+<h2 id="summary-and-recommendations">Summary and recommendations<a class="anchor" aria-label="anchor" href="#summary-and-recommendations"></a>
+</h2>
+<p>Local calibration requires:</p>
+<ul>
+<li>the tile (or ecological unit) in which the calibration plot is
+located, usually derived from the plot’s XY coordinates and
+<code><a href="../reference/rsyc_boundaries.html">rsyc_boundaries()</a></code>;</li>
+<li>the species and response (<code>"agb"</code> or
+<code>"volume"</code>);</li>
+<li>one or more local measurements with the corresponding stand
+ages;</li>
+<li>the model parameters and variance components (<span class="math inline">\(\texttt{b1}\)</span>, <span class="math inline">\(\hat\beta_2\)</span>, <span class="math inline">\(\hat\beta_3\)</span>, <span class="math inline">\(\hat\beta_4\)</span>, <span class="math inline">\(\hat\sigma^2_b\)</span>, <span class="math inline">\(\hat\sigma^2_\epsilon\)</span>), which
+<code><a href="../reference/calibrate_rsyc.html">calibrate_rsyc()</a></code> takes automatically from
+<code>RSYC_models</code>.</li>
+</ul>
+<p>Calibration works best with repeated measurements of the same plot
+and with measurements taken at or after about age 50, when the stand has
+expressed much of its productivity potential. The default constraints
+should normally be kept.</p>
+<p>Several limitations should be kept in mind:</p>
+<ul>
+<li>Calibration adjusts only the asymptote parameter. It re-levels the
+published curve but cannot change its age-dependent form.</li>
+<li>The pixel-level random effects were assumed to be independent. This
+was reasonable for model fitting, because the fitting sample was spaced
+500 m apart, but neighbouring pixels are likely to be spatially
+autocorrelated. The model therefore provides no basis for transferring a
+calibration from the measured plot to adjacent pixels, and it does not
+represent local (microsite) variation in productivity within a
+stand.</li>
+<li>Predictions for an individual pixel or plot are consequently the
+least reliable. Because forest management decisions are usually made at
+stand or landscape scales, predictions aggregated to those scales are
+likely to be more reliable.</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -109,8 +109,8 @@ A list with the components:
 
 - b_pixel:
 
-  The estimated local random effect (capped and shrunk when
-  `apply_limits` is `TRUE`).
+  The estimated pixel-level random effect \\\hat b\_{ij}\\ (capped and
+  shrunk when `apply_limits` is `TRUE`).
 
 - shrinkage_factor:
 
@@ -132,23 +132,35 @@ A list with the components:
 ## Details
 
 The RSYC models are nonlinear mixed-effects models in which the tile-
-and pixel-level random effects act on the asymptote: \$\$AGB\_{ijk} =
-(\beta_1 + b_i + b\_{ij})\\g(age) + \epsilon\_{ijk}\$\$ The `b1`
+and pixel-level random effects act on \\\beta_1\\, the parameter
+associated with the maximum biomass (or volume) potential (the asymptote
+parameter): \$\$AGB\_{ijk} = (\beta_1 + b_i + b\_{ij})\\g(age\_{ijk}) +
+\epsilon\_{ijk}\$\$ where \\i\\ indexes the tile, \\j\\ the pixel nested
+within the tile, \\k\\ the age, and \\g(age) = e^{-\beta_4 age}(1 -
+e^{-\beta_2 age})^{\beta_3}\\ is the age-related modifier. The random
+effects and residual errors are assumed to be independent and normally
+distributed with mean zero. Hats denote estimated values. The `b1`
 coefficient published in
 [RSYC_models](https://ptompalski.github.io/RSYC/dev/reference/RSYC_models.md)
-is the stratum-level asymptote, already equal to \\\beta_1 + b_i\\, so
-the uncalibrated trajectory is `b1 * g(age)`.
+is the tile-level asymptote parameter, already equal to \\\hat\beta_1 +
+\hat b_i\\, so the yield curve based on the tile-level conditional
+prediction is \\\texttt{b1} \cdot \hat g(age)\\.
 
-Local calibration estimates the further pixel-level random effect
-\\b\_{ij}\\ conditional on the fitted model: \$\$b = \frac{\sum_j g_j
-(y_j - b_1 g_j)}{\sum_j g_j^2 + \sigma^2\_\epsilon / \sigma^2_b}\$\$
-where \\g_j\\ is the unit-scale growth at age \\j\\, \\\sigma^2_b\\ is
-the pixel-level random-effect variance, and \\\sigma^2\_\epsilon\\ is
-the residual variance. The \\\sigma^2\_\epsilon / \sigma^2_b\\ term
-shrinks weak local evidence toward no adjustment. The calibrated curve
-substitutes the adjusted asymptote into the same equation, \$\$(b_1 +
-b)\\g(age)\$\$ which is equivalent to scaling the published curve by
-\\(b_1 + b) / b_1\\, reported as `ratio_blup`.
+Local calibration estimates the pixel-level random effect \\b\_{ij}\\ of
+the calibration plot (assumed to coincide with pixel \\j\\ within tile
+\\i\\) conditional on the fitted model. Given observations \\y\_{ijk}\\
+at ages \\age\_{ijk}\\, with \\m\_{ijk} = \hat g(age\_{ijk})\\, \$\$\hat
+b\_{ij} = \frac{\sum_k m\_{ijk} (y\_{ijk} - \texttt{b1} \cdot
+m\_{ijk})}{\sum_k m\_{ijk}^2 + \hat\sigma^2\_\epsilon /
+\hat\sigma^2_b}\$\$ where \\\hat\sigma^2_b\\ is the estimated
+pixel-level (nested within tile) random-effect variance and
+\\\hat\sigma^2\_\epsilon\\ is the estimated residual variance. The
+\\\hat\sigma^2\_\epsilon / \hat\sigma^2_b\\ term shrinks weak local
+evidence toward no adjustment. The calibrated curve substitutes the
+adjusted asymptote parameter into the same equation, \$\$(\texttt{b1} +
+\hat b\_{ij})\\\hat g(age)\$\$ which is equivalent to scaling the
+published curve by \\(\texttt{b1} + \hat b\_{ij}) / \texttt{b1}\\,
+reported as `ratio_blup`.
 
 With a single observation this becomes a one-point level anchor. The
 result should be read as a single-observation BLUP-anchored RSYC curve,

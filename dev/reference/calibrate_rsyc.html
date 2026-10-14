@@ -34,10 +34,16 @@ as a multiplicative ratio to the selected national curve."><meta name="robots" c
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
-    <li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
     <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Model validation</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/curve-explorer.html">Curve explorer</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -161,8 +167,8 @@ falls back to the bare curve. Only used when <code>apply_limits</code> is <code>
 curve.</p></dd>
 
 <dt>b_pixel</dt>
-<dd><p>The estimated local random effect (capped and shrunk when
-<code>apply_limits</code> is <code>TRUE</code>).</p></dd>
+<dd><p>The estimated pixel-level random effect
+\(\hat b_{ij}\) (capped and shrunk when <code>apply_limits</code> is <code>TRUE</code>).</p></dd>
 
 <dt>shrinkage_factor</dt>
 <dd><p>The shrinkage weight in <code>[0, 1]</code>; values near 0
@@ -183,23 +189,33 @@ indicating whether each safeguard altered the result.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The RSYC models are nonlinear mixed-effects models in which the tile- and
-pixel-level random effects act on the asymptote:
-$$AGB_{ijk} = (\beta_1 + b_i + b_{ij})\,g(age) + \epsilon_{ijk}$$
-The <code>b1</code> coefficient published in <a href="RSYC_models.html">RSYC_models</a> is the stratum-level
-asymptote, already equal to \(\beta_1 + b_i\), so the uncalibrated
-trajectory is <code>b1 * g(age)</code>.</p>
-<p>Local calibration estimates the further pixel-level random effect
-\(b_{ij}\) conditional on the fitted model:
-$$b = \frac{\sum_j g_j (y_j - b_1 g_j)}{\sum_j g_j^2 +
-  \sigma^2_\epsilon / \sigma^2_b}$$
-where \(g_j\) is the unit-scale growth at age \(j\), \(\sigma^2_b\) is
-the pixel-level random-effect variance, and \(\sigma^2_\epsilon\) is the
-residual variance. The \(\sigma^2_\epsilon / \sigma^2_b\) term shrinks weak
-local evidence toward no adjustment. The calibrated curve substitutes the
-adjusted asymptote into the same equation,
-$$(b_1 + b)\,g(age)$$
+pixel-level random effects act on \(\beta_1\), the parameter associated
+with the maximum biomass (or volume) potential (the asymptote parameter):
+$$AGB_{ijk} = (\beta_1 + b_i + b_{ij})\,g(age_{ijk}) + \epsilon_{ijk}$$
+where \(i\) indexes the tile, \(j\) the pixel nested within the tile,
+\(k\) the age, and
+\(g(age) = e^{-\beta_4 age}(1 - e^{-\beta_2 age})^{\beta_3}\) is the
+age-related modifier. The random effects and residual errors are assumed to
+be independent and normally distributed with mean zero. Hats denote
+estimated values. The <code>b1</code> coefficient published in <a href="RSYC_models.html">RSYC_models</a> is the
+tile-level asymptote parameter, already equal to
+\(\hat\beta_1 + \hat b_i\), so the yield curve based on the tile-level
+conditional prediction is \(\texttt{b1} \cdot \hat g(age)\).</p>
+<p>Local calibration estimates the pixel-level random effect \(b_{ij}\) of
+the calibration plot (assumed to coincide with pixel \(j\) within tile
+\(i\)) conditional on the fitted model. Given observations \(y_{ijk}\)
+at ages \(age_{ijk}\), with \(m_{ijk} = \hat g(age_{ijk})\),
+$$\hat b_{ij} = \frac{\sum_k m_{ijk} (y_{ijk} - \texttt{b1} \cdot
+  m_{ijk})}{\sum_k m_{ijk}^2 + \hat\sigma^2_\epsilon / \hat\sigma^2_b}$$
+where \(\hat\sigma^2_b\) is the estimated pixel-level (nested within
+tile) random-effect variance and \(\hat\sigma^2_\epsilon\) is the
+estimated residual variance. The
+\(\hat\sigma^2_\epsilon / \hat\sigma^2_b\) term shrinks weak local
+evidence toward no adjustment. The calibrated curve substitutes the adjusted
+asymptote parameter into the same equation,
+$$(\texttt{b1} + \hat b_{ij})\,\hat g(age)$$
 which is equivalent to scaling the published curve by
-\((b_1 + b) / b_1\), reported as <code>ratio_blup</code>.</p>
+\((\texttt{b1} + \hat b_{ij}) / \texttt{b1}\), reported as <code>ratio_blup</code>.</p>
 <p>With a single observation this becomes a one-point level anchor. The result
 should be read as a single-observation BLUP-anchored RSYC curve, not as a
 local growth trajectory learned from the data.</p>

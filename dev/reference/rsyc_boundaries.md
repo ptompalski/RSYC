@@ -43,9 +43,15 @@ source ID fields through the requested level.
 ## Examples
 
 ``` r
-tiles <- rsyc_boundaries("tile")
-if (FALSE) { # \dontrun{
-download_rsyc_boundaries()
-districts <- rsyc_boundaries("ecodistrict")
-} # }
+if (requireNamespace("sf", quietly = TRUE)) {
+  tiles <- rsyc_boundaries("tile")
+}
+# \donttest{
+if (requireNamespace("sf", quietly = TRUE)) {
+  cache <- tempdir()
+  if (!inherits(try(download_rsyc_boundaries(cache_dir = cache)), "try-error")) {
+    districts <- rsyc_boundaries("ecodistrict", cache_dir = cache)
+  }
+}
+# }
 ```

@@ -13,15 +13,14 @@ Source:
 [`inst/CITATION`](https://github.com/ptompalski/RSYC/blob/dev/inst/CITATION)
 
 Tompalski, P. (2026). RSYC R package. R package version 0.2.0. Available
-at https://ptompalski.github.io/RSYC, https://github.com/ptompalski/RSYC
+at https://ptompalski.github.io/RSYC/
 
     @Manual{,
       title = {RSYC R package},
       author = {Piotr Tompalski},
       year = {2026},
       note = {Version 0.2.0},
-      url = {https://ptompalski.github.io/RSYC,
-    https://github.com/ptompalski/RSYC},
+      url = {https://ptompalski.github.io/RSYC/},
     }
 
 Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C.
@@ -47,7 +46,7 @@ https://doi.org/10.1016/j.foreco.2024.121894
       title = {Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data},
       author = {Piotr Tompalski and Michael A. Wulder and Joanne C. White and Txomin Hermosilla and Jose Riofrío and Werner A. Kurz},
       journal = {Forest Ecology and Management},
-      number = {561},
+      volume = {561},
       pages = {121894},
       year = {2024},
       doi = {10.1016/j.foreco.2024.121894},
