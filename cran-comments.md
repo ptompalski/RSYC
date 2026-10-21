@@ -4,6 +4,12 @@
 
 * This is a new submission.
 
+## Resubmission
+
+* Replaced the relative file link `vignettes/articles/Prediction-examples.Rmd`
+  in README.md with the full pkgdown URL, since the article is not included in
+  the package tarball.
+
 ## Notes for CRAN
 
 * The ecological-boundary GeoPackage (~15 MB) is not included in the package.

@@ -227,7 +227,7 @@ curve_predictions |>
 
 <img src="man/figures/README-curve-plot-1.png" alt="RSYC yield curves by stand age for three species and tile combinations."  />
 
-See [Prediction examples](vignettes/articles/Prediction-examples.Rmd)
+See [Prediction examples](https://ptompalski.github.io/RSYC/articles/Prediction-examples.html)
 for a longer walkthrough, including model-availability checks.
 
 ### Find available curves
