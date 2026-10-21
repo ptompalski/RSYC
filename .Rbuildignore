@@ -23,6 +23,8 @@
 ^RSYC\.Rcheck$
 ^.*\.tar\.gz$
 ^cran-comments\.md$
+^handoff\.md$
+^RSYC_package_description\.md$
 ^CRAN-SUBMISSION$
 ^inst/extdata/RSYC_ecostrat\.gpkg$
 ^man/figures/TileIndex\.png$

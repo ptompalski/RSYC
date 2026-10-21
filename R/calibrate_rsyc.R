@@ -83,8 +83,10 @@
 #' local growth trajectory learned from the data.
 #'
 #' @references
-#' Tompalski, P. et al. (2025). National remote sensing-derived aboveground
-#' biomass yield curves for Canada.
+#' Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., and White, J.C.
+#' (2025). National remote sensing-derived aboveground biomass yield curves
+#' for Canada. *Forestry: An International Journal of Forest Research*.
+#' \doi{10.1093/forestry/cpaf067}
 #'
 #' @examples
 #' # One observation for a tile model selected by tile ID.

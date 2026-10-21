@@ -41,7 +41,7 @@
 #' Ecozone codes 5, 6, and 10 are ambiguous and must instead be supplied as a
 #' subdivision name or path.
 #'
-#' @examples
+#' @examplesIf requireNamespace("sf", quietly = TRUE)
 #' tile_dataset <- build_rsyc_dataset(
 #'   response = "agb",
 #'   species = c("PICE.MAR", "POPU.TRE"),

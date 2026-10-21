@@ -6,7 +6,7 @@
 \alias{RSYC-package}
 \title{RSYC: Remote Sensing-Derived Yield Curves for Canada}
 \description{
-Provides published remote sensing-based yield curves for aboveground biomass and total volume across Canada. Models are available for 150 km tiles and four levels of Canada's ecological land classification. Functions help users estimate yield at a given stand age and find curves by species and area.
+Provides published remote sensing-based yield curves for aboveground biomass and total volume across Canada, as described in Tompalski et al. (2024) \doi{10.1016/j.foreco.2024.121894} and Tompalski et al. (2025) \doi{10.1093/forestry/cpaf067}. Models are available for 150 km tiles and four levels of Canada's ecological land classification. Functions help users find curves by species and area, estimate yield at a given stand age, calibrate curves to local observations, and build spatial yield-curve datasets.
 }
 \seealso{
 Useful links:

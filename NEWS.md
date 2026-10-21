@@ -47,6 +47,8 @@
   hierarchy identifiers preserved.
 * Boundary builds now record source and output checksums and validate complete,
   one-to-one coverage of published national model strata.
+* `download_rsyc_boundaries()` now downloads from the immutable GitHub release
+  asset `ecostrat-v2` instead of a development-branch file.
 
 ## Documentation
 

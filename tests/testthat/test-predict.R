@@ -137,6 +137,8 @@ test_that("regional scale is not exposed by prediction", {
 })
 
 test_that("documented tibble application patterns work", {
+  skip_if_not_installed("dplyr")
+  skip_if_not_installed("purrr")
   inputs <- tibble::tribble(
     ~response, ~species,     ~age, ~strata_level, ~strata_id,
     "agb",     "PICE.MAR",    20, "tile",        "H14",

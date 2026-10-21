@@ -1,8 +1,8 @@
 .rsyc_ecostrat_filename <- "RSYC_ecostrat.gpkg"
-# Temporary development URL. Replace with an immutable release/tag asset when
-# boundary v2 is published.
+# Immutable data-only release asset. Publish rebuilt boundaries under a new tag
+# and update both this URL and `.rsyc_ecostrat_sha256`.
 .rsyc_ecostrat_url <- paste0(
-  "https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/",
+  "https://github.com/ptompalski/RSYC/releases/download/ecostrat-v2/",
   .rsyc_ecostrat_filename
 )
 

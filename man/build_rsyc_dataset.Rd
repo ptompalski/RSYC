@@ -71,6 +71,7 @@ Ecozone codes 5, 6, and 10 are ambiguous and must instead be supplied as a
 subdivision name or path.
 }
 \examples{
+\dontshow{if (requireNamespace("sf", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 tile_dataset <- build_rsyc_dataset(
   response = "agb",
   species = c("PICE.MAR", "POPU.TRE"),
@@ -80,5 +81,5 @@ tile_dataset <- build_rsyc_dataset(
 )
 tile_dataset$spatial
 tile_dataset$curves
-
+\dontshow{\}) # examplesIf}
 }
