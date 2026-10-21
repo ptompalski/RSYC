@@ -73,7 +73,8 @@ test_that("upstream model IDs and UTF-8 strata are preserved", {
     "lac_peribonka_hills"
   )
   expect_true(id %in% RSYC_models$model_id)
-  expect_true(any(grepl("Peribonka", iconv(RSYC_models$strata_id, to = "ASCII//TRANSLIT"))))
+  expect_true(any(grepl("P\u00e9ribonka", RSYC_models$strata_id, fixed = TRUE)))
+  expect_true(all(validUTF8(RSYC_models$strata_id)))
 })
 
 test_that("documented ecozone IDs retain one-to-many name mappings", {
