@@ -223,7 +223,7 @@ curve_predictions |>
 combinations.](reference/figures/README-curve-plot-1.png)
 
 See [Prediction
-examples](https://ptompalski.github.io/RSYC/dev/vignettes/articles/Prediction-examples.Rmd)
+examples](https://ptompalski.github.io/RSYC/articles/Prediction-examples.html)
 for a longer walkthrough, including model-availability checks.
 
 ### Find available curves
