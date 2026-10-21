@@ -1,16 +1,44 @@
 # Package index
 
-## All functions
+## Predict yield and build datasets
 
-- [`RSYC_params`](https://ptompalski.github.io/RSYC/reference/RSYC_params.md)
-  : Parameters for the RSYC models
-- [`RSYC_tiles`](https://ptompalski.github.io/RSYC/reference/RSYC_tiles.md)
-  : RSYC Tile Grid (150 × 150 km)
+Estimate yield curves and combine predictions with spatial data.
+
 - [`predict_rsyc()`](https://ptompalski.github.io/RSYC/reference/predict_rsyc.md)
-  : Predict Aboveground Biomass Using RSYC models
+  : Estimate Biomass or Volume from an RSYC Yield Curve
+- [`calibrate_rsyc()`](https://ptompalski.github.io/RSYC/reference/calibrate_rsyc.md)
+  **\[experimental\]** : Calibrate an RSYC Yield Curve with Local
+  Observations
+- [`build_rsyc_dataset()`](https://ptompalski.github.io/RSYC/reference/build_rsyc_dataset.md)
+  : Build an RSYC Spatial Yield-Curve Dataset
+
+## Discover available models
+
+Find published curves, species, and geographic strata.
+
+- [`available_rsyc_models()`](https://ptompalski.github.io/RSYC/reference/available_rsyc_models.md)
+  : List Published RSYC Models
+- [`rsyc_species()`](https://ptompalski.github.io/RSYC/reference/rsyc_species.md)
+  : List Species Available in RSYC Models
+- [`rsyc_strata()`](https://ptompalski.github.io/RSYC/reference/rsyc_strata.md)
+  : List Areas Available in RSYC Models
 - [`species_codes()`](https://ptompalski.github.io/RSYC/reference/species_codes.md)
   : List Available Species Codes and Names
-- [`species_in_tile()`](https://ptompalski.github.io/RSYC/reference/species_in_tile.md)
-  : List Available Species for a Given Tile
-- [`tiles_for_species()`](https://ptompalski.github.io/RSYC/reference/tiles_for_species.md)
-  : List Available Tiles for a Given Species
+
+## Access spatial boundaries
+
+Download and read the polygons associated with RSYC models.
+
+- [`rsyc_boundaries()`](https://ptompalski.github.io/RSYC/reference/rsyc_boundaries.md)
+  : Read RSYC Boundary Maps
+- [`download_rsyc_boundaries()`](https://ptompalski.github.io/RSYC/reference/download_rsyc_boundaries.md)
+  : Download RSYC Ecological Boundaries
+
+## Package datasets
+
+Model metadata and the bundled tile grid.
+
+- [`RSYC_models`](https://ptompalski.github.io/RSYC/reference/RSYC_models.md)
+  : Published RSYC Yield-Curve Data
+- [`RSYC_tiles`](https://ptompalski.github.io/RSYC/reference/RSYC_tiles.md)
+  : RSYC Tile Grid (150 x 150 km)

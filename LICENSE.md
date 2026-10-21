@@ -1,3 +1,14 @@
+# RSYC license
+
+Unless otherwise noted, source code in the `RSYC` R package is Crown
+Copyright, Government of Canada, and is distributed under the GNU
+General Public License, version 3 or later.
+
+Copyright (C) 2025 His Majesty the King in Right of Canada, as
+represented by the Minister of Natural Resources Canada.
+
+------------------------------------------------------------------------
+
 # GNU General Public License
 
 *Version 3, 29 June 2007*  

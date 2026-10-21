@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package index"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package index"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RSYC</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,9 +24,17 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Model parameters</a></li>
-    <li><a class="dropdown-item" href="../articles/RSYC-tiles---interactive-map.html">RSYC tiles - interactive map</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Model-parameters.html">Understanding the yield-curve data</a></li>
+    <li><a class="dropdown-item" href="../articles/Prediction-examples.html">Prediction examples</a></li>
+    <li><a class="dropdown-item" href="../articles/Local-calibration.html">Local calibration</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Model validation</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/curve-explorer.html">Curve explorer</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ptompalski/RSYC/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -42,9 +50,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="predict-yield-and-build-datasets">Predict yield and build datasets<a class="anchor" aria-label="anchor" href="#predict-yield-and-build-datasets"></a></h2>
 
-
+      <div class="section-desc"><p>Estimate yield curves and combine predictions with spatial data.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -53,24 +61,54 @@
 
       <dl><dt>
 
-          <code><a href="RSYC_params.html">RSYC_params</a></code>
-
-        </dt>
-        <dd>Parameters for the RSYC models</dd>
-
-        <dt>
-
-          <code><a href="RSYC_tiles.html">RSYC_tiles</a></code>
-
-        </dt>
-        <dd>RSYC Tile Grid (150 × 150 km)</dd>
-
-        <dt>
-
           <code><a href="predict_rsyc.html">predict_rsyc()</a></code>
 
         </dt>
-        <dd>Predict Aboveground Biomass Using RSYC models</dd>
+        <dd>Estimate Biomass or Volume from an RSYC Yield Curve</dd>
+
+        <dt>
+
+          <code><a href="calibrate_rsyc.html">calibrate_rsyc()</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+        </dt>
+        <dd>Calibrate an RSYC Yield Curve with Local Observations</dd>
+
+        <dt>
+
+          <code><a href="build_rsyc_dataset.html">build_rsyc_dataset()</a></code>
+
+        </dt>
+        <dd>Build an RSYC Spatial Yield-Curve Dataset</dd>
+      </dl></div><div class="section level2">
+      <h2 id="discover-available-models">Discover available models<a class="anchor" aria-label="anchor" href="#discover-available-models"></a></h2>
+
+      <div class="section-desc"><p>Find published curves, species, and geographic strata.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="available_rsyc_models.html">available_rsyc_models()</a></code>
+
+        </dt>
+        <dd>List Published RSYC Models</dd>
+
+        <dt>
+
+          <code><a href="rsyc_species.html">rsyc_species()</a></code>
+
+        </dt>
+        <dd>List Species Available in RSYC Models</dd>
+
+        <dt>
+
+          <code><a href="rsyc_strata.html">rsyc_strata()</a></code>
+
+        </dt>
+        <dd>List Areas Available in RSYC Models</dd>
 
         <dt>
 
@@ -78,22 +116,55 @@
 
         </dt>
         <dd>List Available Species Codes and Names</dd>
+      </dl></div><div class="section level2">
+      <h2 id="access-spatial-boundaries">Access spatial boundaries<a class="anchor" aria-label="anchor" href="#access-spatial-boundaries"></a></h2>
+
+      <div class="section-desc"><p>Download and read the polygons associated with RSYC models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="rsyc_boundaries.html">rsyc_boundaries()</a></code>
+
+        </dt>
+        <dd>Read RSYC Boundary Maps</dd>
 
         <dt>
 
-          <code><a href="species_in_tile.html">species_in_tile()</a></code>
+          <code><a href="download_rsyc_boundaries.html">download_rsyc_boundaries()</a></code>
 
         </dt>
-        <dd>List Available Species for a Given Tile</dd>
+        <dd>Download RSYC Ecological Boundaries</dd>
+      </dl></div><div class="section level2">
+      <h2 id="package-datasets">Package datasets<a class="anchor" aria-label="anchor" href="#package-datasets"></a></h2>
+
+      <div class="section-desc"><p>Model metadata and the bundled tile grid.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="RSYC_models.html">RSYC_models</a></code>
+
+        </dt>
+        <dd>Published RSYC Yield-Curve Data</dd>
 
         <dt>
 
-          <code><a href="tiles_for_species.html">tiles_for_species()</a></code>
+          <code><a href="RSYC_tiles.html">RSYC_tiles</a></code>
 
         </dt>
-        <dd>List Available Tiles for a Given Species</dd>
+        <dd>RSYC Tile Grid (150 x 150 km)</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -101,7 +172,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

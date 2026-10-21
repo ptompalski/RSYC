@@ -1,6 +1,7 @@
-# Pipe operator
+# Pass a Result to the Next Step
 
-See `magrittr::%>%` for details.
+`%>%` passes the result on its left to the function on its right. See
+`magrittr::%>%` for more examples.
 
 ## Usage
 
@@ -12,12 +13,12 @@ lhs %>% rhs
 
 - lhs:
 
-  A value or the magrittr placeholder.
+  The result to pass forward.
 
 - rhs:
 
-  A function call using the magrittr semantics.
+  The next function to run.
 
 ## Value
 
-The result of calling `rhs(lhs)`.
+The result from the function on the right.

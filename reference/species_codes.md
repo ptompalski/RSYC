@@ -1,36 +1,61 @@
 # List Available Species Codes and Names
 
-This function returns a data frame of species codes and their
-corresponding species names used in the RSYC model set. It arranges
-species codes alphabetically, but promotes the meta-categories
-`"Generic"`, `"Broadleaf"`, and `"Coniferous"` to the top of the list.
+List the species codes and common names represented in the published
+RSYC curves. Broad groups are listed first, followed by individual
+species.
 
 ## Usage
 
 ``` r
-species_codes()
+species_codes(response = NULL, strata_level = NULL)
 ```
+
+## Arguments
+
+- response:
+
+  Forest measure to include: `"agb"` for aboveground biomass or
+  `"volume"` for total volume. By default, both are included.
+
+- strata_level:
+
+  Type of area to include. By default, all types are included.
 
 ## Value
 
-A tibble with two columns: `SpeciesCode` and `SpeciesName`.
+A table with the species code and common name.
 
 ## Examples
 
 ``` r
 species_codes()
-#> # A tibble: 30 × 2
+#> # A tibble: 32 × 2
 #>    SpeciesCode SpeciesName  
-#>    <fct>       <chr>        
-#>  1 Generic     Generic      
-#>  2 Broadleaf   Broadleaf    
-#>  3 Coniferous  Coniferous   
+#>    <chr>       <chr>        
+#>  1 generic     Generic      
+#>  2 coniferous  Coniferous   
+#>  3 broadleaf   Broadleaf    
 #>  4 ABIE.AMA    Amabilis fir 
 #>  5 ABIE.BAL    Balsam fir   
 #>  6 ABIE.LAS    Subalpine fir
 #>  7 ACER.RUB    Red maple    
 #>  8 ACER.SAH    Sugar maple  
-#>  9 BETU.ALL    Yellow birch 
-#> 10 BETU.PAP    White birch  
-#> # ℹ 20 more rows
+#>  9 ALNU.RUB    Red alder    
+#> 10 BETU.ALL    Yellow birch 
+#> # ℹ 22 more rows
+species_codes(response = "volume", strata_level = "ecoregion")
+#> # A tibble: 31 × 2
+#>    SpeciesCode SpeciesName  
+#>    <chr>       <chr>        
+#>  1 generic     Generic      
+#>  2 coniferous  Coniferous   
+#>  3 broadleaf   Broadleaf    
+#>  4 ABIE.AMA    Amabilis fir 
+#>  5 ABIE.BAL    Balsam fir   
+#>  6 ABIE.LAS    Subalpine fir
+#>  7 ACER.RUB    Red maple    
+#>  8 ACER.SAH    Sugar maple  
+#>  9 ALNU.RUB    Red alder    
+#> 10 BETU.ALL    Yellow birch 
+#> # ℹ 21 more rows
 ```
