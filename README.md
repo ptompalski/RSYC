@@ -3,8 +3,10 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/RSYC)](https://CRAN.R-project.org/package=RSYC)
 [![Codecov test
-coverage](https://codecov.io/gh/ptompalski/RSYC/branch/dev/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/dev)
+coverage](https://codecov.io/gh/ptompalski/RSYC/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/main)
 <!-- badges: end -->
 
 RSYC provides published yield curves for aboveground biomass (AGB,
@@ -59,9 +61,16 @@ asked to estimate outside this age range.
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+install.packages("RSYC")
+```
+
+Or install the development version from GitHub:
+
 ``` r
 # install.packages("remotes")
-# Development version with model release v20260923:
 remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
@@ -227,7 +236,8 @@ curve_predictions |>
 
 <img src="man/figures/README-curve-plot-1.png" alt="RSYC yield curves by stand age for three species and tile combinations."  />
 
-See [Prediction examples](https://ptompalski.github.io/RSYC/articles/Prediction-examples.html)
+See [Prediction
+examples](https://ptompalski.github.io/RSYC/articles/Prediction-examples.html)
 for a longer walkthrough, including model-availability checks.
 
 ### Find available curves

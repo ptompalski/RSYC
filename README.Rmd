@@ -8,7 +8,8 @@ always_allow_html: true
 # RSYC: Remote Sensing-Based Yield Curves for Canada
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/ptompalski/RSYC/branch/dev/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/dev)
+[![CRAN status](https://www.r-pkg.org/badges/version/RSYC)](https://CRAN.R-project.org/package=RSYC)
+[![Codecov test coverage](https://codecov.io/gh/ptompalski/RSYC/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ptompalski/RSYC/tree/main)
 <!-- badges: end -->
 
 ```{r, include=FALSE}
@@ -62,9 +63,16 @@ estimate outside this age range.
 
 ## Installation
 
+Install the released version from CRAN:
+
+```r
+install.packages("RSYC")
+```
+
+Or install the development version from GitHub:
+
 ```r
 # install.packages("remotes")
-# Development version with model release v20260923:
 remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
