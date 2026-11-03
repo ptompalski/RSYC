@@ -29,7 +29,7 @@ volume models for tiles and ecological strata.
   [RSYC_tiles.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_tiles.gpkg)
 
 - **Ecological strata:**
-  [RSYC_ecostrat.gpkg](https://raw.githubusercontent.com/ptompalski/RSYC/dev/inst/extdata/RSYC_ecostrat.gpkg)
+  [RSYC_ecostrat.gpkg](https://github.com/ptompalski/RSYC/releases/download/ecostrat-v2/RSYC_ecostrat.gpkg)
 
 The RSYC models predict aboveground biomass (AGB) or total volume as a
 function of stand age:
@@ -48,10 +48,18 @@ asked to estimate outside this age range.
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+
+install.packages("RSYC")
+```
+
+Or install the development version from GitHub:
+
 ``` r
 
 # install.packages("remotes")
-# Development version with model release v20260923:
 remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
@@ -223,7 +231,7 @@ curve_predictions |>
 combinations.](reference/figures/README-curve-plot-1.png)
 
 See [Prediction
-examples](https://ptompalski.github.io/RSYC/vignettes/articles/Prediction-examples.Rmd)
+examples](https://ptompalski.github.io/RSYC/articles/Prediction-examples.html)
 for a longer walkthrough, including model-availability checks.
 
 ### Find available curves

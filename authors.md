@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ptompalski/RSYC/blob/ecostrat-v2/inst/CITATION)
+[`inst/CITATION`](https://github.com/ptompalski/RSYC/blob/main/inst/CITATION)
 
 Tompalski, P. (2026). RSYC R package. R package version 0.2.0. Available
 at https://ptompalski.github.io/RSYC/

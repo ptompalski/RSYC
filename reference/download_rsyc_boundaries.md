@@ -53,6 +53,6 @@ location without printing it.
 # \donttest{
 # Save to a temporary folder here; omit `cache_dir` to use the default.
 path <- try(download_rsyc_boundaries(cache_dir = tempdir()))
-#> Cached RSYC ecological stratification at: /tmp/RtmpmCVEMX/RSYC_ecostrat.gpkg
+#> Cached RSYC ecological stratification at: /tmp/RtmpiYOM7x/RSYC_ecostrat.gpkg
 # }
 ```
