@@ -1,39 +1,58 @@
-#' Parameters for the RSYC models
+#' Published RSYC Yield-Curve Data
 #'
+#' A table containing one row for each published remote sensing-based yield
+#' curve. It includes aboveground biomass and total-volume curves fitted across
+#' Canada and within individual regions. Curves are available for tiles and
+#' four levels of Canada's ecological land classification.
 #'
-#' A data frame with 1892 rows and 97 columns:
+#' @format A table with 27,208 rows and 42 columns:
 #' \describe{
-#'   \item{TileID}{Tile identified}
-#'   \item{SpeciesCode, SpeciesName}{Species}
-#'   \item{b1, b2, b3, b4}{model parameters}
-#'   ...
+#'   \item{model_id, model_version}{Unique name for the curve and the RSYC
+#'   release in which it was published.}
+#'   \item{response, response_units}{Forest measure (`agb` or `volume`) and its
+#'   units.}
+#'   \item{strata_type, strata_level, strata_id}{Type and name of the area
+#'   represented by the curve.}
+#'   \item{ecozone_id, ecoprovince_id, ecoregion_id, ecodistrict_id}{Raw
+#'   identifiers for the four levels of the ecological hierarchy.
+#'   `ecoprovince_id` is stored as character; the other three are integers.
+#'   Fields above the row's ecological level, and all four fields for tile
+#'   rows, may be missing.}
+#'   \item{scale, region_id}{Whether the curve was fitted across Canada or
+#'   within a region, and the region name where applicable.}
+#'   \item{species, model_group}{Species code or broad species group.}
+#'   \item{equation, age_min, age_max}{Curve equation and age range. Published
+#'   RSYC curves were fitted for stand ages 1 to 150 years.}
+#'   \item{b1, b2, b3, b4}{Chapman-Richards curve coefficients.}
+#'   \item{b1_se, b2_se, b3_se, b4_se, sigma}{Measures of uncertainty around
+#'   the fitted curve.}
+#'   \item{parent_b1_random_effect, parent_b1_var, local_b1_var, residual_var}{
+#'   Variance components and parent effects used by local calibration and
+#'   retained for model provenance.}
+#'   \item{has_cor_struct, has_var_struct, component_ok, component_message}{
+#'   Checks recorded while each curve was fitted.}
+#'   \item{n_obs, n_units, converged, singular_or_boundary, fit_ok, publish_ok,
+#'   model_message}{Number of observations and forest units, together with
+#'   checks used to decide whether the curve was suitable for publication.}
 #' }
-
-"RSYC_params"
-
-
-#' RSYC Tile Grid (150 × 150 km)
 #'
-#' A spatial layer defining the 150 × 150 km tiles used in the development of
-#' the Remote Sensing Yield Curves (RSYC). Each polygon represents one tile
-#' for which yield curves were developed. The layer can be used to identify the
-#' models to use in given location.
-#'
-#' @format An `sf` object with one feature per tile and the following attribute:
-#' \describe{
-#'   \item{TileID}{Unique identifier of the 150 × 150 km tile (character).}
-#' }
+#' @source RSYC-Canada model products, version `v20260923`, upstream Git commit
+#'   `c799aba24b5d99a6a7953a4dcab1dd73b0925c2c`; source RDS SHA-256
+#'   `193ebfc1f3279ffc278d84c917d206b4b4bcaeae95f38acf25d9c84a040bd1d5`.
 #'
 #' @examples
-#' \dontrun{
-#'   # Path to the RSYC_tiles within the installed package
-#'   gpkg <- system.file("extdata", "RSYC_tiles.gpkg", package = "RSYC")
+#' subset(
+#'   RSYC_models,
+#'   response == "volume" & strata_level == "ecozone" & species == "PICE.MAR"
+#' )
+"RSYC_models"
+
+#' RSYC Tile Grid (150 x 150 km)
 #'
-#'   # Read with sf
-#'   library(sf)
-#'   RSYC_tiles <- st_read(gpkg, quiet = TRUE)
-#'   plot(st_geometry(RSYC_tiles))
-#' }
+#' A model-aligned GeoPackage containing one polygon or multipolygon for each
+#' of the 385 tile IDs used by the v20260923 national RSYC models. The path can
+#' be obtained with `system.file("extdata", "RSYC_tiles.gpkg", package =
+#' "RSYC")` and read with `sf::st_read()`.
 #'
 #' @name RSYC_tiles
 NULL

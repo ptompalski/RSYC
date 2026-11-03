@@ -1,9 +1,15 @@
-meta <- packageDescription("RSYC")
-year <- format(Sys.Date(), "%Y")
+year <- sub("-.*", "", if (!is.null(meta[["Date/Publication"]])) {
+  meta[["Date/Publication"]]
+} else if (!is.null(meta$Date)) {
+  meta$Date
+} else {
+  "2026"
+})
+url <- "https://ptompalski.github.io/RSYC/"
 
 
 citHeader(
-  "To cite the RSYC package and related paper, please use both references below:"
+  "To cite the RSYC package and related paper, please use the references below:"
 )
 
 ## 1. Software citation (auto version)
@@ -16,15 +22,14 @@ bibentry(
     email = "piotr.tompalski@nrcan-rncan.gc.ca",
     role = c("aut", "cre")
   ),
-  year = year, #substr(meta$Packaged, 1, 4), # or manually specify "2025"
+  year = year,
   note = sprintf("Version %s", meta$Version),
-  url = meta$URL,
+  url = url,
   textVersion = sprintf(
     "Tompalski, P. (%s). RSYC R package. R package version %s. Available at %s",
     year,
-    # substr(meta$Packaged, 1, 4),
     meta$Version,
-    meta$URL
+    url
   )
 )
 
@@ -45,7 +50,7 @@ bibentry(
   textVersion = "Tompalski, P., Hermosilla, T., Baral, S.K., Wulder, M.A., White, J.C. 2025. National remote sensing-derived aboveground biomass yield curves for Canada. Forestry: An International Journal Of Forest Research. https://doi.org/10.1093/forestry/cpaf067"
 )
 
-## 2. Paper citation
+## 3. Paper citation
 bibentry(
   bibtype = "Article",
   title = "Developing aboveground biomass yield curves for dominant boreal tree species from time series remote sensing data",
@@ -58,7 +63,7 @@ bibentry(
     person("Werner A.", "Kurz")
   ),
   journal = "Forest Ecology and Management",
-  number = "561",
+  volume = "561",
   pages = "121894",
   year = "2024",
   doi = "10.1016/j.foreco.2024.121894",

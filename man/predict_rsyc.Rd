@@ -2,28 +2,73 @@
 % Please edit documentation in R/predict_rsyc.R
 \name{predict_rsyc}
 \alias{predict_rsyc}
-\title{Predict Aboveground Biomass Using RSYC models}
+\title{Estimate Biomass or Volume from an RSYC Yield Curve}
 \usage{
-predict_rsyc(tile_id, age, species)
+predict_rsyc(response, species, age, strata_level, strata_id)
 }
 \arguments{
-\item{tile_id}{A character string specifying the tile ID. Must match a tile for which RSYC models are available.}
+\item{response}{Forest measure to estimate: \code{"agb"} for aboveground biomass
+or \code{"volume"} for total volume.}
 
-\item{age}{A numeric vector of stand ages (in years) at which to predict biomass. All values must be positive.}
+\item{species}{A species code or broad group such as \code{"coniferous"}.
+Uppercase and lowercase letters are treated the same.}
 
-\item{species}{A character string specifying the species code (e.g., \code{"PICE.MAR"} for black spruce). Use \code{species_codes()} for a full list of species names and codes.}
+\item{age}{One or more stand ages in years.}
+
+\item{strata_level}{Type of area: \code{"tile"}, \code{"ecozone"},
+\code{"ecoprovince"}, \code{"ecoregion"}, or \code{"ecodistrict"}.}
+
+\item{strata_id}{Tile ID, ecological area name or path, or ecological code.
+Tile IDs, names, and paths are matched ignoring case.
+A single area name can be used when it occurs only once. If the name occurs
+in several places, use the full sequence of area names shown by
+\code{rsyc_strata()}. Numeric values are interpreted as codes for the selected
+ecological \code{strata_level}; quote ecoprovince codes such as \code{"10.1"}.}
 }
 \value{
-A numeric vector of predicted AGB values (e.g., in tonnes per hectare) corresponding to the input ages.
+One estimated value for each stand age. AGB is in Mg/ha and volume
+is in m3/ha.
 }
 \description{
-This function generates aboveground biomass (AGB) predictions using remote sensing-based yield curves (RSYC) for a given species, stand age, and tile.
-It retrieves the model parameters associated with the specified tile and species and applies a four-parameter Chapman-Richards growth function.
+Estimate aboveground biomass or total volume at one or more stand ages. The
+curve is selected by species and area.
 }
 \details{
-The RSYC models were developed using data from 0 to 150 years. If any ages provided exceed 150, a warning is issued because predictions represent extrapolations beyond the model's calibration range and may be unreliable.
+This function currently uses curves fitted across Canada. The curves were
+fitted for stand ages 1 through 150 years. The function warns when asked to
+estimate outside this age range; age 0 is also allowed as the start of a
+curve. When a full ecological area sequence is needed, use \code{/} between the
+ecozone, ecoprovince, ecoregion, and ecodistrict names.
+
+Ecological codes are resolved only within the selected \code{strata_level}.
+Ecozone codes 5, 6, and 10 each identify two named package subdivisions and
+therefore cannot select a single curve; use the desired subdivision name.
 }
 \examples{
-predict_rsyc(tile_id = "J11", age = 1:100, species = "PICE.MAR")
+# Select a tile model with its tile ID.
+predict_rsyc("agb", "PICE.MAR", c(20, 60, 120), "tile", "H14")
+
+# Select an ecozone model with its unique name.
+predict_rsyc(
+  response = "volume",
+  species = "PICE.MAR",
+  age = c(20, 60, 120),
+  strata_level = "ecozone",
+  strata_id = "Boreal Shield East"
+)
+
+# Select an ecoregion model with its numeric ecological code.
+predict_rsyc(
+  "agb", "PICE.MAR", c(40, 80), "ecoregion", 198
+)
+
+# A full hierarchy path is an unambiguous ecological selector.
+predict_rsyc(
+  "agb", "PICE.MAR", 80, "ecodistrict",
+  paste(
+    "Atlantic Maritime", "Fundy Uplands", "Annapolis-Minas Lowlands",
+    "Windsor Lowlands", sep = "/"
+  )
+)
 
 }

@@ -1,0 +1,292 @@
+{
+  "bundle": "rsyc-validation-web",
+  "schema_version": 1,
+  "model_version": "v20260709",
+  "build_time": "2026-10-09T15:14:27-0700",
+  "git_commit": "a79423e687c25a3233cf6890da1e1dbf076842e1",
+  "equation": "b1 * exp(-b4 * age) * (1 - exp(-b2 * age))^b3",
+  "age_range": {
+    "min": 1,
+    "max": 600
+  },
+  "response_units": {
+    "agb": "Mg/ha",
+    "volume": "m3/ha"
+  },
+  "table_format": "Columnar JSON: each table is an object of equal-length arrays ({field: [values]}); row i is the i-th element of every array.",
+  "species": [
+    {
+      "species": "ABIE.AMA",
+      "species_name": "Amabilis fir",
+      "scientific_name": "Abies amabilis"
+    },
+    {
+      "species": "ABIE.BAL",
+      "species_name": "Balsam fir",
+      "scientific_name": "Abies balsamea"
+    },
+    {
+      "species": "ABIE.LAS",
+      "species_name": "Subalpine fir",
+      "scientific_name": "Abies lasiocarpa"
+    },
+    {
+      "species": "ACER.RUB",
+      "species_name": "Red maple",
+      "scientific_name": "Acer rubrum"
+    },
+    {
+      "species": "ACER.SAH",
+      "species_name": "Sugar maple",
+      "scientific_name": "Acer saccharum"
+    },
+    {
+      "species": "ALNU.RUB",
+      "species_name": "Red alder",
+      "scientific_name": "Alnus rubra"
+    },
+    {
+      "species": "BETU.ALL",
+      "species_name": "Yellow birch",
+      "scientific_name": "Betula alleghaniensis"
+    },
+    {
+      "species": "BETU.PAP",
+      "species_name": "White birch",
+      "scientific_name": "Betula papyrifera"
+    },
+    {
+      "species": "FRAX.NIG",
+      "species_name": "Black ash",
+      "scientific_name": "Fraxinus nigra"
+    },
+    {
+      "species": "LARI.LAR",
+      "species_name": "Tamarack",
+      "scientific_name": "Larix laricina"
+    },
+    {
+      "species": "LARI.OCC",
+      "species_name": "Western larch",
+      "scientific_name": "Larix occidentalis"
+    },
+    {
+      "species": "PICE.ABI",
+      "species_name": "Norway spruce",
+      "scientific_name": "Picea abies"
+    },
+    {
+      "species": "PICE.ENG",
+      "species_name": "Engelmann spruce",
+      "scientific_name": "Picea engelmannii"
+    },
+    {
+      "species": "PICE.GLA",
+      "species_name": "White spruce",
+      "scientific_name": "Picea glauca"
+    },
+    {
+      "species": "PICE.MAR",
+      "species_name": "Black spruce",
+      "scientific_name": "Picea mariana"
+    },
+    {
+      "species": "PICE.RUB",
+      "species_name": "Red spruce",
+      "scientific_name": "Picea rubens"
+    },
+    {
+      "species": "PICE.SIT",
+      "species_name": "Sitka spruce",
+      "scientific_name": "Picea sitchensis"
+    },
+    {
+      "species": "PINU.BAN",
+      "species_name": "Jack pine",
+      "scientific_name": "Pinus banksiana"
+    },
+    {
+      "species": "PINU.CON",
+      "species_name": "Lodgepole pine",
+      "scientific_name": "Pinus contorta"
+    },
+    {
+      "species": "PINU.PON",
+      "species_name": "Ponderosa pine",
+      "scientific_name": "Pinus ponderosa"
+    },
+    {
+      "species": "PINU.RES",
+      "species_name": "Red pine",
+      "scientific_name": "Pinus resinosa"
+    },
+    {
+      "species": "PINU.STR",
+      "species_name": "Eastern white pine",
+      "scientific_name": "Pinus strobus"
+    },
+    {
+      "species": "POPU.BAL",
+      "species_name": "Balsam poplar",
+      "scientific_name": "Populus balsamifera"
+    },
+    {
+      "species": "POPU.GRA",
+      "species_name": "Largetooth aspen",
+      "scientific_name": "Populus grandidentata"
+    },
+    {
+      "species": "POPU.TRE",
+      "species_name": "Trembling aspen",
+      "scientific_name": "Populus tremuloides"
+    },
+    {
+      "species": "PSEU.MEN",
+      "species_name": "Douglas-fir",
+      "scientific_name": "Pseudotsuga menziesii"
+    },
+    {
+      "species": "THUJ.OCC",
+      "species_name": "Eastern white-cedar",
+      "scientific_name": "Thuja occidentalis"
+    },
+    {
+      "species": "THUJ.PLI",
+      "species_name": "Western redcedar",
+      "scientific_name": "Thuja plicata"
+    },
+    {
+      "species": "TSUG.HET",
+      "species_name": "Western hemlock",
+      "scientific_name": "Tsuga heterophylla"
+    },
+    {
+      "species": "TSUG.MER",
+      "species_name": "Mountain hemlock",
+      "scientific_name": "Tsuga mertensiana"
+    },
+    {
+      "species": "broadleaf",
+      "species_name": "Broadleaf",
+      "scientific_name": null
+    },
+    {
+      "species": "coniferous",
+      "species_name": "Coniferous",
+      "scientific_name": null
+    },
+    {
+      "species": "generic",
+      "species_name": "Generic",
+      "scientific_name": null
+    }
+  ],
+  "validation": {
+    "reference": "MAGPlot (weighted plot means)",
+    "age_class_width": 20,
+    "age_class_note": "age_class is the lower bound of a 20-year class [age_class, age_class + 20); plots older than 150 years are excluded.",
+    "ci_level": 0.95
+  },
+  "counts": {
+    "models": 28391,
+    "validated_models": 5966,
+    "validation_age_rows": 40192
+  },
+  "geometry": {
+    "crs": "EPSG:4326",
+    "join": "parameter_level + strata_id",
+    "simplify_tolerance_m": {
+      "ecozones": 5000,
+      "ecoprovinces": 4000,
+      "ecoregions": 3000,
+      "ecodistricts": 2000,
+      "tiles": 500
+    },
+    "layers": {
+      "ecozone": "geometry/ecozones.geojson",
+      "ecoprovince": "geometry/ecoprovinces.geojson",
+      "ecoregion": "geometry/ecoregions.geojson",
+      "ecodistrict": "geometry/ecodistricts.geojson",
+      "tile": "geometry/tiles.geojson"
+    }
+  },
+  "files": [
+    {
+      "id": "models",
+      "path": "models.json",
+      "size_bytes": 8471253
+    },
+    {
+      "id": "validation_stats",
+      "path": "validation_stats.json",
+      "size_bytes": 376437
+    },
+    {
+      "id": "validation_age",
+      "path": "validation_age.json",
+      "size_bytes": 2193988
+    },
+    {
+      "id": "ecozone",
+      "path": "geometry/ecozones.geojson",
+      "size_bytes": 60378
+    },
+    {
+      "id": "ecoprovince",
+      "path": "geometry/ecoprovinces.geojson",
+      "size_bytes": 434031
+    },
+    {
+      "id": "ecoregion",
+      "path": "geometry/ecoregions.geojson",
+      "size_bytes": 641114
+    },
+    {
+      "id": "ecodistrict",
+      "path": "geometry/ecodistricts.geojson",
+      "size_bytes": 1437369
+    },
+    {
+      "id": "tile",
+      "path": "geometry/tiles.geojson",
+      "size_bytes": 170823
+    }
+  ],
+  "fields": {
+    "models": {
+      "key": "Integer row id; join key for the other tables in this bundle.",
+      "model_id": "Stable model identifier (matches the RSYC package).",
+      "parameter_level": "tile, ecozone, ecoprovince, ecoregion, ecodistrict.",
+      "strata_id": "Spatial unit id; matches geometry strata_id.",
+      "region_id": "Regional model region (regional scale only).",
+      "model_group": "generic, species_group or species.",
+      "species": "Species code; names are in manifest `species`.",
+      "b1,b2,b3,b4": "Curve parameters for `equation`.",
+      "sigma": "Residual standard deviation of the fitted model.",
+      "n_fit_obs,n_fit_units": "Fitting observations and pixels.",
+      "validated": "TRUE when the model has validation results."
+    },
+    "validation_stats": {
+      "n_plots": "MAGPlot plot records used for validation.",
+      "rsq": "R-squared of age-class means.",
+      "md": "Mean difference (prediction - observed), response units.",
+      "rmd": "Relative mean difference (%).",
+      "rmse": "Root mean square error, response units.",
+      "rrmse": "Relative RMSE (%).",
+      "mape": "Mean absolute percentage error (%).",
+      "tier": "Reliability tier, when available.",
+      "n_age_classes": "Age classes with validation data.",
+      "prop_inside_ci": "Share of age classes where pred_mean is inside CI."
+    },
+    "validation_age": {
+      "age_class": "Lower bound of the age class (years).",
+      "n_plots": "Plots in the age class.",
+      "obs_mean": "Weighted observed mean.",
+      "obs_mean_unweighted": "Unweighted observed mean.",
+      "obs_sd": "Observed standard deviation.",
+      "ci_lower,ci_upper": "95% confidence interval of obs_mean.",
+      "pred_mean": "Mean RSYC prediction for the plots in the age class.",
+      "inside_ci": "pred_mean within [ci_lower, ci_upper]."
+    }
+  }
+}

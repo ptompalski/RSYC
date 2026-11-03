@@ -2,19 +2,20 @@
 % Please edit documentation in R/utils-pipe.R
 \name{\%>\%}
 \alias{\%>\%}
-\title{Pipe operator}
+\title{Pass a Result to the Next Step}
 \usage{
 lhs \%>\% rhs
 }
 \arguments{
-\item{lhs}{A value or the magrittr placeholder.}
+\item{lhs}{The result to pass forward.}
 
-\item{rhs}{A function call using the magrittr semantics.}
+\item{rhs}{The next function to run.}
 }
 \value{
-The result of calling \code{rhs(lhs)}.
+The result from the function on the right.
 }
 \description{
-See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+\verb{\%>\%} passes the result on its left to the function on its right. See
+\code{magrittr::\link[magrittr:pipe]{\%>\%}} for more examples.
 }
 \keyword{internal}

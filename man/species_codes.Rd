@@ -4,17 +4,24 @@
 \alias{species_codes}
 \title{List Available Species Codes and Names}
 \usage{
-species_codes()
+species_codes(response = NULL, strata_level = NULL)
+}
+\arguments{
+\item{response}{Forest measure to include: \code{"agb"} for aboveground biomass
+or \code{"volume"} for total volume. By default, both are included.}
+
+\item{strata_level}{Type of area to include. By default, all types are
+included.}
 }
 \value{
-A tibble with two columns: \code{SpeciesCode} and \code{SpeciesName}.
+A table with the species code and common name.
 }
 \description{
-This function returns a data frame of species codes and their corresponding species names
-used in the RSYC model set. It arranges species codes alphabetically, but promotes the
-meta-categories \code{"Generic"}, \code{"Broadleaf"}, and \code{"Coniferous"} to the top of the list.
+List the species codes and common names represented in the published RSYC
+curves. Broad groups are listed first, followed by individual species.
 }
 \examples{
 species_codes()
+species_codes(response = "volume", strata_level = "ecoregion")
 
 }

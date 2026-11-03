@@ -1,0 +1,2 @@
+# Validation web bundles: exported data, keep byte-identical and skip diffs
+pkgdown/assets/validation/v*/** -text -diff

@@ -1,0 +1,21 @@
+---
+title: "Yield curve explorer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Yield curve explorer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Use this page to browse the published RSYC yield curves and their validation
+results. See [Model validation](validation.html) for more information about the validation method. 
+
+
+
+```{=html}
+<link rel="stylesheet" href="../validation/explorer.css">
+<div id="rsyc-curve-explorer" data-base="../validation/"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/dist/plot.umd.min.js"></script>
+<script src="../validation/explorer.js"></script>
+```

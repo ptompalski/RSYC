@@ -1,0 +1,88 @@
+---
+title: "Model validation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Model validation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dpi = 96,
+  fig.align = "center",
+  out.width = "100%"
+)
+source(file.path("..", "..", "pkgdown", "validation-helpers.R"))
+bundle <- load_validation_bundle()
+counts <- bundle$manifest$counts
+```
+
+RSYC yield curves were validated against independent ground plots from
+`r bundle$manifest$validation$reference`. Each curve was compared with the
+plots located in its tile or ecological unit. Plots were grouped into
+`r bundle$manifest$validation$age_class_width`-year age classes, and plots
+older than 150 years were excluded. For each age class, the weighted mean of
+the plot observations and its
+`r scales::percent(bundle$manifest$validation$ci_level)` confidence interval
+(CI) were compared with the mean RSYC prediction for the same plots. See
+[Tompalski et al. (2025)](https://doi.org/10.1093/forestry/cpaf067) for more
+details about model validation.
+
+
+## Summary statistics {.tabset}
+
+
+```{r summary-table, results = "asis"}
+summary_table <- validation_summary_table(bundle)
+for (y_var in response_names) {
+  for (scale in scale_labels) {
+    cat("###", y_var, "–", scale, "\n\n")
+    summary_table %>%
+      filter(Response == y_var, Scale == scale) %>%
+      select(-Response, -Scale) %>%
+      knitr::kable(digits = c(0, 0, 0, 2, 2, 1, 1)) %>%
+      print()
+    cat("\n\n")
+  }
+}
+```
+
+## Observed vs predicted
+
+
+```{r scatterplots, results = "asis"}
+for (y_var in names(response_names)) {
+  cat("###", response_names[[y_var]], "\n\n")
+  for (scale in names(scale_labels)) {
+    cat("####", scale_labels[[scale]], "models {.tabset}\n\n")
+    for (level in spatial_levels) {
+      points <- validation_points(bundle, y_var, scale, level)
+      if (nrow(points) == 0) {
+        next
+      }
+      n_panels <- n_distinct(points$species_name)
+      cat("#####", spatial_labels[[level]], "\n\n")
+      cat(
+        sprintf(
+          "%s age-class points from %s curves. [Map these curves](%s) in the curve explorer.\n\n",
+          format(nrow(points), big.mark = ","),
+          format(n_distinct(points$key), big.mark = ","),
+          explorer_link(y_var, scale, level, metric = "ccc")
+        )
+      )
+      knit_figure(
+        validation_scatterplot(points, y_var),
+        height = figure_height(n_panels, 1.87, 3.75),
+        alt = sprintf(
+          "Scatterplots of %s RSYC predictions against plot means for %s %s models, one panel per model.",
+          response_names[[y_var]], scale, level
+        )
+      )
+    }
+  }
+}
+```

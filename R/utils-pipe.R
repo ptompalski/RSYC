@@ -1,6 +1,7 @@
-#' Pipe operator
+#' Pass a Result to the Next Step
 #'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#' `%>%` passes the result on its left to the function on its right. See
+#' \code{magrittr::\link[magrittr:pipe]{\%>\%}} for more examples.
 #'
 #' @name %>%
 #' @rdname pipe
@@ -8,7 +9,7 @@
 #' @export
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
-#' @param lhs A value or the magrittr placeholder.
-#' @param rhs A function call using the magrittr semantics.
-#' @return The result of calling `rhs(lhs)`.
+#' @param lhs The result to pass forward.
+#' @param rhs The next function to run.
+#' @return The result from the function on the right.
 NULL
