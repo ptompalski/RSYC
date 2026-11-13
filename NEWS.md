@@ -1,3 +1,11 @@
+# RSYC 0.2.0.9000
+
+* Corrected "Betsiamiles Plateau" to "Betsiamites Plateau" for ecodistrict
+  438 (ELC 2017 code `06.3.101.0438`) in the model catalogue, CSV export,
+  ecological boundary results, and current yield curve explorer. Names in the
+  immutable boundary v2 download are corrected when read by `rsyc_boundaries()`.
+  Model IDs, coefficients, and predictions are unchanged.
+
 # RSYC 0.2.0
 
 ## Model release v20260923

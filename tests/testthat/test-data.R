@@ -5,6 +5,24 @@ test_that("published model data match the v20260923 release", {
   expect_identical(unique(RSYC_models$model_version), "v20260923")
 })
 
+test_that("Betsiamites Plateau uses its ELC 2017 name in both model scales", {
+  models <- RSYC_models[which(RSYC_models$ecodistrict_id == 438L), ]
+  path <- paste0(
+    "Boreal Shield East/Eastern Boreal Shield/Central Laurentians/",
+    "Betsiamites Plateau"
+  )
+  expect_gt(nrow(models), 0L)
+  expect_setequal(models$scale, c("national", "regional"))
+  expect_identical(unique(models$strata_id), path)
+
+  named <- available_rsyc_models(
+    strata_level = "ecodistrict", strata_id = "Betsiamites Plateau"
+  )
+  coded <- available_rsyc_models(strata_level = "ecodistrict", strata_id = 438)
+  expect_identical(named, coded)
+  expect_gt(nrow(named), 0L)
+})
+
 test_that("published model data match the release contract", {
   skip_if_no_release_contract()
   model_contract <- rsyc_release_contract_environment()$.rsyc_release_contract

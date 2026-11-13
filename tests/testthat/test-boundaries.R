@@ -175,6 +175,53 @@ test_that("ecological levels retain only their relevant hierarchy", {
   )
 })
 
+test_that("cached v2 names are corrected without changing the boundary file", {
+  skip_if_not_installed("sf")
+  cache <- tempfile("rsyc-ecostrat-cache-")
+  dir.create(cache)
+  path <- file.path(cache, "RSYC_ecostrat.gpkg")
+  old_path <- paste0(
+    "Boreal Shield East/Eastern Boreal Shield/Central Laurentians/",
+    "Betsiamiles Plateau"
+  )
+  x <- sf::st_sf(
+    ecozone = "Boreal Shield East",
+    ecoprovince = "Eastern Boreal Shield",
+    ecoregion = "Central Laurentians",
+    ecodistrict = c("Betsiamiles Plateau", "Manicouagan Plateau"),
+    ecozone_id = 6L,
+    ecoprovince_id = "6.3",
+    ecoregion_id = 101L,
+    ecodistrict_id = c(438L, 436L),
+    join_key = c(old_path, sub("Betsiamiles", "Manicouagan", old_path)),
+    geometry = sf::st_sfc(sf::st_point(c(0, 0)), sf::st_point(c(1, 1)), crs = 3978)
+  )
+  sf::st_write(x, path, layer = "ecodistricts", quiet = TRUE)
+  checksum <- digest::digest(path, "sha256", file = TRUE)
+  testthat::local_mocked_bindings(
+    .rsyc_ecostrat_sha256 = checksum,
+    .package = "RSYC"
+  )
+
+  result <- rsyc_boundaries("ecodistrict", cache_dir = cache)
+  expect_identical(
+    result$ecodistrict, c("Betsiamites Plateau", "Manicouagan Plateau")
+  )
+  expect_identical(
+    result$strata_id,
+    c(sub("Betsiamiles", "Betsiamites", old_path), x$join_key[[2L]])
+  )
+  models <- available_rsyc_models(strata_level = "ecodistrict", strata_id = 438)
+  expect_identical(unique(models$strata_id), result$strata_id[[1L]])
+  expect_identical(result$strata_code, c("438", "436"))
+  expect_identical(
+    sf::st_as_binary(sf::st_geometry(result)),
+    sf::st_as_binary(sf::st_geometry(x))
+  )
+  expect_identical(sf::st_crs(result)$epsg, 3978L)
+  expect_identical(digest::digest(path, "sha256", file = TRUE), checksum)
+})
+
 test_that("boundary v2 layers satisfy their release and model-join contract", {
   skip_if_not_installed("sf")
   path <- skip_if_no_bundled_ecostrat()
@@ -227,7 +274,7 @@ test_that("boundary v2 layers satisfy their release and model-join contract", {
     expect_false(anyNA(x$join_key))
     expect_true(all(nzchar(x$join_key)))
     expect_false(anyDuplicated(x$join_key) > 0L)
-    expect_setequal(x$join_key, model_keys)
+    expect_setequal(.rsyc_correct_strata_names(x$join_key), model_keys)
   }
 })
 
@@ -248,7 +295,7 @@ test_that("every national model stratum joins to exactly one boundary", {
         layer = paste0(level, "s"),
         quiet = TRUE
       )
-      boundary_keys <- as.character(boundaries$join_key)
+      boundary_keys <- .rsyc_correct_strata_names(as.character(boundaries$join_key))
     }
     model_keys <- unique(RSYC_models$strata_id[
       RSYC_models$scale == "national" & RSYC_models$strata_level == level

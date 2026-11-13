@@ -11,6 +11,7 @@ if (!requireNamespace("sf", quietly = TRUE)) {
 }
 
 source(file.path("data-raw", "release_contract.R"), local = TRUE)
+source(file.path("R", "utils.R"), local = TRUE)
 contract <- .rsyc_release_contract
 source_path <- .rsyc_release_source_path("model", contract = contract)
 
@@ -69,6 +70,7 @@ RSYC_models <- RSYC_models[
   , drop = FALSE
 ]
 upstream_model_ids <- RSYC_models$model_id
+RSYC_models$strata_id <- .rsyc_correct_strata_names(RSYC_models$strata_id)
 stopifnot(nrow(RSYC_models) == contract$model$rows)
 is_ecological <- RSYC_models$strata_level %in% ecological_levels
 model_ecozone <- sub("/.*$", "", RSYC_models$strata_id)

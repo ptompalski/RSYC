@@ -18,6 +18,7 @@ if (!requireNamespace("DBI", quietly = TRUE) ||
 }
 
 source(file.path("data-raw", "release_contract.R"), local = TRUE)
+source(file.path("R", "utils.R"), local = TRUE)
 contract <- .rsyc_release_contract
 boundary <- contract$boundary
 layers <- boundary$layers
@@ -83,7 +84,7 @@ validate_layer <- function(x, layer) {
     !anyNA(x$join_key),
     all(nzchar(x$join_key)),
     !anyDuplicated(x$join_key),
-    setequal(x$join_key, model_keys)
+    setequal(.rsyc_correct_strata_names(x$join_key), model_keys)
   )
   x
 }
@@ -94,7 +95,7 @@ for (layer in layers) {
   model_keys <- unique(models$strata_id[
     models$scale == "national" & models$strata_level == level
   ])
-  x <- x[x$join_key %in% model_keys, , drop = FALSE]
+  x <- x[.rsyc_correct_strata_names(x$join_key) %in% model_keys, , drop = FALSE]
   x <- validate_layer(x, layer)
   sf::st_write(x, output, layer = layer, append = file.exists(output), quiet = TRUE)
 }

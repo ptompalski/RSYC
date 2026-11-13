@@ -43,6 +43,11 @@ projection (EPSG:3978) and retain the four hierarchy names, `ecozone_id`,
 were not simplified. See `data-raw/build_ecostrat.R` in the RSYC source
 repository for details on how the file was prepared and checked.
 
+The immutable v2 file retains the source spelling `Betsiamiles Plateau` for
+ecodistrict 438. `rsyc_boundaries()` corrects this to the ELC 2017 name
+`Betsiamites Plateau` in returned names and model join paths without modifying
+the downloaded file or its checksum.
+
 Until boundary v2 is published as an immutable release asset, the package's
 default download URL temporarily points to the versioned file on the `dev`
 branch. The SHA-256 check still pins the exact accepted content.

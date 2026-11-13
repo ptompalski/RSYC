@@ -99,6 +99,10 @@ CRdeclining2 <- function(age, b1, b2, b3, b4) {
   sub("^.*/", "", strata_id)
 }
 
+.rsyc_correct_strata_names <- function(x) {
+  sub("Betsiamiles Plateau$", "Betsiamites Plateau", x)
+}
+
 .rsyc_unknown_species <- function(species) {
   models <- .rsyc_model_catalog()
   known <- .rsyc_normalize_species(

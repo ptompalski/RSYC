@@ -189,7 +189,11 @@ rsyc_boundaries <- function(
     .rsyc_verify_ecostrat(path)
     layer <- paste0(strata_level, "s")
     boundaries <- sf::st_read(path, layer = layer, quiet = quiet)
-    boundaries$strata_id <- as.character(boundaries$join_key)
+    # Keep the checksum-pinned v2 file intact, including existing cached copies.
+    boundaries$strata_id <- .rsyc_correct_strata_names(
+      as.character(boundaries$join_key)
+    )
+    boundaries$ecodistrict <- .rsyc_correct_strata_names(boundaries$ecodistrict)
     hierarchy_levels <- c("ecozone", "ecoprovince", "ecoregion", "ecodistrict")
     hierarchy <- hierarchy_levels[seq_len(match(strata_level, hierarchy_levels))]
     id_fields <- paste0(hierarchy, "_id")
