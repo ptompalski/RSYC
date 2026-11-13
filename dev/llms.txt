@@ -48,10 +48,18 @@ asked to estimate outside this age range.
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+
+install.packages("RSYC")
+```
+
+Or install the development version from GitHub:
+
 ``` r
 
 # install.packages("remotes")
-# Development version with model release v20260923:
 remotes::install_github("ptompalski/RSYC", ref = "dev")
 ```
 
