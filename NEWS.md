@@ -5,6 +5,10 @@
   ecological boundary results, and current yield curve explorer. Names in the
   immutable boundary v2 download are corrected when read by `rsyc_boundaries()`.
   Model IDs, coefficients, and predictions are unchanged.
+* Checksum failures for the ecological boundary file now explain the likely
+  cause. A stale cached file (for example, the v1 boundary file from an earlier
+  release) reports the `download_rsyc_boundaries(overwrite = TRUE)` call needed
+  to replace it.
 
 # RSYC 0.2.0
 

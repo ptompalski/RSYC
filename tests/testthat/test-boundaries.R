@@ -109,6 +109,24 @@ test_that("checksum verification rejects altered files", {
 
   expect_invisible(verify(file, digest::digest(file, "sha256", file = TRUE)))
   expect_error(verify(file, paste(rep("0", 64), collapse = "")), "failed checksum")
+  expect_error(
+    verify(file, paste(rep("0", 64), collapse = "")),
+    "earlier RSYC release.*overwrite = TRUE"
+  )
+  expect_error(
+    verify(file, paste(rep("0", 64), collapse = ""), cached = FALSE),
+    "downloaded file does not match.*RSYC.ecostrat_url"
+  )
+})
+
+test_that("a stale cached boundary file is reported with a replacement hint", {
+  cache <- tempfile("rsyc-stale-cache-")
+  dir.create(cache)
+  writeBin(charToRaw("earlier release"), file.path(cache, "RSYC_ecostrat.gpkg"))
+  expect_error(
+    download_rsyc_boundaries(cache, quiet = TRUE),
+    "download_rsyc_boundaries\\(cache_dir = .*overwrite = TRUE\\)"
+  )
 })
 
 test_that("boundary helpers validate arguments", {

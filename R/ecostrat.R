@@ -95,7 +95,7 @@ download_rsyc_boundaries <- function(
     stop("The ecological-stratification download did not complete.", call. = FALSE)
   }
 
-  .rsyc_verify_ecostrat(temporary)
+  .rsyc_verify_ecostrat(temporary, cached = FALSE)
   if (file.exists(destination)) {
     unlink(destination)
   }
@@ -215,16 +215,34 @@ rsyc_boundaries <- function(
 
 .rsyc_verify_ecostrat <- function(
   path,
-  expected = .rsyc_ecostrat_sha256
+  expected = .rsyc_ecostrat_sha256,
+  cached = TRUE
 ) {
   if (!.rsyc_require_namespace("digest")) {
     stop("Package `digest` is required to verify the downloaded file.", call. = FALSE)
   }
   actual <- digest::digest(path, algo = "sha256", file = TRUE)
   if (!identical(tolower(actual), tolower(expected))) {
+    hint <- if (cached) {
+      cache_dir <- normalizePath(dirname(path), winslash = "/", mustWork = FALSE)
+      paste0(
+        "\nThe cached file at ", normalizePath(path, winslash = "/", mustWork = FALSE),
+        " is likely from an earlier RSYC release, or is incomplete or modified. ",
+        "Replace it with:\n",
+        "  download_rsyc_boundaries(cache_dir = \"", cache_dir, "\", overwrite = TRUE)"
+      )
+    } else {
+      paste0(
+        "\nThe downloaded file does not match the boundary release expected by ",
+        "this version of RSYC. Try again, and check that `url` (or the ",
+        "`RSYC.ecostrat_url` option) points to an unmodified copy of the ",
+        "published file."
+      )
+    }
     stop(
       "The ecological-stratification file failed checksum verification. ",
       "Expected ", expected, ", received ", actual, ".",
+      hint,
       call. = FALSE
     )
   }
