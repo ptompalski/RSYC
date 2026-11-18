@@ -53,6 +53,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0.9000" id="rsyc-0209000">RSYC 0.2.0.9000<a class="anchor" aria-label="anchor" href="#rsyc-0209000"></a></h2>
 <ul><li>Corrected “Betsiamiles Plateau” to “Betsiamites Plateau” for ecodistrict 438 (ELC 2017 code <code>06.3.101.0438</code>) in the model catalogue, CSV export, ecological boundary results, and current yield curve explorer. Names in the immutable boundary v2 download are corrected when read by <code><a href="../reference/rsyc_boundaries.html">rsyc_boundaries()</a></code>. Model IDs, coefficients, and predictions are unchanged.</li>
+<li>Checksum failures for the ecological boundary file now explain the likely cause. A stale cached file (for example, the v1 boundary file from an earlier release) reports the <code>download_rsyc_boundaries(overwrite = TRUE)</code> call needed to replace it.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="rsyc-020">RSYC 0.2.0<a class="anchor" aria-label="anchor" href="#rsyc-020"></a></h2><p class="text-muted">CRAN release: 2026-11-03</p>
